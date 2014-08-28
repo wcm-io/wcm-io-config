@@ -23,6 +23,8 @@ import io.wcm.config.api.Configuration;
 
 import java.util.Iterator;
 
+import org.apache.sling.api.resource.Resource;
+
 /**
  * Find configurations for content scope.
  */
@@ -31,37 +33,37 @@ public interface ConfigurationFinder {
   /**
    * Tries to find the closed matching configuration for the given path.
    * All registered applications are used to find the configuration, iterated in order of service ranking.
-   * @param path Content path
+   * @param resource Content resource
    * @return Configuration or null if none was found
    */
-  Configuration find(String path);
+  Configuration find(Resource resource);
 
   /**
    * Tries to find the closed matching configuration for the given path.
    * Only the configuration finding strategies of the given application are used.
-   * @param path Content path
+   * @param resource Content resource
    * @param applicationId Application Id
    * @return Configuration or null if none was found
    */
-  Configuration find(String path, String applicationId);
+  Configuration find(Resource resource, String applicationId);
 
   /**
    * Tries to find all enclosing configurations for the given path.
    * All registered applications are used to find the configuration, iterated in order of service ranking.
-   * @param path Content path
+   * @param resource Content resource
    * @return List of configurations that where found in the given path (in order of closest matching first).
    *         If none are found an empty iterator is returned.
    */
-  Iterator<Configuration> findAll(String path);
+  Iterator<Configuration> findAll(Resource resource);
 
   /**
    * Tries to find all enclosing configurations for the given path.
    * Only the configuration finding strategies of the given application are used.
-   * @param path Content path
+   * @param resource Content resource
    * @param applicationId Application Id
    * @return List of configurations that where found in the given path (in order of closest matching first).
    *         If none are found an empty iterator is returned.
    */
-  Iterator<Configuration> findAll(String path, String applicationId);
+  Iterator<Configuration> findAll(Resource resource, String applicationId);
 
 }

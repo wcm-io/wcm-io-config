@@ -19,7 +19,7 @@
  */
 package io.wcm.config.management;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -29,10 +29,10 @@ public interface ParameterResolver {
 
   /**
    * Get all parameter values effective for a configuration including configuration inheritance.
-   * @param configuratoinIds List of configuration ids (in order of closest matching first).
+   * @param configurationIds List of configuration ids (in order of closest matching first).
    * @param applicationId Application Id
    * @return Parameter values
    */
-  Map<String, Object> getEffectiveValues(List<String> configuratoinIds, String applicationId);
+  Map<String, Object> getEffectiveValues(Collection<String> configurationIds, String applicationId);
 
 }

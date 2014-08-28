@@ -21,7 +21,7 @@ package io.wcm.config.spi;
 
 import java.util.Iterator;
 
-import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.Resource;
 
 /**
  * Allows application to define a strategy to find configurations for content paths.
@@ -35,11 +35,10 @@ public interface ConfigurationFinderStrategy {
 
   /**
    * Finds configuration ids for the given path.
-   * @param path Path
-   * @param resourceResolver Resource resolver to be used
+   * @param resource Content resource
    * @return Configuration ids that where detected in the given path (in order of closest matching first).
    *         If none are found an empty itrator is returned.
    */
-  Iterator<String> findConfigurationIds(String path, ResourceResolver resourceResolver);
+  Iterator<String> findConfigurationIds(Resource resource);
 
 }

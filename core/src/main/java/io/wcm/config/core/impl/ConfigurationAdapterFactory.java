@@ -52,7 +52,7 @@ public class ConfigurationAdapterFactory implements AdapterFactory {
   public <AdapterType> AdapterType getAdapter(Object adaptable, Class<AdapterType> type) {
     if (adaptable instanceof Resource && type == Configuration.class) {
       Resource resource = (Resource)adaptable;
-      return (AdapterType)configurationFinder.find(resource.getPath());
+      return (AdapterType)configurationFinder.find(resource);
     }
     else {
       return null;

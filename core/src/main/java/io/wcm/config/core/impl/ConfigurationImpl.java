@@ -53,14 +53,16 @@ public class ConfigurationImpl implements Configuration {
   }
 
   @Override
-  public <T> T get(Parameter<T> parameter, Class<T> type) {
-    return this.properties.get(parameter.getName(), type);
+  public <T> T get(Parameter<T> parameter) {
+    return this.properties.get(parameter.getName(), parameter.getType());
   }
 
   @Override
   public <T> T get(Parameter<T> parameter, T defaultValue) {
     return this.properties.get(parameter.getName(), defaultValue);
   }
+
+  // -- delegate methods for ValueMap --
 
   @Override
   public <T> T get(String name, Class<T> type) {
@@ -130,16 +132,6 @@ public class ConfigurationImpl implements Configuration {
   @Override
   public Set<java.util.Map.Entry<String, Object>> entrySet() {
     return this.properties.entrySet();
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    return this.properties.equals(o);
-  }
-
-  @Override
-  public int hashCode() {
-    return this.properties.hashCode();
   }
 
 }

@@ -28,7 +28,7 @@ import org.apache.sling.api.resource.ValueMap;
 public interface Configuration extends ValueMap {
 
   /**
-   * @return Configuration id. This is usually a content path.
+   * @return Configuration id. This is the root path of the subtree this configuration belongs to.
    */
   String getConfigurationId();
 
@@ -38,11 +38,10 @@ public interface Configuration extends ValueMap {
    * array of a primitive type. It should return <code>null</code> in this
    * case.
    * @param parameter Parameter definition
-   * @param type The class of the type
    * @return Return named value converted to type T or <code>null</code> if
    *         non existing or can't be converted.
    */
-  <T> T get(Parameter<T> parameter, Class<T> type);
+  <T> T get(Parameter<T> parameter);
 
   /**
    * Get a named property and convert it into the given type.
