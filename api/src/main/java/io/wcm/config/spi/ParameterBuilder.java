@@ -156,7 +156,7 @@ public final class ParameterBuilder<T> {
     private final String defaultOsgiConfigProperty;
     private final T defaultValue;
 
-    private ParameterImpl(String name, Class<T> type, ValueMap properties, String applicationId,
+    public ParameterImpl(String name, Class<T> type, ValueMap properties, String applicationId,
         Visibility visibility, String defaultOsgiConfigProperty, T defaultValue) {
       this.name = name;
       this.type = type;

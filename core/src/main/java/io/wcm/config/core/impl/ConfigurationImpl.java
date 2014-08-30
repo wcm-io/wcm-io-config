@@ -130,7 +130,7 @@ public class ConfigurationImpl implements Configuration {
   }
 
   @Override
-  public Set<java.util.Map.Entry<String, Object>> entrySet() {
+  public Set<Map.Entry<String, Object>> entrySet() {
     return this.properties.entrySet();
   }
 
