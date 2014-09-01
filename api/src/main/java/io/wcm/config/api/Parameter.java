@@ -25,7 +25,7 @@ import org.apache.sling.api.resource.ValueMap;
  * Defines a configuration parameter.
  * @param <T> Parameter value type
  */
-public interface Parameter<T> {
+public interface Parameter<T> extends Comparable<Parameter> {
 
   /**
    * @return Parameter name
@@ -50,7 +50,7 @@ public interface Parameter<T> {
   /**
    * References OSGi configuration property which is checked for default value if this parameter is not set
    * in any configuration.
-   * @return OSGi configuration parameter name with syntax {persitentIdentity}:{propertyName}
+   * @return OSGi configuration parameter name with syntax {serviceClassName}:{propertyName}
    */
   String getDefaultOsgiConfigProperty();
 

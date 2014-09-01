@@ -25,6 +25,8 @@ import io.wcm.config.api.Visibility;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.junit.Test;
 
@@ -54,6 +56,49 @@ public class ParameterBuilderTest {
     assertEquals("value1", param.getProperties().get("prop1", String.class));
     assertEquals("value2", param.getProperties().get("prop2", String.class));
     assertEquals("value3", param.getProperties().get("prop3", String.class));
+  }
+
+  @Test
+  public void testSort() {
+    Set<Parameter> params = new TreeSet<>();
+    params.add(ParameterBuilder.create("app5_param2", String.class).build());
+    params.add(ParameterBuilder.create("app1_param2", String.class).build());
+    params.add(ParameterBuilder.create("app5_param1", String.class).build());
+
+    Parameter[] paramArray = params.toArray(new Parameter[params.size()]);
+    assertEquals("app1_param2", paramArray[0].getName());
+    assertEquals("app5_param1", paramArray[1].getName());
+    assertEquals("app5_param2", paramArray[2].getName());
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testInvalidName() {
+    ParameterBuilder.create("param 1", String.class).build();
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testNullName() {
+    ParameterBuilder.create(null, String.class).build();
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testInvalidApplicationId() {
+    ParameterBuilder.create("param1", String.class).applicationId("app 1").build();
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testNullApplicationId() {
+    ParameterBuilder.create("param1", String.class).applicationId(null).build();
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testInvalidDefaultOsgiConfigProperty() {
+    ParameterBuilder.create("param1", String.class).defaultOsgiConfigProperty("aaa").build();
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testNullDefaultOsgiConfigProperty() {
+    ParameterBuilder.create("param1", String.class).defaultOsgiConfigProperty(null).build();
   }
 
 }

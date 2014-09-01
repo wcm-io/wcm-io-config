@@ -25,6 +25,7 @@ import io.wcm.config.api.Visibility;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.api.wrappers.ValueMapDecorator;
@@ -43,7 +44,15 @@ public final class ParameterBuilder<T> {
   private String defaultOsgiConfigProperty;
   private T defaultValue;
 
+  private static final String NAME_PATTERN_STRING = "[a-zA-Z0-9\\-\\_\\.]+";
+  private static final Pattern NAME_PATTERN = Pattern.compile("^" + NAME_PATTERN_STRING + "$");
+  private static final Pattern OSGI_CONFIG_PROPERTY_PATTERN =
+      Pattern.compile("^" + NAME_PATTERN_STRING + "\\:" + NAME_PATTERN_STRING + "$");
+
   private ParameterBuilder(String name, Class<T> type) {
+    if (name == null || !NAME_PATTERN.matcher(name).matches()) {
+      throw new IllegalArgumentException("Invalid name: " + name);
+    }
     this.name = name;
     this.type = type;
   }
@@ -63,6 +72,9 @@ public final class ParameterBuilder<T> {
    * @return this
    */
   public ParameterBuilder<T> applicationId(String value) {
+    if (value == null || !NAME_PATTERN.matcher(value).matches()) {
+      throw new IllegalArgumentException("Invalid applicaitonId: " + value);
+    }
     this.applicationId = value;
     return this;
   }
@@ -82,10 +94,13 @@ public final class ParameterBuilder<T> {
   /**
    * References OSGi configuration property which is checked for default value if this parameter is not set
    * in any configuration.
-   * @param value OSGi configuration parameter name with syntax {persitentIdentity}:{propertyName}
+   * @param value OSGi configuration parameter name with syntax {serviceClassName}:{propertyName}
    * @return this
    */
   public ParameterBuilder<T> defaultOsgiConfigProperty(String value) {
+    if (value == null || !OSGI_CONFIG_PROPERTY_PATTERN.matcher(value).matches()) {
+      throw new IllegalArgumentException("Invalid value: " + value);
+    }
     this.defaultOsgiConfigProperty = value;
     return this;
   }
@@ -200,6 +215,24 @@ public final class ParameterBuilder<T> {
     @Override
     public T getDefaultValue() {
       return this.defaultValue;
+    }
+
+    @Override
+    public int hashCode() {
+      return this.name.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (!(obj instanceof ParameterImpl)) {
+        return false;
+      }
+      return this.name.equals(((ParameterImpl)obj).name);
+    }
+
+    @Override
+    public int compareTo(Parameter o) {
+      return this.name.compareTo(o.getName());
     }
 
   }

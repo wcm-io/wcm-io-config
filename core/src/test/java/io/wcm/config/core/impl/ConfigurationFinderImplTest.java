@@ -23,7 +23,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.anyCollectionOf;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 import io.wcm.config.api.Configuration;
 import io.wcm.config.management.ParameterResolver;
@@ -63,7 +62,7 @@ public class ConfigurationFinderImplTest {
   private ConfigurationFinderStrategy finderStrategy1;
   private static final Map<String, Object> FINDER_STRATEGY_PROPS_1 = ImmutableMap.<String, Object>builder()
       .put(Constants.SERVICE_ID, 1L)
-      .put(Constants.SERVICE_RANKING, 10L)
+      .put(Constants.SERVICE_RANKING, 10)
       .build();
   private static final String APPLICATION_ID_1 = "app1";
 
@@ -71,7 +70,7 @@ public class ConfigurationFinderImplTest {
   private ConfigurationFinderStrategy finderStrategy2;
   private static final Map<String, Object> FINDER_STRATEGY_PROPS_2 = ImmutableMap.<String, Object>builder()
       .put(Constants.SERVICE_ID, 2L)
-      .put(Constants.SERVICE_RANKING, 5L)
+      .put(Constants.SERVICE_RANKING, 5)
       .build();
   private static final String APPLICATION_ID_2 = "app2";
 
@@ -94,16 +93,14 @@ public class ConfigurationFinderImplTest {
         .build().iterator());
     when(finderStrategy2.getApplicationId()).thenReturn(APPLICATION_ID_2);
 
-    when(parameterResolver.getEffectiveValues(anyCollectionOf(String.class), anyString()))
+    when(parameterResolver.getEffectiveValues(anyCollectionOf(String.class)))
     .then(new Answer<Map<String,Object>>() {
       @SuppressWarnings("unchecked")
       @Override
       public Map<String, Object> answer(InvocationOnMock invocation) {
         Collection<String> configurationIds = (Collection<String>)invocation.getArguments()[0];
-        String applicationId = (String)invocation.getArguments()[1];
         Map<String, Object> props = new HashMap<>();
         props.put("path", configurationIds.iterator().next());
-        props.put("applicationId", applicationId);
         return props;
       }
     });

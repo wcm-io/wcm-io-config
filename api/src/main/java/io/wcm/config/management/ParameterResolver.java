@@ -30,9 +30,8 @@ public interface ParameterResolver {
   /**
    * Get all parameter values effective for a configuration including configuration inheritance.
    * @param configurationIds List of configuration ids (in order of closest matching first).
-   * @param applicationId Application Id
    * @return Parameter values
    */
-  Map<String, Object> getEffectiveValues(Collection<String> configurationIds, String applicationId);
+  Map<String, Object> getEffectiveValues(Collection<String> configurationIds);
 
 }
