@@ -23,6 +23,7 @@ import static org.junit.Assert.assertEquals;
 import io.wcm.config.api.Parameter;
 import io.wcm.config.api.Visibility;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -79,6 +80,16 @@ public class ParameterBuilderTest {
   @Test(expected = IllegalArgumentException.class)
   public void testNullName() {
     ParameterBuilder.create(null, String.class).build();
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testInvalidType() {
+    ParameterBuilder.create("param1", Date.class).build();
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testNullType() {
+    ParameterBuilder.create("param1", null).build();
   }
 
   @Test(expected = IllegalArgumentException.class)

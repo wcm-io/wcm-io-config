@@ -27,6 +27,21 @@ import io.wcm.config.api.Parameter;
 public interface ParameterOverride {
 
   /**
+   * Scope for system default value
+   */
+  String DEFAULT_SCOPE = "default";
+
+  /**
+   * Delimiter for string array values an map rows
+   */
+  String ARRAY_DELIMITER = ";";
+
+  /**
+   * Delimiter to separate key/value pairs in map rows
+   */
+  String KEY_VALUE_DELIMITER = "=";
+
+  /**
    * Allows to override the system default value of a parameter, that is applied if not configuration
    * value is set either in OSGi configuration or in the configuration hierarchy.
    * @param parameter Parameter definition

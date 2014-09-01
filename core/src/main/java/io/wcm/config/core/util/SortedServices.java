@@ -33,7 +33,7 @@ import org.apache.sling.commons.osgi.ServiceUtil;
  * Implementation is thread-safe.
  * @param <T> Service type
  */
-public class SortedServices<T> {
+public final class SortedServices<T> {
 
   private final Map<Comparable<Object>, T> serviceMap = new TreeMap<>();
   private volatile Collection<T> sortedServices = Collections.emptyList();

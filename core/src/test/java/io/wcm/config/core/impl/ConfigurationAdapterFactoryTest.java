@@ -25,6 +25,7 @@ import static org.mockito.Mockito.when;
 import io.wcm.config.api.Configuration;
 import io.wcm.config.management.ConfigurationFinder;
 
+import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,6 +40,8 @@ public class ConfigurationAdapterFactoryTest {
   @Mock
   private Resource resource;
   @Mock
+  private SlingHttpServletRequest request;
+  @Mock
   private Configuration configuration;
   @Mock
   private ConfigurationFinder configurationFinder;
@@ -48,13 +51,27 @@ public class ConfigurationAdapterFactoryTest {
 
   @Before
   public void setUp() {
+    when(request.getResource()).thenReturn(resource);
     when(configurationFinder.find(resource)).thenReturn(configuration);
   }
 
   @Test
-  public void testAdapt() {
+  public void testResource() {
     assertSame(configuration, underTest.getAdapter(resource, Configuration.class));
     assertNull(underTest.getAdapter(resource, ConfigurationFinder.class));
+    assertNull(underTest.getAdapter(this, Configuration.class));
+  }
+
+  @Test
+  public void testRequest() {
+    assertSame(configuration, underTest.getAdapter(request, Configuration.class));
+
+    when(request.getResource()).thenReturn(null);
+    assertNull(underTest.getAdapter(request, Configuration.class));
+  }
+
+  @Test
+  public void testInvalid() {
     assertNull(underTest.getAdapter(this, Configuration.class));
   }
 

@@ -24,7 +24,9 @@ import io.wcm.config.api.Visibility;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.sling.api.resource.ValueMap;
@@ -36,6 +38,22 @@ import org.apache.sling.api.wrappers.ValueMapDecorator;
  */
 public final class ParameterBuilder<T> {
 
+  private static final String NAME_PATTERN_STRING = "[a-zA-Z0-9\\-\\_\\.]+";
+  private static final Pattern NAME_PATTERN = Pattern.compile("^" + NAME_PATTERN_STRING + "$");
+  private static final Pattern OSGI_CONFIG_PROPERTY_PATTERN =
+      Pattern.compile("^" + NAME_PATTERN_STRING + "\\:" + NAME_PATTERN_STRING + "$");
+
+  private static final Set<Class<?>> SUPPORTED_TYPES = new HashSet<>();
+  static {
+    SUPPORTED_TYPES.add(String.class);
+    SUPPORTED_TYPES.add(String[].class);
+    SUPPORTED_TYPES.add(Integer.class);
+    SUPPORTED_TYPES.add(Long.class);
+    SUPPORTED_TYPES.add(Double.class);
+    SUPPORTED_TYPES.add(Boolean.class);
+    SUPPORTED_TYPES.add(Map.class);
+  }
+
   private final String name;
   private final Class<T> type;
   private final Map<String, Object> properties = new HashMap<>();
@@ -44,14 +62,12 @@ public final class ParameterBuilder<T> {
   private String defaultOsgiConfigProperty;
   private T defaultValue;
 
-  private static final String NAME_PATTERN_STRING = "[a-zA-Z0-9\\-\\_\\.]+";
-  private static final Pattern NAME_PATTERN = Pattern.compile("^" + NAME_PATTERN_STRING + "$");
-  private static final Pattern OSGI_CONFIG_PROPERTY_PATTERN =
-      Pattern.compile("^" + NAME_PATTERN_STRING + "\\:" + NAME_PATTERN_STRING + "$");
-
   private ParameterBuilder(String name, Class<T> type) {
     if (name == null || !NAME_PATTERN.matcher(name).matches()) {
       throw new IllegalArgumentException("Invalid name: " + name);
+    }
+    if (type == null || !SUPPORTED_TYPES.contains(type)) {
+      throw new IllegalArgumentException("Invalid type: " + type);
     }
     this.name = name;
     this.type = type;

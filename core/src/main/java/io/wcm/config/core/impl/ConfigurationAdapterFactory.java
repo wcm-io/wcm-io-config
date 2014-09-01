@@ -29,6 +29,7 @@ import org.apache.felix.scr.annotations.Properties;
 import org.apache.felix.scr.annotations.Property;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.Service;
+import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.adapter.AdapterFactory;
 import org.apache.sling.api.resource.Resource;
 
@@ -42,7 +43,7 @@ import org.apache.sling.api.resource.Resource;
   @Property(name = ADAPTER_CLASSES, value = "io.wcm.config.api.Configuration"),
   @Property(name = "adapter.condition", value = "If a configuration can be found for the given resource or it's parents.")
 })
-public class ConfigurationAdapterFactory implements AdapterFactory {
+public final class ConfigurationAdapterFactory implements AdapterFactory {
 
   @Reference
   private ConfigurationFinder configurationFinder;
@@ -50,13 +51,20 @@ public class ConfigurationAdapterFactory implements AdapterFactory {
   @SuppressWarnings("unchecked")
   @Override
   public <AdapterType> AdapterType getAdapter(Object adaptable, Class<AdapterType> type) {
-    if (adaptable instanceof Resource && type == Configuration.class) {
-      Resource resource = (Resource)adaptable;
-      return (AdapterType)configurationFinder.find(resource);
+    if (type == Configuration.class) {
+      if (adaptable instanceof Resource) {
+        Resource resource = (Resource)adaptable;
+        return (AdapterType)configurationFinder.find(resource);
+      }
+      else if (adaptable instanceof SlingHttpServletRequest) {
+        SlingHttpServletRequest request = (SlingHttpServletRequest)adaptable;
+        Resource resource = request.getResource();
+        if (resource != null) {
+          return (AdapterType)configurationFinder.find(resource);
+        }
+      }
     }
-    else {
-      return null;
-    }
+    return null;
   }
 
 }

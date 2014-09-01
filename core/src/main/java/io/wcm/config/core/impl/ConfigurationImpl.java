@@ -33,7 +33,7 @@ import org.apache.sling.api.wrappers.ValueMapDecorator;
 /**
  * Default implementation of {@link Configuration}.
  */
-public class ConfigurationImpl implements Configuration {
+public final class ConfigurationImpl implements Configuration {
 
   private final String configurationId;
   private final ValueMap properties;

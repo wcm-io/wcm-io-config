@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.config.core.impl;
+package io.wcm.config.core.management.impl;
 
 import io.wcm.config.management.ParameterPersistence;
 
@@ -31,7 +31,7 @@ import org.apache.felix.scr.annotations.Service;
  */
 @Component(metatype = false, immediate = true)
 @Service(ParameterPersistence.class)
-public class ParameterPersistenceImpl implements ParameterPersistence {
+public final class ParameterPersistenceImpl implements ParameterPersistence {
 
   @Override
   public Map<String, Object> getValues(String configurationId) {

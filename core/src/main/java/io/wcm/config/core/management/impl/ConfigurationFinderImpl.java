@@ -17,9 +17,10 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.config.core.impl;
+package io.wcm.config.core.management.impl;
 
 import io.wcm.config.api.Configuration;
+import io.wcm.config.core.impl.ConfigurationImpl;
 import io.wcm.config.core.util.SortedServices;
 import io.wcm.config.management.ConfigurationFinder;
 import io.wcm.config.management.ParameterResolver;
@@ -48,7 +49,7 @@ import org.apache.sling.api.resource.Resource;
  */
 @Component(metatype = false, immediate = true)
 @Service(ConfigurationFinder.class)
-public class ConfigurationFinderImpl implements ConfigurationFinder {
+public final class ConfigurationFinderImpl implements ConfigurationFinder {
 
   /**
    * Ordering of configuration id by "closed match" - is simply a descending alphanumeric sort.

@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.config.core.impl;
+package io.wcm.config.core.management.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -60,18 +60,14 @@ public class ConfigurationFinderImplTest {
 
   @Mock
   private ConfigurationFinderStrategy finderStrategy1;
-  private static final Map<String, Object> FINDER_STRATEGY_PROPS_1 = ImmutableMap.<String, Object>builder()
-      .put(Constants.SERVICE_ID, 1L)
-      .put(Constants.SERVICE_RANKING, 10)
-      .build();
+  private static final Map<String, Object> SERVICE_PROPS_1 = ImmutableMap.<String, Object>builder()
+      .put(Constants.SERVICE_ID, 1L).put(Constants.SERVICE_RANKING, 10).build();
   private static final String APPLICATION_ID_1 = "app1";
 
   @Mock
   private ConfigurationFinderStrategy finderStrategy2;
-  private static final Map<String, Object> FINDER_STRATEGY_PROPS_2 = ImmutableMap.<String, Object>builder()
-      .put(Constants.SERVICE_ID, 2L)
-      .put(Constants.SERVICE_RANKING, 5)
-      .build();
+  private static final Map<String, Object> SERVICE_PROPS_2 = ImmutableMap.<String, Object>builder()
+      .put(Constants.SERVICE_ID, 2L).put(Constants.SERVICE_RANKING, 5).build();
   private static final String APPLICATION_ID_2 = "app2";
 
   @InjectMocks
@@ -79,8 +75,8 @@ public class ConfigurationFinderImplTest {
 
   @Before
   public void setUp() {
-    underTest.bindConfigurationFinderStrategy(finderStrategy1, FINDER_STRATEGY_PROPS_1);
-    underTest.bindConfigurationFinderStrategy(finderStrategy2, FINDER_STRATEGY_PROPS_2);
+    underTest.bindConfigurationFinderStrategy(finderStrategy1, SERVICE_PROPS_1);
+    underTest.bindConfigurationFinderStrategy(finderStrategy2, SERVICE_PROPS_2);
 
     when(finderStrategy1.findConfigurationIds(resource)).thenReturn(ImmutableList.<String>builder()
         .add("/content/region1/region11/site")
@@ -108,8 +104,8 @@ public class ConfigurationFinderImplTest {
 
   @After
   public void tearDown() {
-    underTest.unbindConfigurationFinderStrategy(finderStrategy1, FINDER_STRATEGY_PROPS_1);
-    underTest.unbindConfigurationFinderStrategy(finderStrategy2, FINDER_STRATEGY_PROPS_2);
+    underTest.unbindConfigurationFinderStrategy(finderStrategy1, SERVICE_PROPS_1);
+    underTest.unbindConfigurationFinderStrategy(finderStrategy2, SERVICE_PROPS_2);
   }
 
   @Test
