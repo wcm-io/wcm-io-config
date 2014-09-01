@@ -101,12 +101,14 @@ public final class RequestHeaderOverrideProvider implements ParameterOverridePro
         }
       }
     }
-
-    chain.doFilter(request, response);
-
-    if (this.enabled) {
-      // clear override map
-      OVERRIDE_MAP_THREADLOCAL.get().clear();
+    try {
+      chain.doFilter(request, response);
+    }
+    finally {
+      if (this.enabled) {
+        // clear override map
+        OVERRIDE_MAP_THREADLOCAL.get().clear();
+      }
     }
   }
 
