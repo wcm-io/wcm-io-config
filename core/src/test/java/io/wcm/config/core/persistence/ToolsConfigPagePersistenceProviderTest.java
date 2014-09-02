@@ -27,26 +27,23 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
 import io.wcm.config.management.PersistenceException;
 import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.osgi.MockOsgi;
 
 import java.util.Collections;
-import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.osgi.service.component.ComponentContext;
 
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.WCMException;
+import com.google.common.collect.ImmutableMap;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ToolsConfigPagePersistenceProviderTest {
@@ -58,9 +55,6 @@ public class ToolsConfigPagePersistenceProviderTest {
   @Rule
   public final AemContext context = new AemContext();
 
-  @Mock
-  ComponentContext componentContext;
-
   ToolsConfigPagePersistenceProvider underTest;
 
   @Before
@@ -68,14 +62,12 @@ public class ToolsConfigPagePersistenceProviderTest {
     Page contentPage = context.pageManager().create("/", "content", TOOLS_PAGE_TEMPLATE, "content", true);
     context.pageManager().create(contentPage.getPath(), "site1", CONFIG_PAGE_TEMPLATE, "site1", true);
 
-    Dictionary<String, Object> serviceConfig = new Hashtable<>();
-    serviceConfig.put(ToolsConfigPagePersistenceProvider.PROPERTY_ENABLED, true);
-    serviceConfig.put(ToolsConfigPagePersistenceProvider.PROPERTY_CONFIG_PAGE_TEMPLATE, CONFIG_PAGE_TEMPLATE);
-    serviceConfig.put(ToolsConfigPagePersistenceProvider.PROPERTY_TOOLS_PAGE_TEMPLATE, TOOLS_PAGE_TEMPLATE);
-    when(componentContext.getProperties()).thenReturn(serviceConfig);
-
     underTest = new ToolsConfigPagePersistenceProvider();
-    underTest.activate(componentContext);
+    MockOsgi.activate(underTest, ImmutableMap.<String, Object>builder()
+        .put(ToolsConfigPagePersistenceProvider.PROPERTY_ENABLED, true)
+        .put(ToolsConfigPagePersistenceProvider.PROPERTY_CONFIG_PAGE_TEMPLATE, CONFIG_PAGE_TEMPLATE)
+        .put(ToolsConfigPagePersistenceProvider.PROPERTY_TOOLS_PAGE_TEMPLATE, TOOLS_PAGE_TEMPLATE)
+        .build());
   }
 
   @Test
@@ -133,11 +125,10 @@ public class ToolsConfigPagePersistenceProviderTest {
 
   @Test
   public void testDisabled() throws Exception {
-    Dictionary<String, Object> serviceConfig = new Hashtable<>();
-    serviceConfig.put(ToolsConfigPagePersistenceProvider.PROPERTY_ENABLED, false);
-    when(componentContext.getProperties()).thenReturn(serviceConfig);
     underTest = new ToolsConfigPagePersistenceProvider();
-    underTest.activate(componentContext);
+    MockOsgi.activate(underTest, ImmutableMap.<String, Object>builder()
+        .put(ToolsConfigPagePersistenceProvider.PROPERTY_ENABLED, false)
+        .build());
 
     Page toolsPage = context.pageManager().create(CONFIG_ID, TOOLS_PAGE_NAME, TOOLS_PAGE_TEMPLATE, TOOLS_PAGE_NAME, true);
     Page configPage = context.pageManager().create(toolsPage.getPath(), CONFIG_PAGE_NAME, CONFIG_PAGE_TEMPLATE, CONFIG_PAGE_NAME, true);
