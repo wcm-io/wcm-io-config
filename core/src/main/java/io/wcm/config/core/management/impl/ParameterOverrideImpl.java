@@ -22,7 +22,7 @@ package io.wcm.config.core.management.impl;
 import io.wcm.config.api.Parameter;
 import io.wcm.config.core.util.RankedServices;
 import io.wcm.config.core.util.TypeUtil;
-import io.wcm.config.management.ParameterOverride;
+import io.wcm.config.api.management.ParameterOverride;
 import io.wcm.config.spi.ParameterOverrideProvider;
 
 import java.util.Map;

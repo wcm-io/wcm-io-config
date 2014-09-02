@@ -20,8 +20,8 @@
 package io.wcm.config.core.util;
 
 
-import static io.wcm.config.management.ParameterOverride.ARRAY_DELIMITER;
-import static io.wcm.config.management.ParameterOverride.KEY_VALUE_DELIMITER;
+import static io.wcm.config.api.management.ParameterOverride.ARRAY_DELIMITER;
+import static io.wcm.config.api.management.ParameterOverride.KEY_VALUE_DELIMITER;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

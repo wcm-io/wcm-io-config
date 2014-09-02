@@ -22,7 +22,7 @@ package io.wcm.config.core.impl;
 import static org.apache.sling.api.adapter.AdapterFactory.ADAPTABLE_CLASSES;
 import static org.apache.sling.api.adapter.AdapterFactory.ADAPTER_CLASSES;
 import io.wcm.config.api.Configuration;
-import io.wcm.config.management.ConfigurationFinder;
+import io.wcm.config.api.management.ConfigurationFinder;
 
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Properties;

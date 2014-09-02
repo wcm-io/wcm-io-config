@@ -17,7 +17,29 @@
  * limitations under the License.
  * #L%
  */
+package io.wcm.config.api.management;
+
+import java.io.IOException;
+
 /**
- * API for applications and editors managing configuration.
+ * Persistence exception is thrown when storing configuration parameters fails.
  */
-package io.wcm.config.management;
+public class PersistenceException extends IOException {
+  private static final long serialVersionUID = -5092565323141161861L;
+
+  /**
+   * @param message Message
+   */
+  public PersistenceException(String message) {
+    super(message);
+  }
+
+  /**
+   * @param message Message
+   * @param cause Cause
+   */
+  public PersistenceException(String message, Throwable cause) {
+    super(message, cause);
+  }
+
+}

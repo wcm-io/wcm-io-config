@@ -19,7 +19,7 @@
  */
 package io.wcm.config.spi;
 
-import io.wcm.config.management.PersistenceException;
+import io.wcm.config.api.management.PersistenceException;
 
 import java.util.Map;
 

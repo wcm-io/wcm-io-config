@@ -19,7 +19,7 @@
  */
 package io.wcm.config.core.persistence;
 
-import io.wcm.config.management.PersistenceException;
+import io.wcm.config.api.management.PersistenceException;
 import io.wcm.config.spi.ParameterPersistenceProvider;
 
 import java.util.Dictionary;

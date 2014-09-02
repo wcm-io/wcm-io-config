@@ -26,7 +26,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyCollectionOf;
 import static org.mockito.Mockito.when;
 import io.wcm.config.api.Configuration;
-import io.wcm.config.management.ParameterResolver;
+import io.wcm.config.api.management.ParameterResolver;
 import io.wcm.config.spi.ConfigurationFinderStrategy;
 
 import java.util.Collection;

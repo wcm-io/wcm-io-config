@@ -23,7 +23,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.when;
 import io.wcm.config.api.Configuration;
-import io.wcm.config.management.ConfigurationFinder;
+import io.wcm.config.api.management.ConfigurationFinder;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;

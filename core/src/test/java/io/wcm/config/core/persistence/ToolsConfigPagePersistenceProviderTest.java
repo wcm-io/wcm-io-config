@@ -27,7 +27,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import io.wcm.config.management.PersistenceException;
+import io.wcm.config.api.management.PersistenceException;
 import io.wcm.testing.mock.aem.junit.AemContext;
 import io.wcm.testing.mock.osgi.MockOsgi;
 

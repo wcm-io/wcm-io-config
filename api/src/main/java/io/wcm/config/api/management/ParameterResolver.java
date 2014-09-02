@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.config.management;
+package io.wcm.config.api.management;
 
 import java.util.Collection;
 import java.util.Map;

@@ -22,9 +22,9 @@ package io.wcm.config.core.management.impl;
 import io.wcm.config.api.Parameter;
 import io.wcm.config.core.util.RankedServices;
 import io.wcm.config.core.util.TypeUtil;
-import io.wcm.config.management.ParameterOverride;
-import io.wcm.config.management.ParameterPersistence;
-import io.wcm.config.management.ParameterResolver;
+import io.wcm.config.api.management.ParameterOverride;
+import io.wcm.config.api.management.ParameterPersistence;
+import io.wcm.config.api.management.ParameterResolver;
 import io.wcm.config.spi.ParameterProvider;
 
 import java.util.Collection;
