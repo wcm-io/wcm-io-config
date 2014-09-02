@@ -26,11 +26,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.junit.Test;
-
 
 public class TypeUtilOverridePropertyTest {
 
@@ -95,6 +95,11 @@ public class TypeUtilOverridePropertyTest {
     assertEquals(map, overridePropertyToType("key1=abc;key2=def;key3=;;=xyz", Map.class));
 
     assertNull(overridePropertyToType(null, Map.class));
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testOverridePropertyToType_IllegalType() {
+    overridePropertyToType("value", Date.class);
   }
 
 }

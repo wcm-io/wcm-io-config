@@ -22,10 +22,9 @@ package io.wcm.config.core.util;
 import static io.wcm.config.core.util.TypeUtil.osgiPropertyToType;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -104,15 +103,6 @@ public class TypeUtilOsgiPropertyTest {
   }
 
   @Test
-  public void testOsgiPropertyToType_Boolean() {
-    assertTrue(osgiPropertyToType(true, Boolean.class, null));
-    assertTrue(osgiPropertyToType("true", Boolean.class, null));
-    assertFalse(osgiPropertyToType("wurst", Boolean.class, true));
-    assertFalse(osgiPropertyToType(null, Boolean.class, null));
-    assertTrue(osgiPropertyToType(null, Boolean.class, true));
-  }
-
-  @Test
   public void testOsgiPropertyToType_Map() {
     Map<String, String> map = new LinkedHashMap<>();
     map.put("key1", "abc");
@@ -128,6 +118,11 @@ public class TypeUtilOsgiPropertyTest {
     map = new LinkedHashMap<>();
     map.put("key1", "abc");
     assertEquals(map, osgiPropertyToType(null, Map.class, map));
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testOsgiPropertyToType_IllegalType() {
+    osgiPropertyToType("value", Date.class, null);
   }
 
 }

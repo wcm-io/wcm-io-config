@@ -125,7 +125,7 @@ public final class TypeUtil {
       }
       return (T)(Double)PropertiesUtil.toDouble(value, defaultDoubleValue);
     }
-    else if (type == Boolean.class || type == boolean.class) {
+    else if (type == Boolean.class) {
       Boolean defaultBooleanValue = (Boolean)defaultValue;
       if (defaultBooleanValue == null) {
         defaultBooleanValue = false;
