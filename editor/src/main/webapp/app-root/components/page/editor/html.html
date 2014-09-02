@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!--% <meta data-sly-resource="${'.' @ resourceType='/apps/adaptto/components/global/wcmInit' }" data-sly-unwrap/> %-->
+    <title>${currentPage.title}</title>
+    <!--% <link rel="stylesheet" type="text/css" href="/apps/adaptto/docroot/admin/css/admin.css" /> %-->
+  </head>
+  <body>
+
+    <h1>${currentPage.title}</h1>
+    
+    <ul data-sly-list.childPage="${currentPage.listChildren}">
+      <li><a href="${childPage.path}.html">${childPage.title}</a></li>
+    </ul>
+
+  </body>
+</html>

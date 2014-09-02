@@ -34,7 +34,7 @@
   <version>0.1.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
-  <name>Configuration core implementation</name>
+  <name>Configuration Core Implementation</name>
   <description>Core implementation for configuration infrastructure.</description>
 
   <scm>
