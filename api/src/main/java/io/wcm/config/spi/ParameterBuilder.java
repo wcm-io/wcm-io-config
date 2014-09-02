@@ -38,7 +38,7 @@ import org.apache.sling.api.wrappers.ValueMapDecorator;
  */
 public final class ParameterBuilder<T> {
 
-  private static final String NAME_PATTERN_STRING = "[a-zA-Z0-9\\-\\_\\.]+";
+  private static final String NAME_PATTERN_STRING = "[a-zA-Z0-9\\-\\_\\.\\$]+";
   private static final Pattern NAME_PATTERN = Pattern.compile("^" + NAME_PATTERN_STRING + "$");
   private static final Pattern OSGI_CONFIG_PROPERTY_PATTERN =
       Pattern.compile("^" + NAME_PATTERN_STRING + "\\:" + NAME_PATTERN_STRING + "$");

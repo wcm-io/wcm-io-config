@@ -19,8 +19,10 @@
  */
 package io.wcm.config.core.impl;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import io.wcm.config.api.Configuration;
+import io.wcm.config.api.Parameter;
 import io.wcm.config.core.management.impl.ConfigurationFinderImpl;
 import io.wcm.config.core.management.impl.ParameterOverrideImpl;
 import io.wcm.config.core.management.impl.ParameterPersistenceImpl;
@@ -28,14 +30,21 @@ import io.wcm.config.core.management.impl.ParameterResolverImpl;
 import io.wcm.config.core.override.RequestHeaderOverrideProvider;
 import io.wcm.config.core.override.SystemPropertyOverrideProvider;
 import io.wcm.config.core.persistence.ToolsConfigPagePersistenceProvider;
+import io.wcm.config.management.ParameterPersistence;
+import io.wcm.config.management.PersistenceException;
 import io.wcm.config.spi.ConfigurationFinderStrategy;
+import io.wcm.config.spi.ParameterBuilder;
+import io.wcm.config.spi.ParameterProvider;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.felix.scr.annotations.Component;
+import org.apache.felix.scr.annotations.Property;
 import org.apache.sling.api.resource.Resource;
 import org.junit.Before;
 import org.junit.Rule;
@@ -43,6 +52,7 @@ import org.junit.Test;
 
 import com.day.jcr.vault.util.Text;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 
 /**
  * Test all configuration services in combination.
@@ -51,13 +61,22 @@ public class CombinedTest {
 
   private static final String CONFIG_ID = "/content/region1/site1/en";
 
+  private static final Parameter<String> PROP_1 = ParameterBuilder.create("prop1", String.class).build();
+  private static final Parameter<String> PROP_2 = ParameterBuilder.create("prop2", String.class).build();
+  private static final Parameter<String> PROP_3 = ParameterBuilder.create("prop3", String.class).build();
+  private static final Parameter<String> PROP_4 = ParameterBuilder.create("prop4", String.class)
+      .defaultOsgiConfigProperty(SampleOsgiConfiguration.class.getName() + ":prop4").build();
+
   @Rule
   public final AemContext context = new AemContext();
 
   @Before
   public void setUp() throws Exception {
-    // app-specific configuration finder strategy
+    // app-specific serivces
+    context.registerService(SampleOsgiConfiguration.class, new SampleOsgiConfiguration(),
+        ImmutableMap.<String, Object>builder().put("prop4", "value4-osgi").build());
     context.registerService(ConfigurationFinderStrategy.class, new SampleConfigurationFinderStrategy());
+    context.registerService(ParameterProvider.class, new SampleParameterProvider());
 
     // persistence providers
     context.registerInjectActivateService(new ToolsConfigPagePersistenceProvider(),
@@ -85,18 +104,54 @@ public class CombinedTest {
     context.registerInjectActivateService(new ConfigurationAdapterFactory());
 
     // mount sample content
-    context.jsonImporter().importTo("/sample-content.json", "/content");
+    context.jsonImporter().importTo("/combined-test-content.json", "/content");
     context.currentPage(CONFIG_ID);
   }
 
   @Test
-  public void testConfig() {
+  public void testConfigWithInheritance() {
     Configuration config = context.request().getResource().adaptTo(Configuration.class);
     assertNotNull(config);
+    assertEquals("value1-l3", config.get(PROP_1));
+    assertEquals("value2-l2", config.get(PROP_2));
+    assertEquals("value3-l1", config.get(PROP_3));
+    assertEquals("value4-osgi", config.get(PROP_4));
   }
 
-  // TODO: implement further tests!
+  @Test
+  public void testWriteReadConfig() throws PersistenceException {
+    ParameterPersistence persistence = context.slingScriptHelper().getService(ParameterPersistence.class);
+    persistence.storeParameterValues(context.resourceResolver(), CONFIG_ID, ImmutableMap.<String, Object>builder()
+        .put(PROP_3.getName(), "value3-new").build(), true);
 
+    Configuration config = context.request().getResource().adaptTo(Configuration.class);
+    assertNotNull(config);
+    assertEquals("value1-l3", config.get(PROP_1));
+    assertEquals("value2-l2", config.get(PROP_2));
+    assertEquals("value3-new", config.get(PROP_3));
+    assertEquals("value4-osgi", config.get(PROP_4));
+  }
+
+
+  private static class SampleParameterProvider implements ParameterProvider {
+
+    private static final Set<Parameter<?>> PARAMS = ImmutableSet.<Parameter<?>>builder()
+        .add(PROP_1)
+        .add(PROP_2)
+        .add(PROP_3)
+        .add(PROP_4).build();
+
+    @Override
+    public String getApplicationId() {
+      return "sample";
+    }
+
+    @Override
+    public Set<Parameter<?>> getParameters() {
+      return PARAMS;
+    }
+
+  }
 
   private static class SampleConfigurationFinderStrategy implements ConfigurationFinderStrategy {
 
@@ -121,6 +176,12 @@ public class CombinedTest {
       }
     }
 
+  }
+
+  @Component(immediate = true, metatype = true)
+  @Property(name = "prop4")
+  private static class SampleOsgiConfiguration {
+    // no methods
   }
 
 }
