@@ -20,16 +20,13 @@
 package io.wcm.config.core.management.impl;
 
 import io.wcm.config.api.Parameter;
-import io.wcm.config.core.util.SortedServices;
+import io.wcm.config.core.util.RankedServices;
+import io.wcm.config.core.util.TypeUtil;
 import io.wcm.config.management.ParameterOverride;
 import io.wcm.config.spi.ParameterOverrideProvider;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.commons.lang3.BooleanUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
@@ -48,7 +45,7 @@ public final class ParameterOverrideImpl implements ParameterOverride {
    */
   @Reference(name = "parameterOverrideProvider", referenceInterface = ParameterOverrideProvider.class,
       cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
-  private final SortedServices<ParameterOverrideProvider> parameterOverrideProviders = new SortedServices<>();
+  private final RankedServices<ParameterOverrideProvider> parameterOverrideProviders = new RankedServices<>();
 
   @Override
   public <T> T getOverrideSystemDefault(Parameter<T> parameter) {
@@ -62,55 +59,21 @@ public final class ParameterOverrideImpl implements ParameterOverride {
 
   private <T> T getOverrideValue(String scope, Parameter<T> parameter) {
     String key = "[" + scope + "]" + parameter.getName();
-    for (ParameterOverrideProvider provider : parameterOverrideProviders.get()) {
+    for (ParameterOverrideProvider provider : parameterOverrideProviders) {
       Map<String, String> overrideMap = provider.getOverrideMap();
       String value = overrideMap.get(key.toString());
       if (value != null) {
-        return toType(value, parameter.getType());
+        return TypeUtil.overridePropertyToType(value, parameter.getType());
       }
     }
     return null;
   }
 
-  @SuppressWarnings("unchecked")
-  private <T> T toType(String value, Class<T> type) {
-    if (type == String.class) {
-      return (T)value;
-    }
-    else if (type == String[].class) {
-      return (T)StringUtils.splitPreserveAllTokens(value, ARRAY_DELIMITER);
-    }
-    if (type == Integer.class) {
-      return (T)(Integer)NumberUtils.toInt(value, 0);
-    }
-    if (type == Long.class) {
-      return (T)(Long)NumberUtils.toLong(value, 0L);
-    }
-    if (type == Double.class) {
-      return (T)(Double)NumberUtils.toDouble(value, 0d);
-    }
-    if (type == Boolean.class) {
-      return (T)(Boolean)BooleanUtils.toBoolean(value);
-    }
-    if (type == Map.class) {
-      String[] rows = StringUtils.splitPreserveAllTokens(value, ARRAY_DELIMITER);
-      Map<String, String> map = new LinkedHashMap<>();
-      for (int i = 0; i < rows.length; i++) {
-        String[] keyValue = StringUtils.splitPreserveAllTokens(rows[i], KEY_VALUE_DELIMITER);
-        if (keyValue.length == 2 && StringUtils.isNotEmpty(keyValue[0])) {
-          map.put(keyValue[0], keyValue[1]);
-        }
-      }
-      return (T)map;
-    }
-    return null;
-  }
-
-  protected void bindParameterOverrideProvider(ParameterOverrideProvider service, Map<String, Object> props) {
+  void bindParameterOverrideProvider(ParameterOverrideProvider service, Map<String, Object> props) {
     parameterOverrideProviders.bind(service, props);
   }
 
-  protected void unbindParameterOverrideProvider(ParameterOverrideProvider service, Map<String, Object> props) {
+  void unbindParameterOverrideProvider(ParameterOverrideProvider service, Map<String, Object> props) {
     parameterOverrideProviders.unbind(service, props);
   }
 

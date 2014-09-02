@@ -24,6 +24,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.when;
 import io.wcm.config.api.Parameter;
 import io.wcm.config.management.ParameterOverride;
@@ -37,6 +38,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.sling.api.resource.ResourceResolver;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,6 +56,8 @@ import com.google.common.collect.ImmutableSet;
 @RunWith(MockitoJUnitRunner.class)
 public class ParameterResolverImplTest {
 
+  @Mock
+  private ResourceResolver resolver;
   @Mock
   private ComponentContext componentContext;
   @Mock
@@ -94,7 +98,7 @@ public class ParameterResolverImplTest {
     when(bundleContext.getServiceReference("my.service")).thenReturn(serviceReference);
     when(serviceReference.getProperty("prop1")).thenReturn("valueFromOsgiConfig");
 
-    when(parameterPersistence.getValues(anyString())).thenReturn(Collections.<String, Object>emptyMap());
+    when(parameterPersistence.getValues(same(resolver), anyString())).thenReturn(Collections.<String, Object>emptyMap());
     when(parameterOverride.getOverrideSystemDefault(any(Parameter.class))).thenReturn(null);
     when(parameterOverride.getOverrideForce(anyString(), any(Parameter.class))).thenReturn(null);
 
@@ -114,7 +118,7 @@ public class ParameterResolverImplTest {
 
   @Test
   public void testDefaultValues() {
-    Map<String, Object> values = underTest.getEffectiveValues(Arrays.asList("/config1"));
+    Map<String, Object> values = underTest.getEffectiveValues(resolver, Arrays.asList("/config1"));
     assertNull(values.get("param11"));
     assertEquals("defValue", values.get("param12"));
     assertEquals("valueFromOsgiConfig", values.get("param13"));
@@ -128,7 +132,7 @@ public class ParameterResolverImplTest {
     when(parameterOverride.getOverrideSystemDefault(PARAM13)).thenReturn("override13");
     when(parameterOverride.getOverrideSystemDefault(PARAM21)).thenReturn(66);
 
-    Map<String, Object> values = underTest.getEffectiveValues(Arrays.asList("/config1"));
+    Map<String, Object> values = underTest.getEffectiveValues(resolver, Arrays.asList("/config1"));
     assertEquals("override11", values.get("param11"));
     assertEquals("override12", values.get("param12"));
     assertEquals("override13", values.get("param13"));
@@ -137,14 +141,14 @@ public class ParameterResolverImplTest {
 
   @Test
   public void testConfiguredValues() {
-    when(parameterPersistence.getValues("/config1")).thenReturn(ImmutableMap.<String,Object>builder()
+    when(parameterPersistence.getValues(resolver, "/config1")).thenReturn(ImmutableMap.<String, Object>builder()
         .put("param11", "config11")
         .put("param12", "config12")
         .put("param13", "config13")
         .put("param21", 77)
         .build());
 
-    Map<String, Object> values = underTest.getEffectiveValues(Arrays.asList("/config1"));
+    Map<String, Object> values = underTest.getEffectiveValues(resolver, Arrays.asList("/config1"));
     assertEquals("config11", values.get("param11"));
     assertEquals("config12", values.get("param12"));
     assertEquals("config13", values.get("param13"));
@@ -153,20 +157,20 @@ public class ParameterResolverImplTest {
 
   @Test
   public void testConfigurationHierarchy() {
-    when(parameterPersistence.getValues("/region1")).thenReturn(ImmutableMap.<String, Object>builder()
+    when(parameterPersistence.getValues(resolver, "/region1")).thenReturn(ImmutableMap.<String, Object>builder()
         .put("param11", "r11")
         .put("param12", "r12")
         .put("param21", 88)
         .build());
-    when(parameterPersistence.getValues("/region1/site1")).thenReturn(ImmutableMap.<String, Object>builder()
+    when(parameterPersistence.getValues(resolver, "/region1/site1")).thenReturn(ImmutableMap.<String, Object>builder()
         .put("param11", "s11")
         .put("param21", 99)
         .build());
-    when(parameterPersistence.getValues("/region1/site1/config1")).thenReturn(ImmutableMap.<String, Object>builder()
+    when(parameterPersistence.getValues(resolver, "/region1/site1/config1")).thenReturn(ImmutableMap.<String, Object>builder()
         .put("param11", "c11")
         .build());
 
-    Map<String, Object> values = underTest.getEffectiveValues(Arrays.asList(
+    Map<String, Object> values = underTest.getEffectiveValues(resolver, Arrays.asList(
         "/region1/site1/config1", "/region1/site1", "/region1"));
     assertEquals("c11", values.get("param11"));
     assertEquals("r12", values.get("param12"));
@@ -176,7 +180,7 @@ public class ParameterResolverImplTest {
 
   @Test
   public void testOverrideForce() {
-    when(parameterPersistence.getValues("/config1")).thenReturn(ImmutableMap.<String, Object>builder()
+    when(parameterPersistence.getValues(resolver, "/config1")).thenReturn(ImmutableMap.<String, Object>builder()
         .put("param11", "config11")
         .put("param12", "config12")
         .put("param13", "config13")
@@ -188,7 +192,7 @@ public class ParameterResolverImplTest {
     when(parameterOverride.getOverrideForce("/config1", PARAM13)).thenReturn("override13");
     when(parameterOverride.getOverrideForce("/config1", PARAM21)).thenReturn(66);
 
-    Map<String, Object> values = underTest.getEffectiveValues(Arrays.asList("/config1"));
+    Map<String, Object> values = underTest.getEffectiveValues(resolver, Arrays.asList("/config1"));
     assertEquals("override11", values.get("param11"));
     assertEquals("override12", values.get("param12"));
     assertEquals("override13", values.get("param13"));
@@ -197,23 +201,23 @@ public class ParameterResolverImplTest {
 
   @Test
   public void testConfigurationHierarchyWithOverrides() {
-    when(parameterPersistence.getValues("/region1")).thenReturn(ImmutableMap.<String, Object>builder()
+    when(parameterPersistence.getValues(resolver, "/region1")).thenReturn(ImmutableMap.<String, Object>builder()
         .put("param11", "r11")
         .put("param12", "r12")
         .put("param21", 88)
         .build());
-    when(parameterPersistence.getValues("/region1/site1")).thenReturn(ImmutableMap.<String, Object>builder()
+    when(parameterPersistence.getValues(resolver, "/region1/site1")).thenReturn(ImmutableMap.<String, Object>builder()
         .put("param11", "s11")
         .put("param21", 99)
         .build());
-    when(parameterPersistence.getValues("/region1/site1/config1")).thenReturn(ImmutableMap.<String, Object>builder()
+    when(parameterPersistence.getValues(resolver, "/region1/site1/config1")).thenReturn(ImmutableMap.<String, Object>builder()
         .put("param11", "c11")
         .build());
 
     when(parameterOverride.getOverrideSystemDefault(PARAM13)).thenReturn("override13");
     when(parameterOverride.getOverrideForce("/region1/site1", PARAM21)).thenReturn(66);
 
-    Map<String, Object> values = underTest.getEffectiveValues(Arrays.asList(
+    Map<String, Object> values = underTest.getEffectiveValues(resolver, Arrays.asList(
         "/region1/site1/config1", "/region1/site1", "/region1"));
     assertEquals("c11", values.get("param11"));
     assertEquals("r12", values.get("param12"));
@@ -228,48 +232,21 @@ public class ParameterResolverImplTest {
         .add(ParameterBuilder.create("stringParamUnset", String.class).defaultOsgiConfigProperty("my.service:stringParamUnset").build())
         .add(ParameterBuilder.create("stringArrayParam", String[].class).defaultOsgiConfigProperty("my.service:stringArrayParam").build())
         .add(ParameterBuilder.create("integerParam", Integer.class).defaultOsgiConfigProperty("my.service:integerParam").build())
-        .add(ParameterBuilder.create("longParam", Long.class).defaultOsgiConfigProperty("my.service:longParam").build())
-        .add(ParameterBuilder.create("doubleParam", Double.class).defaultOsgiConfigProperty("my.service:doubleParam").build())
-        .add(ParameterBuilder.create("booleanParam", Boolean.class).defaultOsgiConfigProperty("my.service:booleanParam").build())
-        .add(ParameterBuilder.create("mapParam", Map.class).defaultOsgiConfigProperty("my.service:mapParam").build())
-        .add(ParameterBuilder.create("mapParamDefault", Map.class).defaultOsgiConfigProperty("my.service:mapParamDefault")
-            .defaultValue(
-                ImmutableMap.<String, Object>builder()
-                .put("key1", "value1")
-                .put("key2", 55)
-                .build()).build())
-                .build());
+        .build());
 
     when(serviceReference.getProperty("stringParam")).thenReturn("stringValue");
     when(serviceReference.getProperty("stringArrayParam")).thenReturn(new String[] {
         "v1", "v2"
     });
     when(serviceReference.getProperty("integerParam")).thenReturn("25");
-    when(serviceReference.getProperty("longParam")).thenReturn("33");
-    when(serviceReference.getProperty("doubleParam")).thenReturn("45.123");
-    when(serviceReference.getProperty("booleanParam")).thenReturn("true");
-    when(serviceReference.getProperty("mapParam")).thenReturn(new String[] {
-        "key1=abc", "key2=def"
-    });
 
-    Map<String, Object> values = underTest.getEffectiveValues(Arrays.asList("/config1"));
+    Map<String, Object> values = underTest.getEffectiveValues(resolver, Arrays.asList("/config1"));
     assertEquals("stringValue", values.get("stringParam"));
     assertNull(values.get("stringParamUnset"));
     assertArrayEquals(new String[] {
         "v1", "v2"
     }, (String[])values.get("stringArrayParam"));
     assertEquals(25, values.get("integerParam"));
-    assertEquals(33L, values.get("longParam"));
-    assertEquals(45.123d, values.get("doubleParam"));
-    assertEquals(true, values.get("booleanParam"));
-    assertEquals(ImmutableMap.<String, Object>builder()
-        .put("key1", "abc")
-        .put("key2", "def")
-        .build(), values.get("mapParam"));
-    assertEquals(ImmutableMap.<String, Object>builder()
-        .put("key1", "value1")
-        .put("key2", "55")
-        .build(), values.get("mapParamDefault"));
   }
 
   @Test
@@ -280,12 +257,9 @@ public class ParameterResolverImplTest {
         .add(ParameterBuilder.create("stringArrayParam", String[].class).build())
         .add(ParameterBuilder.create("integerParam", Integer.class).build())
         .add(ParameterBuilder.create("integerParamDefaultValue", Integer.class).defaultValue(22).build())
-        .add(ParameterBuilder.create("longParam", Long.class).build())
-        .add(ParameterBuilder.create("doubleParam", Double.class).build())
-        .add(ParameterBuilder.create("booleanParam", Boolean.class).build())
         .build());
 
-    when(parameterPersistence.getValues("/config1")).thenReturn(ImmutableMap.<String, Object>builder()
+    when(parameterPersistence.getValues(resolver, "/config1")).thenReturn(ImmutableMap.<String, Object>builder()
         .put("stringParam", 55)
         .put("stringParamDefaultValue", 66L)
         .put("stringArrayParam", new int[] {
@@ -293,20 +267,14 @@ public class ParameterResolverImplTest {
         })
         .put("integerParam", "value1")
         .put("integerParamDefaultValue", "value2")
-        .put("longParam", 1.23d)
-        .put("doubleParam", 5L)
-        .put("booleanParam", "false")
         .build());
 
-    Map<String, Object> values = underTest.getEffectiveValues(Arrays.asList("/config1"));
+    Map<String, Object> values = underTest.getEffectiveValues(resolver, Arrays.asList("/config1"));
     assertNull(values.get("stringParam"));
     assertEquals("def", values.get("stringParamDefaultValue"));
     assertNull(values.get("stringArrayParam"));
     assertNull(values.get("integerParam"));
     assertEquals(22, values.get("integerParamDefaultValue"));
-    assertNull(values.get("longParam"));
-    assertNull(values.get("doubleParam"));
-    assertNull(values.get("booleanParam"));
   }
 
 }

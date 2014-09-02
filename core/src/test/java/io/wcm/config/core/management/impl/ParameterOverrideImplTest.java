@@ -27,7 +27,6 @@ import io.wcm.config.api.Parameter;
 import io.wcm.config.spi.ParameterBuilder;
 import io.wcm.config.spi.ParameterOverrideProvider;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.junit.Before;
@@ -88,10 +87,6 @@ public class ParameterOverrideImplTest {
         .put("[default]stringParam", "value1")
         .put("[default]stringArrayParam", "value1;value2;")
         .put("[default]integerParam", "55")
-        .put("[default]longParam", "66")
-        .put("[default]doubleParam", "1.23")
-        .put("[default]booleanParam", "true")
-        .put("[default]mapParam", "key1=abc;key2=def;key3=;;=xyz")
         .build());
 
     assertEquals("value1", underTest.getOverrideSystemDefault(
@@ -101,18 +96,6 @@ public class ParameterOverrideImplTest {
     }, underTest.getOverrideSystemDefault(ParameterBuilder.create("stringArrayParam", String[].class).build()));
     assertEquals((Integer)55, underTest.getOverrideSystemDefault(
         ParameterBuilder.create("integerParam", Integer.class).build()));
-    assertEquals((Long)66L, underTest.getOverrideSystemDefault(
-        ParameterBuilder.create("longParam", Long.class).build()));
-    assertEquals(1.23d, underTest.getOverrideSystemDefault(
-        ParameterBuilder.create("doubleParam", Double.class).build()), 0.0001d);
-    assertEquals(true, underTest.getOverrideSystemDefault(
-        ParameterBuilder.create("booleanParam", Boolean.class).build()));
-    Map<String, String> map = new LinkedHashMap<>();
-    map.put("key1", "abc");
-    map.put("key2", "def");
-    map.put("key3", "");
-    assertEquals(map, underTest.getOverrideSystemDefault(
-        ParameterBuilder.create("mapParam", Map.class).build()));
   }
 
 }

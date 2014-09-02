@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.config.core.overrideprovider;
+package io.wcm.config.core.override;
 
 import io.wcm.config.spi.ParameterOverrideProvider;
 
@@ -123,7 +123,7 @@ public final class RequestHeaderOverrideProvider implements ParameterOverridePro
   }
 
   @Activate
-  protected void activate(final ComponentContext ctx) {
+  void activate(final ComponentContext ctx) {
     Dictionary config = ctx.getProperties();
     this.enabled = PropertiesUtil.toBoolean(config.get(PROPERTY_ENABLED), DEFAULT_ENABLED);
   }

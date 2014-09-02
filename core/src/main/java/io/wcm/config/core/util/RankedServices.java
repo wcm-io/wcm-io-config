@@ -22,8 +22,10 @@ package io.wcm.config.core.util;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.apache.sling.commons.osgi.ServiceUtil;
@@ -33,9 +35,9 @@ import org.apache.sling.commons.osgi.ServiceUtil;
  * Implementation is thread-safe.
  * @param <T> Service type
  */
-public final class SortedServices<T> {
+public final class RankedServices<T> implements Iterable<T> {
 
-  private final Map<Comparable<Object>, T> serviceMap = new TreeMap<>();
+  private final SortedMap<Comparable<Object>, T> serviceMap = new TreeMap<>();
   private volatile Collection<T> sortedServices = Collections.emptyList();
 
   /**
@@ -75,6 +77,11 @@ public final class SortedServices<T> {
    */
   public Collection<T> get() {
     return sortedServices;
+  }
+
+  @Override
+  public Iterator<T> iterator() {
+    return sortedServices.iterator();
   }
 
 }

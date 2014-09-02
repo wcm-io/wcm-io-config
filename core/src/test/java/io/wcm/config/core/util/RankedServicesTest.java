@@ -30,7 +30,7 @@ import org.osgi.framework.Constants;
 
 import com.google.common.collect.ImmutableMap;
 
-public class SortedServicesTest {
+public class RankedServicesTest {
 
   private static final String SERVICE_1 = "service1";
   private static final Map<String, Object> SERVICE_1_PROPS = ImmutableMap.<String, Object>builder()
@@ -45,7 +45,7 @@ public class SortedServicesTest {
   @Test
   public void testSortedServices() {
 
-    SortedServices<Comparable> underTest = new SortedServices<>();
+    RankedServices<Comparable> underTest = new RankedServices<>();
     assertEquals(0, underTest.get().size());
 
     underTest.bind(SERVICE_1, SERVICE_1_PROPS);

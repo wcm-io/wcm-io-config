@@ -23,7 +23,7 @@ import io.wcm.config.api.Configuration;
 import io.wcm.config.api.Parameter;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -44,7 +44,9 @@ public final class ConfigurationImpl implements Configuration {
    */
   public ConfigurationImpl(String configurationId, Map<String, Object> properties) {
     this.configurationId = configurationId;
-    this.properties = new ValueMapDecorator(Collections.unmodifiableMap(properties));
+    // copy map to make sure original map is never touched
+    Map<String, Object> mapCopy = new HashMap<String, Object>(properties);
+    this.properties = new ValueMapDecorator(mapCopy);
   }
 
   @Override

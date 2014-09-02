@@ -22,6 +22,7 @@ package io.wcm.config.core.management.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyCollectionOf;
 import static org.mockito.Mockito.when;
 import io.wcm.config.api.Configuration;
@@ -35,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -89,12 +91,12 @@ public class ConfigurationFinderImplTest {
         .build().iterator());
     when(finderStrategy2.getApplicationId()).thenReturn(APPLICATION_ID_2);
 
-    when(parameterResolver.getEffectiveValues(anyCollectionOf(String.class)))
+    when(parameterResolver.getEffectiveValues(any(ResourceResolver.class), anyCollectionOf(String.class)))
     .then(new Answer<Map<String,Object>>() {
       @SuppressWarnings("unchecked")
       @Override
       public Map<String, Object> answer(InvocationOnMock invocation) {
-        Collection<String> configurationIds = (Collection<String>)invocation.getArguments()[0];
+            Collection<String> configurationIds = (Collection<String>)invocation.getArguments()[1];
         Map<String, Object> props = new HashMap<>();
         props.put("path", configurationIds.iterator().next());
         return props;

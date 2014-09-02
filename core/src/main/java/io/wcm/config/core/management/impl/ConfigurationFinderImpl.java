@@ -21,7 +21,7 @@ package io.wcm.config.core.management.impl;
 
 import io.wcm.config.api.Configuration;
 import io.wcm.config.core.impl.ConfigurationImpl;
-import io.wcm.config.core.util.SortedServices;
+import io.wcm.config.core.util.RankedServices;
 import io.wcm.config.management.ConfigurationFinder;
 import io.wcm.config.management.ParameterResolver;
 import io.wcm.config.spi.ConfigurationFinderStrategy;
@@ -43,6 +43,7 @@ import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.apache.felix.scr.annotations.Service;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
 
 /**
  * Default implementation of {@link ConfigurationFinder}.
@@ -66,7 +67,7 @@ public final class ConfigurationFinderImpl implements ConfigurationFinder {
    */
   @Reference(name = "configurationFinderStrategy", referenceInterface = ConfigurationFinderStrategy.class,
       cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
-  private final SortedServices<ConfigurationFinderStrategy> finderStrategies = new SortedServices<>();
+  private final RankedServices<ConfigurationFinderStrategy> finderStrategies = new RankedServices<>();
 
   @Reference
   private ParameterResolver parameterResolver;
@@ -79,7 +80,7 @@ public final class ConfigurationFinderImpl implements ConfigurationFinder {
   @Override
   public Configuration find(Resource resource, String applicationId) {
     Set<String> allIds = getAllMatchingConfigurationIds(resource, applicationId);
-    return readConfiguration(allIds);
+    return readConfiguration(resource.getResourceResolver(), allIds);
   }
 
   @Override
@@ -92,7 +93,7 @@ public final class ConfigurationFinderImpl implements ConfigurationFinder {
     List<Configuration> configurations = new ArrayList<>();
     List<String> allIds = new LinkedList<String>(getAllMatchingConfigurationIds(resource, applicationId));
     while (!allIds.isEmpty()) {
-      configurations.add(readConfiguration(allIds));
+      configurations.add(readConfiguration(resource.getResourceResolver(), allIds));
       allIds.remove(0);
     }
     return configurations.iterator();
@@ -100,7 +101,7 @@ public final class ConfigurationFinderImpl implements ConfigurationFinder {
 
   private Set<String> getAllMatchingConfigurationIds(Resource resource, String applicationId) {
     Set<String> allIds = new TreeSet<>(CONFIGURATION_ID_CLOSED_MATCH_COMPARATOR);
-    for (ConfigurationFinderStrategy finderStrategy : finderStrategies.get()) {
+    for (ConfigurationFinderStrategy finderStrategy : finderStrategies) {
       if (matchesApplicationId(applicationId, finderStrategy.getApplicationId())) {
         Iterator<String> configIds = finderStrategy.findConfigurationIds(resource);
         while (configIds.hasNext()) {
@@ -120,20 +121,20 @@ public final class ConfigurationFinderImpl implements ConfigurationFinder {
     }
   }
 
-  private Configuration readConfiguration(Collection<String> configurationIds) {
+  private Configuration readConfiguration(ResourceResolver resolver, Collection<String> configurationIds) {
     if (configurationIds.isEmpty()) {
       return null;
     }
     String topmostConfigurationId = configurationIds.iterator().next();
-    Map<String, Object> values = this.parameterResolver.getEffectiveValues(configurationIds);
+    Map<String, Object> values = this.parameterResolver.getEffectiveValues(resolver, configurationIds);
     return new ConfigurationImpl(topmostConfigurationId, values);
   }
 
-  protected void bindConfigurationFinderStrategy(ConfigurationFinderStrategy service, Map<String, Object> props) {
+  void bindConfigurationFinderStrategy(ConfigurationFinderStrategy service, Map<String, Object> props) {
     finderStrategies.bind(service, props);
   }
 
-  protected void unbindConfigurationFinderStrategy(ConfigurationFinderStrategy service, Map<String, Object> props) {
+  void unbindConfigurationFinderStrategy(ConfigurationFinderStrategy service, Map<String, Object> props) {
     finderStrategies.unbind(service, props);
   }
 

@@ -20,7 +20,8 @@
 package io.wcm.config.core.management.impl;
 
 import io.wcm.config.api.Parameter;
-import io.wcm.config.core.util.SortedServices;
+import io.wcm.config.core.util.RankedServices;
+import io.wcm.config.core.util.TypeUtil;
 import io.wcm.config.management.ParameterOverride;
 import io.wcm.config.management.ParameterPersistence;
 import io.wcm.config.management.ParameterResolver;
@@ -34,7 +35,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.felix.scr.annotations.Activate;
 import org.apache.felix.scr.annotations.Component;
@@ -42,10 +42,12 @@ import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.apache.felix.scr.annotations.Service;
-import org.apache.sling.commons.osgi.PropertiesUtil;
+import org.apache.sling.api.resource.ResourceResolver;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Iterators;
 
@@ -56,7 +58,7 @@ import com.google.common.collect.Iterators;
 @Service(ParameterResolver.class)
 public final class ParameterResolverImpl implements ParameterResolver {
 
-  private static final String KEY_VALUE_DELIMITER = "=";
+  private static final Logger log = LoggerFactory.getLogger(ParameterResolverImpl.class);
 
   @Reference
   private ParameterPersistence parameterPersistence;
@@ -71,10 +73,10 @@ public final class ParameterResolverImpl implements ParameterResolver {
    */
   @Reference(name = "parameterProvider", referenceInterface = ParameterProvider.class,
       cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
-  private final SortedServices<ParameterProvider> parameterProviders = new SortedServices<>();
+  private final RankedServices<ParameterProvider> parameterProviders = new RankedServices<>();
 
   @Override
-  public Map<String, Object> getEffectiveValues(Collection<String> configurationIds) {
+  public Map<String, Object> getEffectiveValues(ResourceResolver resolver, Collection<String> configurationIds) {
     Map<String, Parameter<?>> parameters = getAllParameters();
     Map<String, Object> parameterValues = new HashMap<>();
 
@@ -86,7 +88,7 @@ public final class ParameterResolverImpl implements ParameterResolver {
     String[] configurationIdArray = Iterators.toArray(configurationIds.iterator(), String.class);
     for (int i = configurationIdArray.length - 1; i >= 0; i--) {
       String configurationId = configurationIdArray[i];
-      applyConfiguredValues(configurationId, parameters, parameterValues);
+      applyConfiguredValues(resolver, configurationId, parameters, parameterValues);
 
       // apply forced override values
       applyOverrideForce(configurationId, parameters, parameterValues);
@@ -101,7 +103,7 @@ public final class ParameterResolverImpl implements ParameterResolver {
    */
   private Map<String, Parameter<?>> getAllParameters() {
     Set<Parameter<?>> parameters = new HashSet<>();
-    for (ParameterProvider provider : this.parameterProviders.get()) {
+    for (ParameterProvider provider : this.parameterProviders) {
       parameters.addAll(provider.getParameters());
     }
     Map<String, Parameter<?>> parameterMap = new TreeMap<>();
@@ -127,7 +129,7 @@ public final class ParameterResolverImpl implements ParameterResolver {
    * @param parameter Parameter definition
    * @return Default value or null
    */
-  private Object getParameterDefaultValue(Parameter<?> parameter) {
+  private <T> T getParameterDefaultValue(Parameter<T> parameter) {
     String defaultOsgiConfigProperty = parameter.getDefaultOsgiConfigProperty();
     if (StringUtils.isNotBlank(defaultOsgiConfigProperty)) {
       String[] parts = StringUtils.split(defaultOsgiConfigProperty, ":");
@@ -136,56 +138,7 @@ public final class ParameterResolverImpl implements ParameterResolver {
       ServiceReference ref = bundleContext.getServiceReference(className);
       if (ref != null) {
         Object value = ref.getProperty(propertyName);
-        // only selected parameter types are supported
-        if (parameter.getType() == String.class) {
-          return PropertiesUtil.toString(value, (String)parameter.getDefaultValue());
-        }
-        if (parameter.getType() == String[].class) {
-          return PropertiesUtil.toStringArray(value, (String[])parameter.getDefaultValue());
-        }
-        else if (parameter.getType() == Integer.class) {
-          Integer defaultValue = (Integer)parameter.getDefaultValue();
-          if (defaultValue == null) {
-            defaultValue = 0;
-          }
-          return PropertiesUtil.toInteger(value, defaultValue);
-        }
-        else if (parameter.getType() == Long.class) {
-          Long defaultValue = (Long)parameter.getDefaultValue();
-          if (defaultValue == null) {
-            defaultValue = 0L;
-          }
-          return PropertiesUtil.toLong(value, defaultValue);
-        }
-        else if (parameter.getType() == Double.class) {
-          Double defaultValue = (Double)parameter.getDefaultValue();
-          if (defaultValue == null) {
-            defaultValue = 0d;
-          }
-          return PropertiesUtil.toDouble(value, defaultValue);
-        }
-        else if (parameter.getType() == Boolean.class || parameter.getType() == boolean.class) {
-          Boolean defaultValue = (Boolean)parameter.getDefaultValue();
-          if (defaultValue == null) {
-            defaultValue = false;
-          }
-          return PropertiesUtil.toBoolean(value, defaultValue);
-        }
-        else if (parameter.getType() == Map.class) {
-          Map<?, ?> defaultMap = (Map)parameter.getDefaultValue();
-          String[] defaultValue;
-          if (defaultMap == null) {
-            defaultValue = new String[0];
-          }
-          else {
-            defaultValue = new String[defaultMap.size()];
-            Map.Entry<?, ?>[] entries = Iterators.toArray(defaultMap.entrySet().iterator(), Map.Entry.class);
-            for (int i = 0; i < entries.length; i++) {
-              defaultValue[i] = ObjectUtils.toString(entries[i].getKey()) + KEY_VALUE_DELIMITER + ObjectUtils.toString(entries[i].getValue());
-            }
-          }
-          return PropertiesUtil.toMap(value, defaultValue);
-        }
+        return TypeUtil.osgiPropertyToType(value, parameter.getType(), parameter.getDefaultValue());
       }
     }
     return parameter.getDefaultValue();
@@ -207,11 +160,14 @@ public final class ParameterResolverImpl implements ParameterResolver {
 
   /**
    * Apply configured values for given configuration id.
+   * @param resolver Resource resolver
    * @param configurationId Configuration id
+   * @param parameters Parameter definitions
    * @param parameterValues Parameter values
    */
-  private void applyConfiguredValues(String configurationId, Map<String, Parameter<?>> parameters, Map<String, Object> parameterValues) {
-    Map<String, Object> configuredValues = new HashMap<>(parameterPersistence.getValues(configurationId));
+  private void applyConfiguredValues(ResourceResolver resolver, String configurationId,
+      Map<String, Parameter<?>> parameters, Map<String, Object> parameterValues) {
+    Map<String, Object> configuredValues = new HashMap<>(parameterPersistence.getValues(resolver, configurationId));
     ensureValidValueTypes(parameters, configuredValues);
     parameterValues.putAll(configuredValues);
   }
@@ -253,16 +209,41 @@ public final class ParameterResolverImpl implements ParameterResolver {
     }
   }
 
+  /**
+   * Validate that application ids and configuration names are unique over all providers.
+   */
+  private void validateParameterProviders() {
+    Set<String> applicationIds = new HashSet<>();
+    Set<String> parameterNames = new HashSet<>();
+    for (ParameterProvider provider : this.parameterProviders) {
+      if (applicationIds.contains(provider.getApplicationId())) {
+        log.warn("Parameter provider application id is not unique: {}", provider.getApplicationId());
+      }
+      else if (StringUtils.isNotEmpty(provider.getApplicationId())) {
+        applicationIds.add(provider.getApplicationId());
+      }
+      for (Parameter<?> parameter : provider.getParameters()) {
+        if (parameterNames.contains(parameter.getName())) {
+          log.warn("Parameter name is not unique: {} (application: {})", parameter.getName(), provider.getApplicationId());
+        }
+        else {
+          parameterNames.add(parameter.getName());
+        }
+      }
+    }
+  }
+
   @Activate
-  protected void activate(final ComponentContext ctx) {
+  void activate(final ComponentContext ctx) {
     bundleContext = ctx.getBundleContext();
   }
 
-  protected void bindParameterProvider(ParameterProvider service, Map<String, Object> props) {
+  void bindParameterProvider(ParameterProvider service, Map<String, Object> props) {
     parameterProviders.bind(service, props);
+    validateParameterProviders();
   }
 
-  protected void unbindParameterProvider(ParameterProvider service, Map<String, Object> props) {
+  void unbindParameterProvider(ParameterProvider service, Map<String, Object> props) {
     parameterProviders.unbind(service, props);
   }
 

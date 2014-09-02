@@ -22,6 +22,8 @@ package io.wcm.config.management;
 import java.util.Collection;
 import java.util.Map;
 
+import org.apache.sling.api.resource.ResourceResolver;
+
 /**
  * Resolve parameter values respecting configuration hierarchy and overriding.
  */
@@ -29,9 +31,10 @@ public interface ParameterResolver {
 
   /**
    * Get all parameter values effective for a configuration including configuration inheritance.
+   * @param resolver Resource resolver
    * @param configurationIds List of configuration ids (in order of closest matching first).
    * @return Parameter values
    */
-  Map<String, Object> getEffectiveValues(Collection<String> configurationIds);
+  Map<String, Object> getEffectiveValues(ResourceResolver resolver, Collection<String> configurationIds);
 
 }
