@@ -23,8 +23,10 @@ import static io.wcm.config.core.persistence.ToolsConfigPagePersistenceProvider.
 import static io.wcm.config.core.persistence.ToolsConfigPagePersistenceProvider.CONFIG_RESOURCE_NAME;
 import static io.wcm.config.core.persistence.ToolsConfigPagePersistenceProvider.TOOLS_PAGE_NAME;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 import io.wcm.config.management.PersistenceException;
 import io.wcm.testing.mock.aem.junit.AemContext;
@@ -66,11 +68,11 @@ public class ToolsConfigPagePersistenceProviderTest {
     Page contentPage = context.pageManager().create("/", "content", TOOLS_PAGE_TEMPLATE, "content", true);
     context.pageManager().create(contentPage.getPath(), "site1", CONFIG_PAGE_TEMPLATE, "site1", true);
 
-    Dictionary<String, Object> props = new Hashtable<>();
-    props.put(ToolsConfigPagePersistenceProvider.PROPERTY_ENABLED, true);
-    props.put(ToolsConfigPagePersistenceProvider.PROPERTY_CONFIG_PAGE_TEMPLATE, CONFIG_PAGE_TEMPLATE);
-    props.put(ToolsConfigPagePersistenceProvider.PROPERTY_TOOLS_PAGE_TEMPLATE, TOOLS_PAGE_TEMPLATE);
-    when(componentContext.getProperties()).thenReturn(props);
+    Dictionary<String, Object> serviceConfig = new Hashtable<>();
+    serviceConfig.put(ToolsConfigPagePersistenceProvider.PROPERTY_ENABLED, true);
+    serviceConfig.put(ToolsConfigPagePersistenceProvider.PROPERTY_CONFIG_PAGE_TEMPLATE, CONFIG_PAGE_TEMPLATE);
+    serviceConfig.put(ToolsConfigPagePersistenceProvider.PROPERTY_TOOLS_PAGE_TEMPLATE, TOOLS_PAGE_TEMPLATE);
+    when(componentContext.getProperties()).thenReturn(serviceConfig);
 
     underTest = new ToolsConfigPagePersistenceProvider();
     underTest.activate(componentContext);
@@ -104,7 +106,7 @@ public class ToolsConfigPagePersistenceProviderTest {
     Map<String, Object> newProps = new HashMap<>();
     props.put("props1", "value2");
     props.put("props3", "value3");
-    underTest.store(context.resourceResolver(), CONFIG_ID, newProps);
+    assertTrue(underTest.store(context.resourceResolver(), CONFIG_ID, newProps));
 
     assertEquals(newProps, new HashMap<String, Object>(underTest.get(context.resourceResolver(), CONFIG_ID)));
   }
@@ -126,7 +128,28 @@ public class ToolsConfigPagePersistenceProviderTest {
     Map<String, Object> props = new HashMap<>();
     props.put("props1", "value1");
     props.put("props2", 55L);
-    underTest.store(context.resourceResolver(), "/content/site2", props);
+    assertTrue(underTest.store(context.resourceResolver(), "/content/site2", props));
+  }
+
+  @Test
+  public void testDisabled() throws Exception {
+    Dictionary<String, Object> serviceConfig = new Hashtable<>();
+    serviceConfig.put(ToolsConfigPagePersistenceProvider.PROPERTY_ENABLED, false);
+    when(componentContext.getProperties()).thenReturn(serviceConfig);
+    underTest = new ToolsConfigPagePersistenceProvider();
+    underTest.activate(componentContext);
+
+    Page toolsPage = context.pageManager().create(CONFIG_ID, TOOLS_PAGE_NAME, TOOLS_PAGE_TEMPLATE, TOOLS_PAGE_NAME, true);
+    Page configPage = context.pageManager().create(toolsPage.getPath(), CONFIG_PAGE_NAME, CONFIG_PAGE_TEMPLATE, CONFIG_PAGE_NAME, true);
+
+    Map<String, Object> props = new HashMap<>();
+    props.put("props1", "value1");
+    props.put("props2", 55L);
+    context.resourceResolver().create(configPage.getContentResource(), CONFIG_RESOURCE_NAME, props);
+    context.resourceResolver().commit();
+
+    assertNull(underTest.get(context.resourceResolver(), CONFIG_ID));
+    assertFalse(underTest.store(context.resourceResolver(), CONFIG_ID, props));
   }
 
 }
