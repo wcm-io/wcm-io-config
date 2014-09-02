@@ -55,7 +55,7 @@ public class ToolsConfigPagePersistenceProviderTest {
   @Rule
   public final AemContext context = new AemContext();
 
-  ToolsConfigPagePersistenceProvider underTest;
+  private ToolsConfigPagePersistenceProvider underTest;
 
   @Before
   public void setUp() throws WCMException {
