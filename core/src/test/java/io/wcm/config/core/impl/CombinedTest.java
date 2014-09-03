@@ -23,6 +23,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import io.wcm.config.api.Configuration;
 import io.wcm.config.api.Parameter;
+import io.wcm.config.api.management.ParameterPersistence;
+import io.wcm.config.api.management.PersistenceException;
 import io.wcm.config.core.management.impl.ConfigurationFinderImpl;
 import io.wcm.config.core.management.impl.ParameterOverrideImpl;
 import io.wcm.config.core.management.impl.ParameterPersistenceImpl;
@@ -30,8 +32,6 @@ import io.wcm.config.core.management.impl.ParameterResolverImpl;
 import io.wcm.config.core.override.RequestHeaderOverrideProvider;
 import io.wcm.config.core.override.SystemPropertyOverrideProvider;
 import io.wcm.config.core.persistence.ToolsConfigPagePersistenceProvider;
-import io.wcm.config.api.management.ParameterPersistence;
-import io.wcm.config.api.management.PersistenceException;
 import io.wcm.config.spi.ConfigurationFinderStrategy;
 import io.wcm.config.spi.ParameterBuilder;
 import io.wcm.config.spi.ParameterProvider;
@@ -72,6 +72,7 @@ public class CombinedTest {
 
   @Before
   public void setUp() throws Exception {
+
     // app-specific serivces
     context.registerService(SampleOsgiConfiguration.class, new SampleOsgiConfiguration(),
         ImmutableMap.<String, Object>builder().put("prop4", "value4-osgi").build());
@@ -110,7 +111,9 @@ public class CombinedTest {
 
   @Test
   public void testConfigWithInheritance() {
-    Configuration config = context.request().getResource().adaptTo(Configuration.class);
+    Resource resource = context.request().getResource();
+    Configuration config = resource.adaptTo(Configuration.class);
+
     assertNotNull(config);
     assertEquals("value1-l3", config.get(PROP_1));
     assertEquals("value2-l2", config.get(PROP_2));
@@ -124,7 +127,9 @@ public class CombinedTest {
     persistence.storeParameterValues(context.resourceResolver(), CONFIG_ID, ImmutableMap.<String, Object>builder()
         .put(PROP_3.getName(), "value3-new").build(), true);
 
-    Configuration config = context.request().getResource().adaptTo(Configuration.class);
+    Resource resource = context.request().getResource();
+    Configuration config = resource.adaptTo(Configuration.class);
+
     assertNotNull(config);
     assertEquals("value1-l3", config.get(PROP_1));
     assertEquals("value2-l2", config.get(PROP_2));
