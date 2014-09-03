@@ -1,3 +1,4 @@
 {
-  "jcr:primaryType": "cq:Component"
+  "jcr:primaryType": "cq:Component",
+  "sling:resourceSuperType": "/apps/wcm-io/wcm/commons/components/global/page"  
 }

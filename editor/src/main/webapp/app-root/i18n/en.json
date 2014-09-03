@@ -1,0 +1,10 @@
+{
+  "jcr:primaryType": "nt:folder",
+  "jcr:language": "en",
+  "jcr:mixinTypes": ["mix:language"],
+  "io.wcm.config.editor.title": {
+    "jcr:primaryType": "nt:folder",
+    "sling:message": "Configuration Editor",
+    "jcr:mixinTypes": ["sling:Message"]
+  }
+}
