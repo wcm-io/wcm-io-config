@@ -2,7 +2,8 @@
   "jcr:primaryType": "cq:Template",
   "jcr:title": "wcm.io Configuration Editor",
 
-  "allowedPaths": "^/content(/.*)?$",
+  // this template is not allowed at any path - create a template in the application itself with property path mapping
+  "allowedPaths": "",
 
   "jcr:content": {
     "jcr:primaryType": "cq:PageContent",

@@ -94,9 +94,11 @@
             <Export-Package>
               io.wcm.config.editor.*;version=${project.version}
             </Export-Package>
+            <!--
             <Sling-Model-Packages>
               io.wcm.config.editor
             </Sling-Model-Packages>
+            -->
           </instructions>
         </configuration>
       </plugin>
