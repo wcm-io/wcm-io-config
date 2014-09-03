@@ -17,11 +17,9 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.config.spi;
+package io.wcm.config.api;
 
 import static org.junit.Assert.assertEquals;
-import io.wcm.config.api.Parameter;
-import io.wcm.config.api.Visibility;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -40,7 +38,6 @@ public class ParameterBuilderTest {
 
     Parameter<String> param = ParameterBuilder.create("param1", String.class)
         .applicationId("app1")
-        .visibility(Visibility.FRONTEND)
         .defaultOsgiConfigProperty("service:prop1")
         .defaultValue("defValue")
         .property("prop3", "value3")
@@ -51,7 +48,6 @@ public class ParameterBuilderTest {
     assertEquals("param1", param.getName());
     assertEquals(String.class, param.getType());
     assertEquals("app1", param.getApplicationId());
-    assertEquals(Visibility.FRONTEND, param.getVisibility());
     assertEquals("service:prop1", param.getDefaultOsgiConfigProperty());
     assertEquals("defValue", param.getDefaultValue());
     assertEquals("value1", param.getProperties().get("prop1", String.class));

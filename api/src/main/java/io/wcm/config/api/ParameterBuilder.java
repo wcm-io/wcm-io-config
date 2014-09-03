@@ -17,20 +17,15 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.config.spi;
+package io.wcm.config.api;
 
-import io.wcm.config.api.Parameter;
-import io.wcm.config.api.Visibility;
+import io.wcm.sling.commons.wrappers.ImmutableValueMapDecorator;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
-
-import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.api.wrappers.ValueMapDecorator;
 
 /**
  * Fluent API for building configuration parameter definitions.
@@ -58,7 +53,6 @@ public final class ParameterBuilder<T> {
   private final Class<T> type;
   private final Map<String, Object> properties = new HashMap<>();
   private String applicationId;
-  private Visibility visibility = Visibility.NONE;
   private String defaultOsgiConfigProperty;
   private T defaultValue;
 
@@ -92,18 +86,6 @@ public final class ParameterBuilder<T> {
       throw new IllegalArgumentException("Invalid applicaitonId: " + value);
     }
     this.applicationId = value;
-    return this;
-  }
-
-  /**
-   * @param value Parameter visibility
-   * @return this
-   */
-  public ParameterBuilder<T> visibility(Visibility value) {
-    if (value == null) {
-      throw new IllegalArgumentException("Visibility argument must not be null.");
-    }
-    this.visibility = value;
     return this;
   }
 
@@ -163,94 +145,13 @@ public final class ParameterBuilder<T> {
    * @return Parameter definition
    */
   public Parameter<T> build() {
-    return new ParameterImpl<T>(
+    return new Parameter<T>(
         this.name,
         this.type,
-        new ValueMapDecorator(Collections.unmodifiableMap(this.properties)),
         this.applicationId,
-        this.visibility,
         this.defaultOsgiConfigProperty,
-        this.defaultValue);
-  }
-
-  /**
-   * Immutable {@link Parameter} implementation.
-   * @param <T> Parameter value type
-   */
-  private static final class ParameterImpl<T> implements Parameter<T> {
-
-    private final String name;
-    private final Class<T> type;
-    private final ValueMap properties;
-    private final String applicationId;
-    private final Visibility visibility;
-    private final String defaultOsgiConfigProperty;
-    private final T defaultValue;
-
-    public ParameterImpl(String name, Class<T> type, ValueMap properties, String applicationId,
-        Visibility visibility, String defaultOsgiConfigProperty, T defaultValue) {
-      this.name = name;
-      this.type = type;
-      this.properties = properties;
-      this.applicationId = applicationId;
-      this.visibility = visibility;
-      this.defaultOsgiConfigProperty = defaultOsgiConfigProperty;
-      this.defaultValue = defaultValue;
-    }
-
-    @Override
-    public String getName() {
-      return this.name;
-    }
-
-    @Override
-    public Class<T> getType() {
-      return this.type;
-    }
-
-    @Override
-    public ValueMap getProperties() {
-      return this.properties;
-    }
-
-    @Override
-    public String getApplicationId() {
-      return this.applicationId;
-    }
-
-    @Override
-    public Visibility getVisibility() {
-      return this.visibility;
-    }
-
-    @Override
-    public String getDefaultOsgiConfigProperty() {
-      return this.defaultOsgiConfigProperty;
-    }
-
-    @Override
-    public T getDefaultValue() {
-      return this.defaultValue;
-    }
-
-    @Override
-    public int hashCode() {
-      return this.name.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-      if (!(obj instanceof ParameterImpl)) {
-        return false;
-      }
-      return this.name.equals(((ParameterImpl)obj).name);
-    }
-
-    @Override
-    public int compareTo(Parameter o) {
-      return this.name.compareTo(o.getName());
-    }
-
+        this.defaultValue,
+        new ImmutableValueMapDecorator(this.properties));
   }
 
 }

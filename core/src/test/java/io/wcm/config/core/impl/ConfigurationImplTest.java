@@ -24,7 +24,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import io.wcm.config.api.Configuration;
 import io.wcm.config.api.Parameter;
-import io.wcm.config.spi.ParameterBuilder;
+import io.wcm.config.api.ParameterBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -81,29 +81,27 @@ public class ConfigurationImplTest {
     assertEquals(2, underTest.entrySet().size());
   }
 
-  @Test
+  @Test(expected = UnsupportedOperationException.class)
   public void testMapClear() {
     underTest.clear();
-    assertEquals(0, underTest.size());
   }
 
-  @Test
-  public void testPutRemove() {
+  @Test(expected = UnsupportedOperationException.class)
+  public void testMapRemove() {
     underTest.remove("prop2");
+  }
+
+  @Test(expected = UnsupportedOperationException.class)
+  public void testMapPut() {
     underTest.put("prop3", "value3");
+  }
+
+  @Test(expected = UnsupportedOperationException.class)
+  public void testMapPutAll() {
     underTest.putAll(ImmutableMap.<String, Object>builder()
         .put("prop4", 25)
         .put("prop5", 33)
         .build());
-
-    Map<String, Object> expected = ImmutableMap.<String, Object>builder()
-        .put("prop1", "value1")
-        .put("prop3", "value3")
-        .put("prop4", 25)
-        .put("prop5", 33)
-        .build();
-
-    assertEquals(expected, underTest);
   }
 
 }

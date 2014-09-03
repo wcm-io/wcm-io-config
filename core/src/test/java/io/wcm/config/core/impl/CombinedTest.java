@@ -23,6 +23,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import io.wcm.config.api.Configuration;
 import io.wcm.config.api.Parameter;
+import io.wcm.config.api.ParameterBuilder;
 import io.wcm.config.api.management.ParameterPersistence;
 import io.wcm.config.api.management.PersistenceException;
 import io.wcm.config.core.management.impl.ConfigurationFinderImpl;
@@ -33,7 +34,6 @@ import io.wcm.config.core.override.RequestHeaderOverrideProvider;
 import io.wcm.config.core.override.SystemPropertyOverrideProvider;
 import io.wcm.config.core.persistence.ToolsConfigPagePersistenceProvider;
 import io.wcm.config.spi.ConfigurationFinderStrategy;
-import io.wcm.config.spi.ParameterBuilder;
 import io.wcm.config.spi.ParameterProvider;
 import io.wcm.testing.mock.aem.junit.AemContext;
 

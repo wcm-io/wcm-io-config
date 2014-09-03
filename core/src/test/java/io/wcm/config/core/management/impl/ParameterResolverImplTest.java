@@ -27,9 +27,9 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.when;
 import io.wcm.config.api.Parameter;
+import io.wcm.config.api.ParameterBuilder;
 import io.wcm.config.api.management.ParameterOverride;
 import io.wcm.config.api.management.ParameterPersistence;
-import io.wcm.config.spi.ParameterBuilder;
 import io.wcm.config.spi.ParameterProvider;
 
 import java.util.Arrays;

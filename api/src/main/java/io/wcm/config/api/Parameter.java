@@ -25,44 +25,86 @@ import org.apache.sling.api.resource.ValueMap;
  * Defines a configuration parameter.
  * @param <T> Parameter value type
  */
-public interface Parameter<T> extends Comparable<Parameter> {
+public final class Parameter<T> implements Comparable<Parameter> {
+
+  private final String name;
+  private final Class<T> type;
+  private final ValueMap properties;
+  private final String applicationId;
+  private final String defaultOsgiConfigProperty;
+  private final T defaultValue;
+
+  Parameter(String name, Class<T> type, String applicationId,
+      String defaultOsgiConfigProperty, T defaultValue, ValueMap properties) {
+    this.name = name;
+    this.type = type;
+    this.applicationId = applicationId;
+    this.defaultOsgiConfigProperty = defaultOsgiConfigProperty;
+    this.defaultValue = defaultValue;
+    this.properties = properties;
+  }
 
   /**
    * @return Parameter name
    */
-  String getName();
+  public String getName() {
+    return this.name;
+  }
 
   /**
    * @return Parameter type
    */
-  Class<T> getType();
+  public Class<T> getType() {
+    return this.type;
+  }
 
   /**
    * @return Application Id
    */
-  String getApplicationId();
-
-  /**
-   * @return Parameter visibility
-   */
-  Visibility getVisibility();
+  public String getApplicationId() {
+    return this.applicationId;
+  }
 
   /**
    * References OSGi configuration property which is checked for default value if this parameter is not set
    * in any configuration.
    * @return OSGi configuration parameter name with syntax {serviceClassName}:{propertyName}
    */
-  String getDefaultOsgiConfigProperty();
+  public String getDefaultOsgiConfigProperty() {
+    return this.defaultOsgiConfigProperty;
+  }
 
   /**
    * @return Default value if parameter is not set for configuration
    *         and no default value is defined in OSGi configuration
    */
-  T getDefaultValue();
+  public T getDefaultValue() {
+    return this.defaultValue;
+  }
 
   /**
    * @return Further properties for documentation and configuration of behavior in configuration editor.
    */
-  ValueMap getProperties();
+  public ValueMap getProperties() {
+    return this.properties;
+  }
+
+  @Override
+  public int hashCode() {
+    return this.name.hashCode();
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (!(obj instanceof Parameter)) {
+      return false;
+    }
+    return this.name.equals(((Parameter)obj).name);
+  }
+
+  @Override
+  public int compareTo(Parameter o) {
+    return this.name.compareTo(o.getName());
+  }
 
 }

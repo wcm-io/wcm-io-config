@@ -20,11 +20,11 @@
 package io.wcm.config.core.management.impl;
 
 import io.wcm.config.api.Configuration;
-import io.wcm.config.core.impl.ConfigurationImpl;
-import io.wcm.config.core.util.RankedServices;
 import io.wcm.config.api.management.ConfigurationFinder;
 import io.wcm.config.api.management.ParameterResolver;
+import io.wcm.config.core.impl.ConfigurationImpl;
 import io.wcm.config.spi.ConfigurationFinderStrategy;
+import io.wcm.sling.commons.osgi.RankedServices;
 
 import java.util.ArrayList;
 import java.util.Collection;

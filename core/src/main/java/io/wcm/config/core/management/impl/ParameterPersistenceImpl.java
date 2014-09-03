@@ -19,10 +19,10 @@
  */
 package io.wcm.config.core.management.impl;
 
-import io.wcm.config.core.util.RankedServices;
 import io.wcm.config.api.management.ParameterPersistence;
 import io.wcm.config.api.management.PersistenceException;
 import io.wcm.config.spi.ParameterPersistenceProvider;
+import io.wcm.sling.commons.osgi.RankedServices;
 
 import java.util.Collections;
 import java.util.HashMap;

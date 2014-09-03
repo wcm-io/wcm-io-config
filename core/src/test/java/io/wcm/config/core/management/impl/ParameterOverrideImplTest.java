@@ -24,7 +24,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.when;
 import io.wcm.config.api.Parameter;
-import io.wcm.config.spi.ParameterBuilder;
+import io.wcm.config.api.ParameterBuilder;
 import io.wcm.config.spi.ParameterOverrideProvider;
 
 import java.util.Map;

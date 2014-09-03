@@ -21,14 +21,13 @@ package io.wcm.config.core.impl;
 
 import io.wcm.config.api.Configuration;
 import io.wcm.config.api.Parameter;
+import io.wcm.sling.commons.wrappers.ImmutableValueMapDecorator;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.api.wrappers.ValueMapDecorator;
 
 /**
  * Default implementation of {@link Configuration}.
@@ -44,9 +43,7 @@ public final class ConfigurationImpl implements Configuration {
    */
   public ConfigurationImpl(String configurationId, Map<String, Object> properties) {
     this.configurationId = configurationId;
-    // copy map to make sure original map is never touched
-    Map<String, Object> mapCopy = new HashMap<String, Object>(properties);
-    this.properties = new ValueMapDecorator(mapCopy);
+    this.properties = new ImmutableValueMapDecorator(properties);
   }
 
   @Override
