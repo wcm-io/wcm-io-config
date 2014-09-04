@@ -35,8 +35,10 @@ import org.osgi.framework.Constants;
 /**
  * Sling Models {@link ImplementationPicker} implementation that checks if an application is associated
  * with the given adaptable, and then chooses the implementation that is annotated for this application.
- * If not application is associated with the adaptable, the first implementation without @Application
- * annotation is used.
+ * <p>
+ * If no application is associated with the adaptable, or no implementation for the detected application exists, the
+ * first implementation without @Application annotation is used.
+ * </p>
  */
 @Component
 @Service(ImplementationPicker.class)
