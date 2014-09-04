@@ -26,6 +26,7 @@ import io.wcm.config.api.Parameter;
 import io.wcm.config.api.ParameterBuilder;
 import io.wcm.config.api.management.ParameterPersistence;
 import io.wcm.config.api.management.PersistenceException;
+import io.wcm.config.core.management.impl.ApplicationFinderImpl;
 import io.wcm.config.core.management.impl.ConfigurationFinderImpl;
 import io.wcm.config.core.management.impl.ParameterOverrideImpl;
 import io.wcm.config.core.management.impl.ParameterPersistenceImpl;
@@ -73,7 +74,7 @@ public class CombinedTest {
   @Before
   public void setUp() throws Exception {
 
-    // app-specific serivces
+    // app-specific services
     context.registerService(SampleOsgiConfiguration.class, new SampleOsgiConfiguration(),
         ImmutableMap.<String, Object>builder().put("prop4", "value4-osgi").build());
     context.registerService(ConfigurationFinderStrategy.class, new SampleConfigurationFinderStrategy());
@@ -96,6 +97,7 @@ public class CombinedTest {
         .build());
 
     // management services
+    context.registerInjectActivateService(new ApplicationFinderImpl());
     context.registerInjectActivateService(new ParameterOverrideImpl());
     context.registerInjectActivateService(new ParameterPersistenceImpl());
     context.registerInjectActivateService(new ParameterResolverImpl());
@@ -145,11 +147,6 @@ public class CombinedTest {
         .add(PROP_2)
         .add(PROP_3)
         .add(PROP_4).build();
-
-    @Override
-    public String getApplicationId() {
-      return "sample";
-    }
 
     @Override
     public Set<Parameter<?>> getParameters() {

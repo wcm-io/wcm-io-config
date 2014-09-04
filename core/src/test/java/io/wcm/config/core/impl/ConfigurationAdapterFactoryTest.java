@@ -22,7 +22,9 @@ package io.wcm.config.core.impl;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.when;
+import io.wcm.config.api.Application;
 import io.wcm.config.api.Configuration;
+import io.wcm.config.api.management.ApplicationFinder;
 import io.wcm.config.api.management.ConfigurationFinder;
 
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -45,6 +47,10 @@ public class ConfigurationAdapterFactoryTest {
   private Configuration configuration;
   @Mock
   private ConfigurationFinder configurationFinder;
+  @Mock
+  private Application application;
+  @Mock
+  private ApplicationFinder applicationFinder;
 
   @InjectMocks
   private ConfigurationAdapterFactory underTest;
@@ -53,17 +59,18 @@ public class ConfigurationAdapterFactoryTest {
   public void setUp() {
     when(request.getResource()).thenReturn(resource);
     when(configurationFinder.find(resource)).thenReturn(configuration);
+    when(applicationFinder.find(resource)).thenReturn(application);
   }
 
   @Test
-  public void testResource() {
+  public void testConfigurationResource() {
     assertSame(configuration, underTest.getAdapter(resource, Configuration.class));
     assertNull(underTest.getAdapter(resource, ConfigurationFinder.class));
     assertNull(underTest.getAdapter(this, Configuration.class));
   }
 
   @Test
-  public void testRequest() {
+  public void testConfigurationRequest() {
     assertSame(configuration, underTest.getAdapter(request, Configuration.class));
 
     when(request.getResource()).thenReturn(null);
@@ -71,8 +78,28 @@ public class ConfigurationAdapterFactoryTest {
   }
 
   @Test
-  public void testInvalid() {
+  public void testConfigurationInvalid() {
     assertNull(underTest.getAdapter(this, Configuration.class));
+  }
+
+  @Test
+  public void testApplicationResource() {
+    assertSame(application, underTest.getAdapter(resource, Application.class));
+    assertNull(underTest.getAdapter(resource, ApplicationFinder.class));
+    assertNull(underTest.getAdapter(this, Application.class));
+  }
+
+  @Test
+  public void testApplicationRequest() {
+    assertSame(application, underTest.getAdapter(request, Application.class));
+
+    when(request.getResource()).thenReturn(null);
+    assertNull(underTest.getAdapter(request, Application.class));
+  }
+
+  @Test
+  public void testApplicationInvalid() {
+    assertNull(underTest.getAdapter(this, Application.class));
   }
 
 }

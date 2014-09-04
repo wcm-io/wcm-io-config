@@ -21,20 +21,22 @@ package io.wcm.config.core.impl;
 
 import static org.apache.sling.api.adapter.AdapterFactory.ADAPTABLE_CLASSES;
 import static org.apache.sling.api.adapter.AdapterFactory.ADAPTER_CLASSES;
+import io.wcm.config.api.Application;
 import io.wcm.config.api.Configuration;
+import io.wcm.config.api.management.ApplicationFinder;
 import io.wcm.config.api.management.ConfigurationFinder;
+import io.wcm.config.core.util.AdaptableUtil;
 
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Properties;
 import org.apache.felix.scr.annotations.Property;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.Service;
-import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.adapter.AdapterFactory;
 import org.apache.sling.api.resource.Resource;
 
 /**
- * AdapterFactory that adapts Resources to effective configurations.
+ * AdapterFactory that adapts resources to effective configurations and applications.
  */
 @Component(metatype = false, immediate = true)
 @Service(AdapterFactory.class)
@@ -47,21 +49,22 @@ public final class ConfigurationAdapterFactory implements AdapterFactory {
 
   @Reference
   private ConfigurationFinder configurationFinder;
+  @Reference
+  private ApplicationFinder applicationFinder;
 
   @SuppressWarnings("unchecked")
   @Override
   public <AdapterType> AdapterType getAdapter(Object adaptable, Class<AdapterType> type) {
     if (type == Configuration.class) {
-      if (adaptable instanceof Resource) {
-        Resource resource = (Resource)adaptable;
+      Resource resource = AdaptableUtil.getResource(adaptable);
+      if (resource != null) {
         return (AdapterType)configurationFinder.find(resource);
       }
-      else if (adaptable instanceof SlingHttpServletRequest) {
-        SlingHttpServletRequest request = (SlingHttpServletRequest)adaptable;
-        Resource resource = request.getResource();
-        if (resource != null) {
-          return (AdapterType)configurationFinder.find(resource);
-        }
+    }
+    else if (type == Application.class) {
+      Resource resource = AdaptableUtil.getResource(adaptable);
+      if (resource != null) {
+        return (AdapterType)applicationFinder.find(resource);
       }
     }
     return null;

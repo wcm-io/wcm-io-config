@@ -26,13 +26,16 @@ import java.util.Iterator;
 import org.apache.sling.api.resource.Resource;
 
 /**
- * Find configurations for content scope.
+ * Find matching configurations for a resource.
  */
 public interface ConfigurationFinder {
 
   /**
    * Tries to find the closed matching configuration for the given path.
-   * All registered applications are used to find the configuration, iterated in order of service ranking.
+   * Tries to detect the application for the resource using {@link ApplicationFinder} to use the
+   * configuration finder strategy of this application.
+   * If no application is found, or it does not provide such a strategy, all configuration finder strategies are
+   * enquired, iterated in order of service ranking.
    * @param resource Content resource
    * @return Configuration or null if none was found
    */
@@ -49,7 +52,10 @@ public interface ConfigurationFinder {
 
   /**
    * Tries to find all enclosing configurations for the given path.
-   * All registered applications are used to find the configuration, iterated in order of service ranking.
+   * Tries to detect the application for the resource using {@link ApplicationFinder} to use the
+   * configuration finder strategy of this application.
+   * If no application is found, or it does not provide such a strategy, all configuration finder strategies are
+   * enquired, iterated in order of service ranking.
    * @param resource Content resource
    * @return List of configurations that where found in the given path (in order of closest matching first).
    *         If none are found an empty iterator is returned.

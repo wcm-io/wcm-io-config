@@ -17,20 +17,21 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.config.spi;
-
-import io.wcm.config.api.Parameter;
-
-import java.util.Set;
+package io.wcm.config.api;
 
 /**
- * Allows application to provide the necessary meta data for configuration.
+ * Application meta data.
  */
-public interface ParameterProvider {
+public interface Application {
 
   /**
-   * @return Parameters that the application defines
+   * @return Application Id. The application is is usually the application path at /apps/ or /libs/.
    */
-  Set<Parameter<?>> getParameters();
+  String getApplicationId();
+
+  /**
+   * @return Display name for application.
+   */
+  String getLabel();
 
 }

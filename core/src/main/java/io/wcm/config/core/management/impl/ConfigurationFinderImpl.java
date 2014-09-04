@@ -19,7 +19,9 @@
  */
 package io.wcm.config.core.management.impl;
 
+import io.wcm.config.api.Application;
 import io.wcm.config.api.Configuration;
+import io.wcm.config.api.management.ApplicationFinder;
 import io.wcm.config.api.management.ConfigurationFinder;
 import io.wcm.config.api.management.ParameterResolver;
 import io.wcm.config.core.impl.ConfigurationImpl;
@@ -70,11 +72,13 @@ public final class ConfigurationFinderImpl implements ConfigurationFinder {
   private final RankedServices<ConfigurationFinderStrategy> finderStrategies = new RankedServices<>();
 
   @Reference
+  private ApplicationFinder applicationFinder;
+  @Reference
   private ParameterResolver parameterResolver;
 
   @Override
   public Configuration find(Resource resource) {
-    return find(resource, null);
+    return find(resource, findApplicationId(resource));
   }
 
   @Override
@@ -85,7 +89,15 @@ public final class ConfigurationFinderImpl implements ConfigurationFinder {
 
   @Override
   public Iterator<Configuration> findAll(Resource resource) {
-    return findAll(resource, null);
+    return findAll(resource, findApplicationId(resource));
+  }
+
+  private String findApplicationId(Resource resource) {
+    Application application = applicationFinder.find(resource);
+    if (application != null) {
+      return application.getApplicationId();
+    }
+    return null;
   }
 
   @Override

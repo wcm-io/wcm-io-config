@@ -26,7 +26,9 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyCollectionOf;
 import static org.mockito.Mockito.when;
 import io.wcm.config.api.Configuration;
+import io.wcm.config.api.management.ApplicationFinder;
 import io.wcm.config.api.management.ParameterResolver;
+import io.wcm.config.core.impl.ApplicationImpl;
 import io.wcm.config.spi.ConfigurationFinderStrategy;
 
 import java.util.Collection;
@@ -59,6 +61,8 @@ public class ConfigurationFinderImplTest {
   private Resource resource;
   @Mock
   private ParameterResolver parameterResolver;
+  @Mock
+  private ApplicationFinder applicationFinder;
 
   @Mock
   private ConfigurationFinderStrategy finderStrategy1;
@@ -96,7 +100,7 @@ public class ConfigurationFinderImplTest {
       @SuppressWarnings("unchecked")
       @Override
       public Map<String, Object> answer(InvocationOnMock invocation) {
-            Collection<String> configurationIds = (Collection<String>)invocation.getArguments()[1];
+        Collection<String> configurationIds = (Collection<String>)invocation.getArguments()[1];
         Map<String, Object> props = new HashMap<>();
         props.put("path", configurationIds.iterator().next());
         return props;
@@ -132,6 +136,15 @@ public class ConfigurationFinderImplTest {
 
     Configuration conf3 = underTest.find(resource, "invalidAppId");
     assertNull(conf3);
+  }
+
+  @Test
+  public void testFindResourceDetectionByApplicationFinder() {
+    when(applicationFinder.find(resource)).thenReturn(new ApplicationImpl(APPLICATION_ID_1, null));
+    Configuration conf = underTest.find(resource);
+    assertNotNull(conf);
+    assertEquals("/content/region1/region11/site", conf.getConfigurationId());
+    assertEquals("/content/region1/region11/site", conf.get("path", String.class));
   }
 
   @Test

@@ -20,10 +20,10 @@
 package io.wcm.config.core.management.impl;
 
 import io.wcm.config.api.Parameter;
-import io.wcm.config.core.util.TypeUtil;
 import io.wcm.config.api.management.ParameterOverride;
 import io.wcm.config.api.management.ParameterPersistence;
 import io.wcm.config.api.management.ParameterResolver;
+import io.wcm.config.core.util.TypeUtil;
 import io.wcm.config.spi.ParameterProvider;
 import io.wcm.sling.commons.osgi.RankedServices;
 
@@ -216,18 +216,29 @@ public final class ParameterResolverImpl implements ParameterResolver {
     Set<String> applicationIds = new HashSet<>();
     Set<String> parameterNames = new HashSet<>();
     for (ParameterProvider provider : this.parameterProviders) {
-      if (applicationIds.contains(provider.getApplicationId())) {
-        log.warn("Parameter provider application id is not unique: {}", provider.getApplicationId());
-      }
-      else if (StringUtils.isNotEmpty(provider.getApplicationId())) {
-        applicationIds.add(provider.getApplicationId());
-      }
+      Set<String> applicationIdsOfThisProvider = new HashSet<>();
       for (Parameter<?> parameter : provider.getParameters()) {
+        if (StringUtils.isNotEmpty(parameter.getApplicationId())) {
+          applicationIdsOfThisProvider.add(parameter.getApplicationId());
+        }
         if (parameterNames.contains(parameter.getName())) {
-          log.warn("Parameter name is not unique: {} (application: {})", parameter.getName(), provider.getApplicationId());
+          log.warn("Parameter name is not unique: {} (application: {})", parameter.getName(), parameter.getApplicationId());
         }
         else {
           parameterNames.add(parameter.getName());
+        }
+      }
+      if (applicationIdsOfThisProvider.size() > 1) {
+        log.warn("Parameter provider {} defines parameters with multiple application Ids: {}", provider,
+            applicationIdsOfThisProvider.toArray(new String[applicationIdsOfThisProvider.size()]));
+      }
+      else if (applicationIdsOfThisProvider.size() == 1) {
+        String applicationId = applicationIdsOfThisProvider.iterator().next();
+        if (applicationIds.contains(applicationId)) {
+          log.warn("Parameter provider application id is not unique: {}", applicationId);
+        }
+        else {
+          applicationIds.add(applicationId);
         }
       }
     }
