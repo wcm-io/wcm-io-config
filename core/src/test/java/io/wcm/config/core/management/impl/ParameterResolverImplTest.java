@@ -56,6 +56,9 @@ import com.google.common.collect.ImmutableSet;
 @RunWith(MockitoJUnitRunner.class)
 public class ParameterResolverImplTest {
 
+  private static final String APP_ID_1 = "/apps/app1";
+  private static final String APP_ID_2 = "/apps/app2";
+
   @Mock
   private ResourceResolver resolver;
   @Mock
@@ -74,11 +77,11 @@ public class ParameterResolverImplTest {
   private static final Map<String, Object> SERVICE_PROPS_1 = ImmutableMap.<String, Object>builder()
       .put(Constants.SERVICE_ID, 1L).put(Constants.SERVICE_RANKING, 10).build();
   private static final Parameter<String> PARAM11 =
-      ParameterBuilder.create("param11", String.class).build();
+      ParameterBuilder.create("param11", String.class, APP_ID_1).build();
   private static final Parameter<String> PARAM12 =
-      ParameterBuilder.create("param12", String.class).defaultValue("defValue").build();
+      ParameterBuilder.create("param12", String.class, APP_ID_1).defaultValue("defValue").build();
   private static final Parameter<String> PARAM13 =
-      ParameterBuilder.create("param13", String.class).defaultValue("defValue")
+      ParameterBuilder.create("param13", String.class, APP_ID_1).defaultValue("defValue")
       .defaultOsgiConfigProperty("my.service:prop1").build();
 
   @Mock
@@ -86,7 +89,7 @@ public class ParameterResolverImplTest {
   private static final Map<String, Object> SERVICE_PROPS_2 = ImmutableMap.<String, Object>builder()
       .put(Constants.SERVICE_ID, 2L).put(Constants.SERVICE_RANKING, 20).build();
   private static final Parameter<Integer> PARAM21 =
-      ParameterBuilder.create("param21", Integer.class).defaultValue(55).build();
+      ParameterBuilder.create("param21", Integer.class, APP_ID_2).defaultValue(55).build();
 
   @InjectMocks
   private ParameterResolverImpl underTest;
@@ -228,10 +231,10 @@ public class ParameterResolverImplTest {
   @Test
   public void testOsgiTypes() {
     when(parameterProvider1.getParameters()).thenReturn(ImmutableSet.<Parameter<?>>builder()
-        .add(ParameterBuilder.create("stringParam", String.class).defaultOsgiConfigProperty("my.service:stringParam").build())
-        .add(ParameterBuilder.create("stringParamUnset", String.class).defaultOsgiConfigProperty("my.service:stringParamUnset").build())
-        .add(ParameterBuilder.create("stringArrayParam", String[].class).defaultOsgiConfigProperty("my.service:stringArrayParam").build())
-        .add(ParameterBuilder.create("integerParam", Integer.class).defaultOsgiConfigProperty("my.service:integerParam").build())
+        .add(ParameterBuilder.create("stringParam", String.class, APP_ID_1).defaultOsgiConfigProperty("my.service:stringParam").build())
+        .add(ParameterBuilder.create("stringParamUnset", String.class, APP_ID_1).defaultOsgiConfigProperty("my.service:stringParamUnset").build())
+        .add(ParameterBuilder.create("stringArrayParam", String[].class, APP_ID_1).defaultOsgiConfigProperty("my.service:stringArrayParam").build())
+        .add(ParameterBuilder.create("integerParam", Integer.class, APP_ID_1).defaultOsgiConfigProperty("my.service:integerParam").build())
         .build());
 
     when(serviceReference.getProperty("stringParam")).thenReturn("stringValue");
@@ -252,11 +255,11 @@ public class ParameterResolverImplTest {
   @Test
   public void testConfiguredValuesInvalidTypes() {
     when(parameterProvider1.getParameters()).thenReturn(ImmutableSet.<Parameter<?>>builder()
-        .add(ParameterBuilder.create("stringParam", String.class).build())
-        .add(ParameterBuilder.create("stringParamDefaultValue", String.class).defaultValue("def").build())
-        .add(ParameterBuilder.create("stringArrayParam", String[].class).build())
-        .add(ParameterBuilder.create("integerParam", Integer.class).build())
-        .add(ParameterBuilder.create("integerParamDefaultValue", Integer.class).defaultValue(22).build())
+        .add(ParameterBuilder.create("stringParam", String.class, APP_ID_1).build())
+        .add(ParameterBuilder.create("stringParamDefaultValue", String.class, APP_ID_1).defaultValue("def").build())
+        .add(ParameterBuilder.create("stringArrayParam", String[].class, APP_ID_1).build())
+        .add(ParameterBuilder.create("integerParam", Integer.class, APP_ID_1).build())
+        .add(ParameterBuilder.create("integerParamDefaultValue", Integer.class, APP_ID_1).defaultValue(22).build())
         .build());
 
     when(parameterPersistence.getValues(resolver, "/config1")).thenReturn(ImmutableMap.<String, Object>builder()

@@ -41,6 +41,8 @@ import com.google.common.collect.ImmutableMap;
 @RunWith(MockitoJUnitRunner.class)
 public class ParameterOverrideImplTest {
 
+  private static final String APP_ID = "/apps/app1";
+
   @Mock
   private ParameterOverrideProvider provider1;
   private static final Map<String, Object> SERVICE_PROPS_1 = ImmutableMap.<String, Object>builder()
@@ -51,7 +53,7 @@ public class ParameterOverrideImplTest {
   private static final Map<String, Object> SERVICE_PROPS_2 = ImmutableMap.<String, Object>builder()
       .put(Constants.SERVICE_ID, 2L).put(Constants.SERVICE_RANKING, 5).build();
 
-  private static final Parameter<String> PARAM1 = ParameterBuilder.create("param1", String.class).build();
+  private static final Parameter<String> PARAM1 = ParameterBuilder.create("param1", String.class, APP_ID).build();
 
   private ParameterOverrideImpl underTest;
 
@@ -90,12 +92,12 @@ public class ParameterOverrideImplTest {
         .build());
 
     assertEquals("value1", underTest.getOverrideSystemDefault(
-        ParameterBuilder.create("stringParam", String.class).build()));
+        ParameterBuilder.create("stringParam", String.class, APP_ID).build()));
     assertArrayEquals(new String[] {
         "value1", "value2", ""
-    }, underTest.getOverrideSystemDefault(ParameterBuilder.create("stringArrayParam", String[].class).build()));
+    }, underTest.getOverrideSystemDefault(ParameterBuilder.create("stringArrayParam", String[].class, APP_ID).build()));
     assertEquals((Integer)55, underTest.getOverrideSystemDefault(
-        ParameterBuilder.create("integerParam", Integer.class).build()));
+        ParameterBuilder.create("integerParam", Integer.class, APP_ID).build()));
   }
 
 }

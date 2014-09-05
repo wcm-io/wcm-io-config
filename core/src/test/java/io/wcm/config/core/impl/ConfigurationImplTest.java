@@ -36,6 +36,7 @@ import com.google.common.collect.ImmutableMap;
 
 public class ConfigurationImplTest {
 
+  private static final String APP_ID = "/apps/app1";
   private static final String CONFIG_ID = "/config1";
   private static final Map<String, Object> SAMPLE_PROPS = new HashMap<>();
   static {
@@ -43,9 +44,9 @@ public class ConfigurationImplTest {
     SAMPLE_PROPS.put("prop2", 55);
   }
 
-  private static final Parameter<String> PARAM1 = ParameterBuilder.create("prop1", String.class).build();
-  private static final Parameter<Integer> PARAM2 = ParameterBuilder.create("prop2", Integer.class).build();
-  private static final Parameter<String> PARAM3 = ParameterBuilder.create("prop3", String.class).build();
+  private static final Parameter<String> PARAM1 = ParameterBuilder.create("prop1", String.class, APP_ID).build();
+  private static final Parameter<Integer> PARAM2 = ParameterBuilder.create("prop2", Integer.class, APP_ID).build();
+  private static final Parameter<String> PARAM3 = ParameterBuilder.create("prop3", String.class, APP_ID).build();
 
   private Configuration underTest;
 

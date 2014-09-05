@@ -60,12 +60,13 @@ import com.google.common.collect.ImmutableSet;
  */
 public class CombinedTest {
 
+  private static final String APP_ID = "/apps/app1";
   private static final String CONFIG_ID = "/content/region1/site1/en";
 
-  private static final Parameter<String> PROP_1 = ParameterBuilder.create("prop1", String.class).build();
-  private static final Parameter<String> PROP_2 = ParameterBuilder.create("prop2", String.class).build();
-  private static final Parameter<String> PROP_3 = ParameterBuilder.create("prop3", String.class).build();
-  private static final Parameter<String> PROP_4 = ParameterBuilder.create("prop4", String.class)
+  private static final Parameter<String> PROP_1 = ParameterBuilder.create("prop1", String.class, APP_ID).build();
+  private static final Parameter<String> PROP_2 = ParameterBuilder.create("prop2", String.class, APP_ID).build();
+  private static final Parameter<String> PROP_3 = ParameterBuilder.create("prop3", String.class, APP_ID).build();
+  private static final Parameter<String> PROP_4 = ParameterBuilder.create("prop4", String.class, APP_ID)
       .defaultOsgiConfigProperty(SampleOsgiConfiguration.class.getName() + ":prop4").build();
 
   @Rule

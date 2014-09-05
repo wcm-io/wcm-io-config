@@ -33,10 +33,10 @@ import java.util.regex.Pattern;
  */
 public final class ParameterBuilder<T> {
 
-  private static final String NAME_PATTERN_STRING = "[a-zA-Z0-9\\-\\_\\.\\$]+";
-  private static final Pattern NAME_PATTERN = Pattern.compile("^" + NAME_PATTERN_STRING + "$");
+  private static final Pattern PARAMETER_NAME_PATTERN = Pattern.compile("^[a-zA-Z0-9\\-\\_\\.]+$");
+  private static final Pattern APPLICATION_ID_PATTERN = Pattern.compile("^(/[a-zA-Z0-9\\-\\_]+)+$");
   private static final Pattern OSGI_CONFIG_PROPERTY_PATTERN =
-      Pattern.compile("^" + NAME_PATTERN_STRING + "\\:" + NAME_PATTERN_STRING + "$");
+      Pattern.compile("^[a-zA-Z0-9\\-\\_\\.\\$]+\\:[a-zA-Z0-9\\-\\_\\.]+$");
 
   private static final Set<Class<?>> SUPPORTED_TYPES = new HashSet<>();
   static {
@@ -49,40 +49,91 @@ public final class ParameterBuilder<T> {
     SUPPORTED_TYPES.add(Map.class);
   }
 
-  private final String name;
-  private final Class<T> type;
-  private final Map<String, Object> properties = new HashMap<>();
+  private String name;
+  private Class<T> type;
   private String applicationId;
+  private final Map<String, Object> properties = new HashMap<>();
   private String defaultOsgiConfigProperty;
   private T defaultValue;
 
-  private ParameterBuilder(String name, Class<T> type) {
-    if (name == null || !NAME_PATTERN.matcher(name).matches()) {
-      throw new IllegalArgumentException("Invalid name: " + name);
-    }
-    if (type == null || !SUPPORTED_TYPES.contains(type)) {
-      throw new IllegalArgumentException("Invalid type: " + type);
-    }
-    this.name = name;
-    this.type = type;
+  private ParameterBuilder() {
+    // private constructor
   }
 
   /**
    * Create a new parameter builder.
-   * @param name Parameter name
+   * @return Parameter builder
+   */
+  public static <T> ParameterBuilder<T> create() {
+    return new ParameterBuilder<T>();
+  }
+
+  /**
+   * Create a new parameter builder.
+   * @param name Parameter name. Only characters, numbers, hyphen, underline and point are allowed.
+   * @return Parameter builder
+   */
+  public static <T> ParameterBuilder<T> create(String name) {
+    return new ParameterBuilder<T>()
+        .name(name);
+  }
+
+  /**
+   * Create a new parameter builder.
+   * @param name Parameter name. Only characters, numbers, hyphen, underline and point are allowed.
    * @param type Parameter value type
    * @return Parameter builder
    */
   public static <T> ParameterBuilder<T> create(String name, Class<T> type) {
-    return new ParameterBuilder<T>(name, type);
+    return new ParameterBuilder<T>()
+        .name(name)
+        .type(type);
   }
 
   /**
-   * @param value Application Id
+   * Create a new parameter builder.
+   * @param name Parameter name. Only characters, numbers, hyphen, underline and point are allowed.
+   * @param type Parameter Value type.
+   * @param applicationId Application Id. Has to be a conent path starting with "/".
+   * @return Parameter builder
+   */
+  public static <T> ParameterBuilder<T> create(String name, Class<T> type, String applicationId) {
+    return new ParameterBuilder<T>()
+        .name(name)
+        .type(type)
+        .applicationId(applicationId);
+  }
+
+  /**
+   * @param value Parameter name. Only characters, numbers, hyphen, underline and point are allowed.
+   * @return this
+   */
+  public ParameterBuilder<T> name(String value) {
+    if (value == null || !PARAMETER_NAME_PATTERN.matcher(value).matches()) {
+      throw new IllegalArgumentException("Invalid name: " + value);
+    }
+    this.name = value;
+    return this;
+  }
+
+  /**
+   * @param value Value type.
+   * @return this
+   */
+  public ParameterBuilder<T> type(Class<T> value) {
+    if (value == null || !SUPPORTED_TYPES.contains(value)) {
+      throw new IllegalArgumentException("Invalid type: " + value);
+    }
+    this.type = value;
+    return this;
+  }
+
+  /**
+   * @param value Application Id. Has to be a conent path starting with "/".
    * @return this
    */
   public ParameterBuilder<T> applicationId(String value) {
-    if (value == null || !NAME_PATTERN.matcher(value).matches()) {
+    if (value == null || !APPLICATION_ID_PATTERN.matcher(value).matches()) {
       throw new IllegalArgumentException("Invalid applicaitonId: " + value);
     }
     this.applicationId = value;
@@ -145,6 +196,15 @@ public final class ParameterBuilder<T> {
    * @return Parameter definition
    */
   public Parameter<T> build() {
+    if (this.name == null) {
+      throw new IllegalArgumentException("Name is missing.");
+    }
+    if (this.type == null) {
+      throw new IllegalArgumentException("Type is missing.");
+    }
+    if (this.applicationId == null) {
+      throw new IllegalArgumentException("Application Id is missing.");
+    }
     return new Parameter<T>(
         this.name,
         this.type,

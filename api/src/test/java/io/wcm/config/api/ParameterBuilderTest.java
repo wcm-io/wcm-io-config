@@ -31,13 +31,14 @@ import org.junit.Test;
 
 public class ParameterBuilderTest {
 
+  private static final String APP_ID = "/apps/app1";
+
   @Test
   public void testBuilder() {
     Map<String, Object> props = new HashMap<>();
     props.put("prop1", "value1");
 
-    Parameter<String> param = ParameterBuilder.create("param1", String.class)
-        .applicationId("app1")
+    Parameter<String> param = ParameterBuilder.create("param1", String.class, APP_ID)
         .defaultOsgiConfigProperty("service:prop1")
         .defaultValue("defValue")
         .property("prop3", "value3")
@@ -47,7 +48,7 @@ public class ParameterBuilderTest {
 
     assertEquals("param1", param.getName());
     assertEquals(String.class, param.getType());
-    assertEquals("app1", param.getApplicationId());
+    assertEquals(APP_ID, param.getApplicationId());
     assertEquals("service:prop1", param.getDefaultOsgiConfigProperty());
     assertEquals("defValue", param.getDefaultValue());
     assertEquals("value1", param.getProperties().get("prop1", String.class));
@@ -58,9 +59,9 @@ public class ParameterBuilderTest {
   @Test
   public void testSort() {
     Set<Parameter> params = new TreeSet<>();
-    params.add(ParameterBuilder.create("app5_param2", String.class).build());
-    params.add(ParameterBuilder.create("app1_param2", String.class).build());
-    params.add(ParameterBuilder.create("app5_param1", String.class).build());
+    params.add(ParameterBuilder.create("app5_param2", String.class, APP_ID).build());
+    params.add(ParameterBuilder.create("app1_param2", String.class, APP_ID).build());
+    params.add(ParameterBuilder.create("app5_param1", String.class, APP_ID).build());
 
     Parameter[] paramArray = params.toArray(new Parameter[params.size()]);
     assertEquals("app1_param2", paramArray[0].getName());
@@ -70,42 +71,42 @@ public class ParameterBuilderTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void testInvalidName() {
-    ParameterBuilder.create("param 1", String.class).build();
+    ParameterBuilder.create("param 1", String.class, APP_ID).build();
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testNullName() {
-    ParameterBuilder.create(null, String.class).build();
+    ParameterBuilder.create(null, String.class, APP_ID).build();
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testInvalidType() {
-    ParameterBuilder.create("param1", Date.class).build();
+    ParameterBuilder.create("param1", Date.class, APP_ID).build();
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testNullType() {
-    ParameterBuilder.create("param1", null).build();
+    ParameterBuilder.create("param1", null, APP_ID).build();
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testInvalidApplicationId() {
-    ParameterBuilder.create("param1", String.class).applicationId("app 1").build();
+    ParameterBuilder.create("param1", String.class, "app 1").build();
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testNullApplicationId() {
-    ParameterBuilder.create("param1", String.class).applicationId(null).build();
+    ParameterBuilder.create("param1", String.class, null).build();
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testInvalidDefaultOsgiConfigProperty() {
-    ParameterBuilder.create("param1", String.class).defaultOsgiConfigProperty("aaa").build();
+    ParameterBuilder.create("param1", String.class, APP_ID).defaultOsgiConfigProperty("aaa").build();
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testNullDefaultOsgiConfigProperty() {
-    ParameterBuilder.create("param1", String.class).defaultOsgiConfigProperty(null).build();
+    ParameterBuilder.create("param1", String.class, APP_ID).defaultOsgiConfigProperty(null).build();
   }
 
 }
