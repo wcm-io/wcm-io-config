@@ -77,25 +77,19 @@ public class CombinedTest {
 
     // app-specific services
     context.registerService(SampleOsgiConfiguration.class, new SampleOsgiConfiguration(),
-        ImmutableMap.<String, Object>builder().put("prop4", "value4-osgi").build());
+        ImmutableMap.<String, Object>of("prop4", "value4-osgi"));
     context.registerService(ConfigurationFinderStrategy.class, new SampleConfigurationFinderStrategy());
     context.registerService(ParameterProvider.class, new SampleParameterProvider());
 
     // persistence providers
     context.registerInjectActivateService(new ToolsConfigPagePersistenceProvider(),
-        ImmutableMap.<String, Object>builder()
-        .put("enabled", true)
-        .build());
+        ImmutableMap.<String, Object>of("enabled", true));
 
     // override providers
     context.registerInjectActivateService(new RequestHeaderOverrideProvider(),
-        ImmutableMap.<String, Object>builder()
-        .put("enabled", true)
-        .build());
+        ImmutableMap.<String, Object>of("enabled", true));
     context.registerInjectActivateService(new SystemPropertyOverrideProvider(),
-        ImmutableMap.<String, Object>builder()
-        .put("enabled", true)
-        .build());
+        ImmutableMap.<String, Object>of("enabled", true));
 
     // management services
     context.registerInjectActivateService(new ApplicationFinderImpl());
@@ -130,8 +124,8 @@ public class CombinedTest {
   @Test
   public void testWriteReadConfig() throws PersistenceException {
     ParameterPersistence persistence = context.slingScriptHelper().getService(ParameterPersistence.class);
-    persistence.storeParameterValues(context.resourceResolver(), CONFIG_ID, ImmutableMap.<String, Object>builder()
-        .put(PROP_3.getName(), "value3-new").build(), true);
+    persistence.storeParameterValues(context.resourceResolver(), CONFIG_ID,
+        ImmutableMap.<String, Object>of(PROP_3.getName(), "value3-new"), true);
 
     Resource resource = context.request().getResource();
     Configuration config = resource.adaptTo(Configuration.class);

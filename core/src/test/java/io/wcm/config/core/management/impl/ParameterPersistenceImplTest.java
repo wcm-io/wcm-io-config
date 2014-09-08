@@ -62,13 +62,15 @@ public class ParameterPersistenceImplTest {
 
   @Mock
   private ParameterPersistenceProvider persistenceProvider1;
-  private static final Map<String, Object> SERVICE_PROPS_1 = ImmutableMap.<String, Object>builder()
-      .put(Constants.SERVICE_ID, 1L).put(Constants.SERVICE_RANKING, 10).build();
+  private static final Map<String, Object> SERVICE_PROPS_1 =
+      ImmutableMap.<String, Object>of(Constants.SERVICE_ID, 1L,
+          Constants.SERVICE_RANKING, 10);
 
   @Mock
   private ParameterPersistenceProvider persistenceProvider2;
-  private static final Map<String, Object> SERVICE_PROPS_2 = ImmutableMap.<String, Object>builder()
-      .put(Constants.SERVICE_ID, 2L).put(Constants.SERVICE_RANKING, 20).build();
+  private static final Map<String, Object> SERVICE_PROPS_2 =
+      ImmutableMap.<String, Object>of(Constants.SERVICE_ID, 2L,
+          Constants.SERVICE_RANKING, 20);
 
   @InjectMocks
   private ParameterPersistenceImpl underTest;

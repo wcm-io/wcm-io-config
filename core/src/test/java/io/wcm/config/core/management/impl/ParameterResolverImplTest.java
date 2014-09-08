@@ -74,8 +74,9 @@ public class ParameterResolverImplTest {
 
   @Mock
   private ParameterProvider parameterProvider1;
-  private static final Map<String, Object> SERVICE_PROPS_1 = ImmutableMap.<String, Object>builder()
-      .put(Constants.SERVICE_ID, 1L).put(Constants.SERVICE_RANKING, 10).build();
+  private static final Map<String, Object> SERVICE_PROPS_1 =
+      ImmutableMap.<String, Object>of(Constants.SERVICE_ID, 1L,
+          Constants.SERVICE_RANKING, 10);
   private static final Parameter<String> PARAM11 =
       ParameterBuilder.create("param11", String.class, APP_ID_1).build();
   private static final Parameter<String> PARAM12 =
@@ -86,8 +87,9 @@ public class ParameterResolverImplTest {
 
   @Mock
   private ParameterProvider parameterProvider2;
-  private static final Map<String, Object> SERVICE_PROPS_2 = ImmutableMap.<String, Object>builder()
-      .put(Constants.SERVICE_ID, 2L).put(Constants.SERVICE_RANKING, 20).build();
+  private static final Map<String, Object> SERVICE_PROPS_2 =
+      ImmutableMap.<String, Object>of(Constants.SERVICE_ID, 2L,
+          Constants.SERVICE_RANKING, 20);
   private static final Parameter<Integer> PARAM21 =
       ParameterBuilder.create("param21", Integer.class, APP_ID_2).defaultValue(55).build();
 

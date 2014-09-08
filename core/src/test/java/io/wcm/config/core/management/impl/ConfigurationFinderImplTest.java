@@ -66,14 +66,16 @@ public class ConfigurationFinderImplTest {
 
   @Mock
   private ConfigurationFinderStrategy finderStrategy1;
-  private static final Map<String, Object> SERVICE_PROPS_1 = ImmutableMap.<String, Object>builder()
-      .put(Constants.SERVICE_ID, 1L).put(Constants.SERVICE_RANKING, 10).build();
+  private static final Map<String, Object> SERVICE_PROPS_1 =
+      ImmutableMap.<String, Object>of(Constants.SERVICE_ID, 1L,
+          Constants.SERVICE_RANKING, 10);
   private static final String APPLICATION_ID_1 = "app1";
 
   @Mock
   private ConfigurationFinderStrategy finderStrategy2;
-  private static final Map<String, Object> SERVICE_PROPS_2 = ImmutableMap.<String, Object>builder()
-      .put(Constants.SERVICE_ID, 2L).put(Constants.SERVICE_RANKING, 5).build();
+  private static final Map<String, Object> SERVICE_PROPS_2 =
+      ImmutableMap.<String, Object>of(Constants.SERVICE_ID, 2L,
+          Constants.SERVICE_RANKING, 5);
   private static final String APPLICATION_ID_2 = "app2";
 
   @InjectMocks
