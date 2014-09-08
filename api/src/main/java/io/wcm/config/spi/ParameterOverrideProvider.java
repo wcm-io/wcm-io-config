@@ -32,10 +32,20 @@ public interface ParameterOverrideProvider {
    * Key:
    * </p>
    * <ul>
-   * <li>Syntax: [{scope}]{parameterName}</li>
-   * <li>{scope}: if "default", the system default parameter is overriden. Otherwise {scope} may define a configuration
-   * id (path), in this case the configuration parameter is overwritten by force for this configuration level.</li>
-   * <li>{parameterName}: Parameter name (from parameter definitions)</li>
+   * <li>Syntax: <code>[{scope}]{parameterName}</code></li>
+   * <li><code>{scope}</code>: if "default", the system default parameter is overriden. Otherwise <code>{scope}</code>
+   * may define a configuration id (path), in this case the configuration parameter is overwritten by force for this
+   * configuration level. If the [{scope}] part is missing, the parameter is overridded for all configurations.</li>
+   * <li><code>{parameterName}</code>: Parameter name (from parameter definitions)</li>
+   * </ul>
+   * <p>
+   * Examples:
+   * </p>
+   * <ul>
+   * <li><code>[default]param1</code> - Override default value for parameter "param1"</li>
+   * <li><code>param1</code> - Override value for parameter "param1" for all configurations</li>
+   * <li><code>[/content/region1/site1]param1</code> - Override value for parameter "param1" for the configurations at
+   * <code>/content/region1/site1</code>. This has higher precedence than the other variants.</li>
    * </ul>
    * <p>
    * Value:

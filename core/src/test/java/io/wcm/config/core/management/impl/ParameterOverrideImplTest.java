@@ -54,6 +54,8 @@ public class ParameterOverrideImplTest {
       .put(Constants.SERVICE_ID, 2L).put(Constants.SERVICE_RANKING, 5).build();
 
   private static final Parameter<String> PARAM1 = ParameterBuilder.create("param1", String.class, APP_ID).build();
+  private static final Parameter<String> PARAM2 = ParameterBuilder.create("param2", String.class, APP_ID).build();
+  private static final Parameter<String> PARAM3 = ParameterBuilder.create("param3", String.class, APP_ID).build();
 
   private ParameterOverrideImpl underTest;
 
@@ -62,9 +64,12 @@ public class ParameterOverrideImplTest {
     when(provider1.getOverrideMap()).thenReturn(ImmutableMap.<String, String>builder()
         .put("[default]param1", "value1")
         .put("[/config1]param1", "value11")
+        .put("[/config1]param2", "value21")
         .build());
     when(provider2.getOverrideMap()).thenReturn(ImmutableMap.<String, String>builder()
         .put("[default]param1", "value2")
+        .put("param2", "value2")
+        .put("param3", "value3")
         .build());
 
     underTest = new ParameterOverrideImpl();
@@ -75,12 +80,20 @@ public class ParameterOverrideImplTest {
   @Test
   public void testOverrideSystemDefault() {
     assertEquals("value2", underTest.getOverrideSystemDefault(PARAM1));
+    assertNull(underTest.getOverrideSystemDefault(PARAM2));
+    assertNull(underTest.getOverrideSystemDefault(PARAM3));
   }
 
   @Test
   public void testOverrideForce() {
     assertEquals("value11", underTest.getOverrideForce("/config1", PARAM1));
     assertNull(underTest.getOverrideForce("/config2", PARAM1));
+
+    assertEquals("value21", underTest.getOverrideForce("/config1", PARAM2));
+    assertEquals("value2", underTest.getOverrideForce("/config2", PARAM2));
+
+    assertEquals("value3", underTest.getOverrideForce("/config1", PARAM3));
+    assertEquals("value3", underTest.getOverrideForce("/config2", PARAM3));
   }
 
   @Test

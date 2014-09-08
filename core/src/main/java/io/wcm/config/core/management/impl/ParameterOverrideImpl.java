@@ -20,8 +20,8 @@
 package io.wcm.config.core.management.impl;
 
 import io.wcm.config.api.Parameter;
-import io.wcm.config.core.util.TypeUtil;
 import io.wcm.config.api.management.ParameterOverride;
+import io.wcm.config.core.util.TypeUtil;
 import io.wcm.config.spi.ParameterOverrideProvider;
 import io.wcm.sling.commons.osgi.RankedServices;
 
@@ -54,11 +54,17 @@ public final class ParameterOverrideImpl implements ParameterOverride {
 
   @Override
   public <T> T getOverrideForce(String configurationId, Parameter<T> parameter) {
-    return getOverrideValue(configurationId, parameter);
+    // try to get override for explicit configuration
+    T value = getOverrideValue(configurationId, parameter);
+    if (value == null) {
+      // try to get override for all configurations
+      value = getOverrideValue(null, parameter);
+    }
+    return value;
   }
 
   private <T> T getOverrideValue(String scope, Parameter<T> parameter) {
-    String key = "[" + scope + "]" + parameter.getName();
+    String key = (scope != null ? "[" + scope + "]" : "") + parameter.getName();
     for (ParameterOverrideProvider provider : parameterOverrideProviders) {
       Map<String, String> overrideMap = provider.getOverrideMap();
       String value = overrideMap.get(key.toString());
