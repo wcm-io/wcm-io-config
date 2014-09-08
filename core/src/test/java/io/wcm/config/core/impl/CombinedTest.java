@@ -107,6 +107,9 @@ public class CombinedTest {
     // adapter factory
     context.registerInjectActivateService(new ConfigurationAdapterFactory());
 
+    // models implementation picker
+    context.registerInjectActivateService(new ApplicationImplementationPicker());
+
     // mount sample content
     context.jsonImporter().importTo("/combined-test-content.json", "/content");
     context.currentPage(CONFIG_ID);
