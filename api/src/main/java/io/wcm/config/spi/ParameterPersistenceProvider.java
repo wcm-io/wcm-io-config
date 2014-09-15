@@ -44,7 +44,7 @@ public interface ParameterPersistenceProvider {
    * All existing parameter values are erased before writing the new ones.
    * @param resolver Resource resolver
    * @param configurationId Configuration id
-   * @param values Parameter values
+   * @param values Parameter values. Map may include "control" properties within the "wcm-io-config:" namespace.
    * @return true if parameters are accepted. false if this provider does not accept storing the parameters
    *         and the next provider should be asked to store them.
    * @throws PersistenceException Persistence exception is thrown when storing configuration parameters fails.

@@ -19,8 +19,6 @@
  */
 package io.wcm.config.api.management;
 
-import java.util.Map;
-
 import org.apache.sling.api.resource.ResourceResolver;
 
 /**
@@ -29,34 +27,39 @@ import org.apache.sling.api.resource.ResourceResolver;
 public interface ParameterPersistence {
 
   /**
+   * Control property holding String Array with list of locked parameter names.
+   */
+  String PN_LOCKED_PARAMETER_NAMES = "io-wcm-config:lockedParameterNames";
+
+  /**
    * Get all parameter values stored for a configuration.
    * @param resolver Resource resolver
    * @param configurationId Configuration id
-   * @return Set of parameter values. Never null.
+   * @return Parameter data. Never null.
    */
-  Map<String, Object> getValues(ResourceResolver resolver, String configurationId);
+  ParameterPersistenceData getData(ResourceResolver resolver, String configurationId);
 
   /**
    * Writes parameter values for a configuration.
    * All existing parameter values are erased before writing the new ones.
    * @param resolver Resource resolver
    * @param configurationId Configuration id
-   * @param values Parameter values
+   * @param data Parameter data. Never null.
    * @throws PersistenceException Persistence exception is thrown when storing configuration parameters fails.
    */
-  void storeParameterValues(ResourceResolver resolver, String configurationId, Map<String, Object> values)
+  void storeData(ResourceResolver resolver, String configurationId, ParameterPersistenceData data)
       throws PersistenceException;
 
   /**
    * Writes parameter values for a configuration.
    * @param resolver Resource resolver
    * @param configurationId Configuration id
-   * @param values Parameter values
+   * @param data Parameter data. Never null.
    * @param mergeWithExisting If true, existing parameter values are only overridden when they are contained in the
    *          set of parameter values. Otherwise all existing parameter values are erased before writing the new ones.
    * @throws PersistenceException Persistence exception is thrown when storing configuration parameters fails.
    */
-  void storeParameterValues(ResourceResolver resolver, String configurationId, Map<String, Object> values,
+  void storeData(ResourceResolver resolver, String configurationId, ParameterPersistenceData data,
       boolean mergeWithExisting) throws PersistenceException;
 
 }

@@ -30,13 +30,14 @@ import io.wcm.config.api.Parameter;
 import io.wcm.config.api.ParameterBuilder;
 import io.wcm.config.api.management.ParameterOverride;
 import io.wcm.config.api.management.ParameterPersistence;
+import io.wcm.config.api.management.ParameterPersistenceData;
 import io.wcm.config.spi.ParameterProvider;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
 
 import org.apache.sling.api.resource.ResourceResolver;
 import org.junit.Before;
@@ -52,6 +53,7 @@ import org.osgi.service.component.ComponentContext;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableSortedSet;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ParameterResolverImplTest {
@@ -103,7 +105,7 @@ public class ParameterResolverImplTest {
     when(bundleContext.getServiceReference("my.service")).thenReturn(serviceReference);
     when(serviceReference.getProperty("prop1")).thenReturn("valueFromOsgiConfig");
 
-    when(parameterPersistence.getValues(same(resolver), anyString())).thenReturn(Collections.<String, Object>emptyMap());
+    when(parameterPersistence.getData(same(resolver), anyString())).thenReturn(toData(ImmutableMap.<String, Object>of()));
     when(parameterOverride.getOverrideSystemDefault(any(Parameter.class))).thenReturn(null);
     when(parameterOverride.getOverrideForce(anyString(), any(Parameter.class))).thenReturn(null);
 
@@ -146,12 +148,12 @@ public class ParameterResolverImplTest {
 
   @Test
   public void testConfiguredValues() {
-    when(parameterPersistence.getValues(resolver, "/config1")).thenReturn(ImmutableMap.<String, Object>builder()
+    when(parameterPersistence.getData(resolver, "/config1")).thenReturn(toData(ImmutableMap.<String, Object>builder()
         .put("param11", "config11")
         .put("param12", "config12")
         .put("param13", "config13")
         .put("param21", 77)
-        .build());
+        .build()));
 
     Map<String, Object> values = underTest.getEffectiveValues(resolver, Arrays.asList("/config1"));
     assertEquals("config11", values.get("param11"));
@@ -162,18 +164,18 @@ public class ParameterResolverImplTest {
 
   @Test
   public void testConfigurationHierarchy() {
-    when(parameterPersistence.getValues(resolver, "/region1")).thenReturn(ImmutableMap.<String, Object>builder()
+    when(parameterPersistence.getData(resolver, "/region1")).thenReturn(toData(ImmutableMap.<String, Object>builder()
         .put("param11", "r11")
         .put("param12", "r12")
         .put("param21", 88)
-        .build());
-    when(parameterPersistence.getValues(resolver, "/region1/site1")).thenReturn(ImmutableMap.<String, Object>builder()
+        .build()));
+    when(parameterPersistence.getData(resolver, "/region1/site1")).thenReturn(toData(ImmutableMap.<String, Object>builder()
         .put("param11", "s11")
         .put("param21", 99)
-        .build());
-    when(parameterPersistence.getValues(resolver, "/region1/site1/config1")).thenReturn(ImmutableMap.<String, Object>builder()
+        .build()));
+    when(parameterPersistence.getData(resolver, "/region1/site1/config1")).thenReturn(toData(ImmutableMap.<String, Object>builder()
         .put("param11", "c11")
-        .build());
+        .build()));
 
     Map<String, Object> values = underTest.getEffectiveValues(resolver, Arrays.asList(
         "/region1/site1/config1", "/region1/site1", "/region1"));
@@ -185,12 +187,12 @@ public class ParameterResolverImplTest {
 
   @Test
   public void testOverrideForce() {
-    when(parameterPersistence.getValues(resolver, "/config1")).thenReturn(ImmutableMap.<String, Object>builder()
+    when(parameterPersistence.getData(resolver, "/config1")).thenReturn(toData(ImmutableMap.<String, Object>builder()
         .put("param11", "config11")
         .put("param12", "config12")
         .put("param13", "config13")
         .put("param21", 77)
-        .build());
+        .build()));
 
     when(parameterOverride.getOverrideForce("/config1", PARAM11)).thenReturn("override11");
     when(parameterOverride.getOverrideForce("/config1", PARAM12)).thenReturn("override12");
@@ -206,18 +208,18 @@ public class ParameterResolverImplTest {
 
   @Test
   public void testConfigurationHierarchyWithOverrides() {
-    when(parameterPersistence.getValues(resolver, "/region1")).thenReturn(ImmutableMap.<String, Object>builder()
+    when(parameterPersistence.getData(resolver, "/region1")).thenReturn(toData(ImmutableMap.<String, Object>builder()
         .put("param11", "r11")
         .put("param12", "r12")
         .put("param21", 88)
-        .build());
-    when(parameterPersistence.getValues(resolver, "/region1/site1")).thenReturn(ImmutableMap.<String, Object>builder()
+        .build()));
+    when(parameterPersistence.getData(resolver, "/region1/site1")).thenReturn(toData(ImmutableMap.<String, Object>builder()
         .put("param11", "s11")
         .put("param21", 99)
-        .build());
-    when(parameterPersistence.getValues(resolver, "/region1/site1/config1")).thenReturn(ImmutableMap.<String, Object>builder()
+        .build()));
+    when(parameterPersistence.getData(resolver, "/region1/site1/config1")).thenReturn(toData(ImmutableMap.<String, Object>builder()
         .put("param11", "c11")
-        .build());
+        .build()));
 
     when(parameterOverride.getOverrideSystemDefault(PARAM13)).thenReturn("override13");
     when(parameterOverride.getOverrideForce("/region1/site1", PARAM21)).thenReturn(66);
@@ -258,28 +260,92 @@ public class ParameterResolverImplTest {
   public void testConfiguredValuesInvalidTypes() {
     when(parameterProvider1.getParameters()).thenReturn(ImmutableSet.<Parameter<?>>builder()
         .add(ParameterBuilder.create("stringParam", String.class, APP_ID_1).build())
+        .add(ParameterBuilder.create("stringParam2", String.class, APP_ID_1).build())
         .add(ParameterBuilder.create("stringParamDefaultValue", String.class, APP_ID_1).defaultValue("def").build())
         .add(ParameterBuilder.create("stringArrayParam", String[].class, APP_ID_1).build())
         .add(ParameterBuilder.create("integerParam", Integer.class, APP_ID_1).build())
         .add(ParameterBuilder.create("integerParamDefaultValue", Integer.class, APP_ID_1).defaultValue(22).build())
         .build());
 
-    when(parameterPersistence.getValues(resolver, "/config1")).thenReturn(ImmutableMap.<String, Object>builder()
+    when(parameterPersistence.getData(resolver, "/config1")).thenReturn(toData(ImmutableMap.<String, Object>builder()
         .put("stringParam", 55)
+        .put("stringParam2", "thisIsReallyAString")
         .put("stringParamDefaultValue", 66L)
         .put("stringArrayParam", new int[] {
             1, 2, 3
         })
         .put("integerParam", "value1")
         .put("integerParamDefaultValue", "value2")
-        .build());
+        .build()));
 
     Map<String, Object> values = underTest.getEffectiveValues(resolver, Arrays.asList("/config1"));
     assertNull(values.get("stringParam"));
     assertEquals("def", values.get("stringParamDefaultValue"));
+    assertEquals("thisIsReallyAString", values.get("stringParam2"));
     assertNull(values.get("stringArrayParam"));
     assertNull(values.get("integerParam"));
     assertEquals(22, values.get("integerParamDefaultValue"));
+  }
+
+
+  @Test
+  public void testConfigurationHierarchyWithLockedParameterNames() {
+    when(parameterPersistence.getData(resolver, "/region1")).thenReturn(toData(ImmutableMap.<String, Object>builder()
+        .put("param11", "r11")
+        .put("param12", "r12")
+        .put("param21", 88)
+        .build(), ImmutableSortedSet.of("param11")));
+    when(parameterPersistence.getData(resolver, "/region1/site1")).thenReturn(toData(ImmutableMap.<String, Object>builder()
+        .put("param11", "s11")
+        .put("param21", 99)
+        .build(), ImmutableSortedSet.of("param21")));
+    when(parameterPersistence.getData(resolver, "/region1/site1/config1")).thenReturn(toData(ImmutableMap.<String, Object>builder()
+        .put("param11", "c11")
+        .put("param21", 111)
+        .build()));
+
+    Map<String, Object> values = underTest.getEffectiveValues(resolver, Arrays.asList(
+        "/region1/site1/config1", "/region1/site1", "/region1"));
+    assertEquals("r11", values.get("param11"));
+    assertEquals("r12", values.get("param12"));
+    assertEquals("valueFromOsgiConfig", values.get("param13"));
+    assertEquals(99, values.get("param21"));
+  }
+
+  @Test
+  public void testConfigurationHierarchyWithOverridesAndLockedParameterNames() {
+    when(parameterPersistence.getData(resolver, "/region1")).thenReturn(toData(ImmutableMap.<String, Object>builder()
+        .put("param11", "r11")
+        .put("param12", "r12")
+        .put("param21", 88)
+        .build(), ImmutableSortedSet.of("param11")));
+    when(parameterPersistence.getData(resolver, "/region1/site1")).thenReturn(toData(ImmutableMap.<String, Object>builder()
+        .put("param11", "s11")
+        .put("param21", 99)
+        .build(), ImmutableSortedSet.of("param21")));
+    when(parameterPersistence.getData(resolver, "/region1/site1/config1")).thenReturn(toData(ImmutableMap.<String, Object>builder()
+        .put("param11", "c11")
+        .put("param21", 111)
+        .build()));
+
+    when(parameterOverride.getOverrideSystemDefault(PARAM13)).thenReturn("override13");
+    when(parameterOverride.getOverrideForce("/region1/site1", PARAM21)).thenReturn(66);
+
+    Map<String, Object> values = underTest.getEffectiveValues(resolver, Arrays.asList(
+        "/region1/site1/config1", "/region1/site1", "/region1"));
+    assertEquals("r11", values.get("param11"));
+    assertEquals("r12", values.get("param12"));
+    assertEquals("override13", values.get("param13"));
+    assertEquals(66, values.get("param21"));
+  }
+
+
+  private static ParameterPersistenceData toData(Map<String, Object> values) {
+    return toData(values, ImmutableSortedSet.<String>of());
+  }
+
+  private static ParameterPersistenceData toData(Map<String, Object> values, SortedSet<String> lockedParameterNames) {
+    return new ParameterPersistenceData(values, lockedParameterNames);
   }
 
 }

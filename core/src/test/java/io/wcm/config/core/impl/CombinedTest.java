@@ -25,6 +25,7 @@ import io.wcm.config.api.Configuration;
 import io.wcm.config.api.Parameter;
 import io.wcm.config.api.ParameterBuilder;
 import io.wcm.config.api.management.ParameterPersistence;
+import io.wcm.config.api.management.ParameterPersistenceData;
 import io.wcm.config.api.management.PersistenceException;
 import io.wcm.config.core.management.impl.ApplicationFinderImpl;
 import io.wcm.config.core.management.impl.ConfigurationFinderImpl;
@@ -54,6 +55,7 @@ import org.junit.Test;
 import com.day.jcr.vault.util.Text;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableSortedSet;
 
 /**
  * Test all configuration services in combination.
@@ -124,8 +126,9 @@ public class CombinedTest {
   @Test
   public void testWriteReadConfig() throws PersistenceException {
     ParameterPersistence persistence = context.slingScriptHelper().getService(ParameterPersistence.class);
-    persistence.storeParameterValues(context.resourceResolver(), CONFIG_ID,
-        ImmutableMap.<String, Object>of(PROP_3.getName(), "value3-new"), true);
+    persistence.storeData(context.resourceResolver(), CONFIG_ID,
+        new ParameterPersistenceData(ImmutableMap.<String, Object>of(PROP_3.getName(), "value3-new"), ImmutableSortedSet.<String>of()),
+        true);
 
     Resource resource = context.request().getResource();
     Configuration config = resource.adaptTo(Configuration.class);

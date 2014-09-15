@@ -20,13 +20,16 @@
 package io.wcm.config.core.management.impl;
 
 import io.wcm.config.api.management.ParameterPersistence;
+import io.wcm.config.api.management.ParameterPersistenceData;
 import io.wcm.config.api.management.PersistenceException;
 import io.wcm.config.spi.ParameterPersistenceProvider;
 import io.wcm.sling.commons.osgi.RankedServices;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Reference;
@@ -34,6 +37,8 @@ import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.apache.felix.scr.annotations.Service;
 import org.apache.sling.api.resource.ResourceResolver;
+
+import com.google.common.collect.ImmutableSortedSet;
 
 /**
  * Default implementation of {@link ParameterPersistence}.
@@ -50,36 +55,63 @@ public final class ParameterPersistenceImpl implements ParameterPersistence {
   private final RankedServices<ParameterPersistenceProvider> parameterPersistenceProviders = new RankedServices<>();
 
   @Override
-  public Map<String, Object> getValues(ResourceResolver resolver, String configurationId) {
+  public ParameterPersistenceData getData(ResourceResolver resolver, String configurationId) {
     // get values from first configuration provider that can provide them
     for (ParameterPersistenceProvider provider : parameterPersistenceProviders) {
       Map<String, Object> values = provider.get(resolver, configurationId);
       if (values != null) {
-        return values;
+        return toData(values);
       }
     }
-    return Collections.emptyMap();
+    return ParameterPersistenceData.EMPTY;
+  }
+
+  private ParameterPersistenceData toData(Map<String,Object> valuesFromProvider) {
+    String[] lockedParameterNamesArray = (String[])valuesFromProvider.get(PN_LOCKED_PARAMETER_NAMES);
+    if (lockedParameterNamesArray != null) {
+      Map<String, Object> values = new HashMap<>(valuesFromProvider);
+      values.remove(PN_LOCKED_PARAMETER_NAMES);
+      return new ParameterPersistenceData(values, ImmutableSortedSet.copyOf(lockedParameterNamesArray));
+    }
+    else {
+      return new ParameterPersistenceData(valuesFromProvider, ImmutableSortedSet.<String>of());
+    }
   }
 
   @Override
-  public void storeParameterValues(ResourceResolver resolver, String configurationId, Map<String, Object> values)
+  public void storeData(ResourceResolver resolver, String configurationId, ParameterPersistenceData data)
       throws PersistenceException {
-    storeParameterValues(resolver, configurationId, values, false);
+    storeData(resolver, configurationId, data, false);
   }
 
   @Override
-  public void storeParameterValues(ResourceResolver resolver, String configurationId, Map<String, Object> values,
+  public void storeData(ResourceResolver resolver, String configurationId, ParameterPersistenceData data,
       boolean mergeWithExisting) throws PersistenceException {
 
     // merge values with existing if requested
-    Map<String, Object> valuesToStore;
+    Map<String, Object> valuesToStore = new HashMap<>();
     if (mergeWithExisting) {
-      valuesToStore = new HashMap<>();
-      valuesToStore.putAll(getValues(resolver, configurationId));
-      valuesToStore.putAll(values);
+      // values
+      ParameterPersistenceData existingData = getData(resolver, configurationId);
+      valuesToStore.putAll(existingData.getValues());
+      valuesToStore.putAll(data.getValues());
+
+      // locked parameter names
+      SortedSet<String> lockedParameterNames = new TreeSet<>();
+      lockedParameterNames.addAll(existingData.getLockedParameterNames());
+      lockedParameterNames.addAll(data.getLockedParameterNames());
+      if (!lockedParameterNames.isEmpty()) {
+        valuesToStore.put(PN_LOCKED_PARAMETER_NAMES, toArray(lockedParameterNames));
+      }
     }
     else {
-      valuesToStore = values;
+      // values
+      valuesToStore.putAll(data.getValues());
+
+      // locked parameter names
+      if (!data.getLockedParameterNames().isEmpty()) {
+        valuesToStore.put(PN_LOCKED_PARAMETER_NAMES, toArray(data.getLockedParameterNames()));
+      }
     }
 
     // ask providers to store the parameter values
@@ -89,6 +121,10 @@ public final class ParameterPersistenceImpl implements ParameterPersistence {
       }
     }
     throw new PersistenceException("No provider accepted to store parameter values for " + configurationId);
+  }
+
+  private String[] toArray(Set<String> set) {
+    return set.toArray(new String[set.size()]);
   }
 
   void bindParameterPersistenceProvider(ParameterPersistenceProvider service, Map<String, Object> props) {

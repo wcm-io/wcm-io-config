@@ -99,6 +99,18 @@
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <instructions>
+
+            <!-- include application path as intial content -->
+            <Sling-Initial-Content>SLING-INF/app-root;overwrite:=true;ignoreImportProviders:=xml;path:=/apps/wcm-io/config/core</Sling-Initial-Content>
+
+            <!-- Define custom node types and node type namespaces -->
+            <Sling-Nodetypes>SLING-INF/app-root/nodetypes/io.wcm.config.cnd</Sling-Nodetypes>
+            <Sling-Namespaces>io-wcm-config=http://wcm.io/config</Sling-Namespaces>
+
+          </instructions>
+        </configuration>
       </plugin>
 
       <plugin>

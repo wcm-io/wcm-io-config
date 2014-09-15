@@ -22,6 +22,7 @@ package io.wcm.config.core.management.impl;
 import io.wcm.config.api.Parameter;
 import io.wcm.config.api.management.ParameterOverride;
 import io.wcm.config.api.management.ParameterPersistence;
+import io.wcm.config.api.management.ParameterPersistenceData;
 import io.wcm.config.api.management.ParameterResolver;
 import io.wcm.config.core.util.TypeUtil;
 import io.wcm.config.spi.ParameterProvider;
@@ -30,10 +31,11 @@ import io.wcm.sling.commons.osgi.RankedServices;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.felix.scr.annotations.Activate;
@@ -49,6 +51,7 @@ import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.ImmutableSortedSet;
 import com.google.common.collect.Iterators;
 
 /**
@@ -86,9 +89,10 @@ public final class ParameterResolverImpl implements ParameterResolver {
 
     // apply configured values following inheritance hierarchy
     String[] configurationIdArray = Iterators.toArray(configurationIds.iterator(), String.class);
+    SortedSet<String> lockedParameterNames = ImmutableSortedSet.<String>of();
     for (int i = configurationIdArray.length - 1; i >= 0; i--) {
       String configurationId = configurationIdArray[i];
-      applyConfiguredValues(resolver, configurationId, parameters, parameterValues);
+      lockedParameterNames = applyConfiguredValues(resolver, configurationId, parameters, parameterValues, lockedParameterNames);
 
       // apply forced override values
       applyOverrideForce(configurationId, parameters, parameterValues);
@@ -159,17 +163,45 @@ public final class ParameterResolverImpl implements ParameterResolver {
   }
 
   /**
-   * Apply configured values for given configuration id.
+   * Apply configured values for given configuration id (except those for which the parameter names are locked on a
+   * higher configuration level).
    * @param resolver Resource resolver
    * @param configurationId Configuration id
    * @param parameters Parameter definitions
    * @param parameterValues Parameter values
+   * @param ancestorLockedParameterNames Set of locked parameter names on the configuration levels above.
+   * @return Set of locked parameter names on this configuration level combined with the from the levels above.
    */
-  private void applyConfiguredValues(ResourceResolver resolver, String configurationId,
-      Map<String, Parameter<?>> parameters, Map<String, Object> parameterValues) {
-    Map<String, Object> configuredValues = new HashMap<>(parameterPersistence.getValues(resolver, configurationId));
-    ensureValidValueTypes(parameters, configuredValues);
-    parameterValues.putAll(configuredValues);
+  private SortedSet<String> applyConfiguredValues(ResourceResolver resolver, String configurationId,
+      Map<String, Parameter<?>> parameters, Map<String, Object> parameterValues,
+      SortedSet<String> ancestorLockedParameterNames) {
+
+    // get data from persistence
+    ParameterPersistenceData data = parameterPersistence.getData(resolver, configurationId);
+
+    // ensure the types provided by persistence are valid
+    Map<String, Object> configuredValues = ensureValidValueTypes(parameters, data.getValues());
+
+    // put parameter values to map (respect locked parameter names that may be defined on ancestor level)
+    if (!ancestorLockedParameterNames.isEmpty()) {
+      for (Map.Entry<String, Object> entry : configuredValues.entrySet()) {
+        if (!ancestorLockedParameterNames.contains(entry.getKey())) {
+          parameterValues.put(entry.getKey(), entry.getValue());
+        }
+      }
+    }
+    else {
+      parameterValues.putAll(configuredValues);
+    }
+
+    // aggregate set of locked parameter names from ancestor levels and this level
+    SortedSet<String> lockedParameterNames = ancestorLockedParameterNames;
+    if (!data.getLockedParameterNames().isEmpty()) {
+      lockedParameterNames = new TreeSet<>();
+      lockedParameterNames.addAll(ancestorLockedParameterNames);
+      lockedParameterNames.addAll(data.getLockedParameterNames());
+    }
+    return lockedParameterNames;
   }
 
   /**
@@ -177,20 +209,32 @@ public final class ParameterResolverImpl implements ParameterResolver {
    * parameter definition exists are removed.
    * @param parameters Parameter definitions
    * @param parameterValues Parameter values
+   * @return Cleaned up parameter values
    */
-  private void ensureValidValueTypes(Map<String, Parameter<?>> parameters, Map<String, Object> parameterValues) {
-    Iterator<Map.Entry<String, Object>> valueIterator = parameterValues.entrySet().iterator();
-    while (valueIterator.hasNext()) {
-      Map.Entry<String,Object> value = valueIterator.next();
-      if (value.getKey() == null || value.getValue() == null) {
-        valueIterator.remove();
+  private Map<String, Object> ensureValidValueTypes(Map<String, Parameter<?>> parameters, Map<String, Object> parameterValues) {
+    Set<String> invalidParameterNames = new HashSet<>();
+    for (Map.Entry<String, Object> entry : parameterValues.entrySet()) {
+      if (entry.getKey() == null || entry.getValue() == null) {
+        invalidParameterNames.add(entry.getKey());
       }
       else {
-        Parameter<?> parameter = parameters.get(value.getKey());
-        if (parameter == null || !parameter.getType().isAssignableFrom(value.getValue().getClass())) {
-          valueIterator.remove();
+        Parameter<?> parameter = parameters.get(entry.getKey());
+        if (parameter == null || !parameter.getType().isAssignableFrom(entry.getValue().getClass())) {
+          invalidParameterNames.add(entry.getKey());
         }
       }
+    }
+    if (invalidParameterNames.isEmpty()) {
+      return parameterValues;
+    }
+    else {
+      Map<String, Object> cleanedUpParameterValues = new HashMap<>();
+      for (Map.Entry<String, Object> entry : parameterValues.entrySet()) {
+        if (!invalidParameterNames.contains(entry.getKey())) {
+          cleanedUpParameterValues.put(entry.getKey(), entry.getValue());
+        }
+      }
+      return cleanedUpParameterValues;
     }
   }
 
