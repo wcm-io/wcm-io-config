@@ -21,7 +21,6 @@ package io.wcm.config.core.override;
 
 import io.wcm.config.spi.ParameterOverrideProvider;
 
-import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -36,6 +35,8 @@ import org.apache.felix.scr.annotations.Service;
 import org.apache.sling.commons.osgi.PropertiesUtil;
 import org.osgi.framework.Constants;
 import org.osgi.service.component.ComponentContext;
+
+import com.google.common.collect.ImmutableMap;
 
 /**
  * Provide parameter override map from system properties.
@@ -88,7 +89,7 @@ public final class SystemPropertyOverrideProvider implements ParameterOverridePr
         }
       }
     }
-    this.overrideMap = Collections.unmodifiableMap(map);
+    this.overrideMap = ImmutableMap.copyOf(map);
   }
 
 }

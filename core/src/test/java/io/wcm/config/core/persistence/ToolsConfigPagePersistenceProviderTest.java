@@ -31,7 +31,6 @@ import io.wcm.config.api.management.PersistenceException;
 import io.wcm.testing.mock.aem.junit.AemContext;
 import io.wcm.testing.mock.osgi.MockOsgi;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -79,7 +78,7 @@ public class ToolsConfigPagePersistenceProviderTest {
   public void testGetPageNoConfigResource() throws WCMException {
     Page toolsPage = context.pageManager().create(CONFIG_ID, TOOLS_PAGE_NAME, TOOLS_PAGE_TEMPLATE, TOOLS_PAGE_NAME, true);
     context.pageManager().create(toolsPage.getPath(), CONFIG_PAGE_NAME, CONFIG_PAGE_TEMPLATE, CONFIG_PAGE_NAME, true);
-    assertEquals(Collections.EMPTY_MAP, underTest.get(context.resourceResolver(), CONFIG_ID));
+    assertEquals(ImmutableMap.of(), underTest.get(context.resourceResolver(), CONFIG_ID));
   }
 
   @Test

@@ -23,9 +23,10 @@ import io.wcm.config.api.Parameter;
 import io.wcm.config.spi.ParameterProvider;
 
 import java.lang.reflect.Field;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.google.common.collect.ImmutableSet;
 
 /**
  * Abstract implementation of {@link ParameterProvider} providing list of parameters either from given
@@ -72,7 +73,7 @@ public abstract class AbstractParameterProvider implements ParameterProvider {
     catch (IllegalArgumentException | IllegalAccessException ex) {
       throw new RuntimeException("Unable to access fields of " + type.getName(), ex);
     }
-    return Collections.unmodifiableSet(params);
+    return ImmutableSet.copyOf(params);
   }
 
 }
