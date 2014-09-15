@@ -24,9 +24,9 @@ import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.when;
 
 import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.Map;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,30 +35,26 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.osgi.service.component.ComponentContext;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SystemPropertyOverrideProviderTest {
+public class OsgiConfigOverrideProviderTest {
 
   @Mock
   private ComponentContext componentContext;
-  @Mock
-  private Dictionary config;
+  private Dictionary<String, Object> config;
 
   @Before
   public void setUp() {
+    config = new Hashtable<>();
+    config.put(OsgiConfigOverrideProvider.PROPERTY_OVERRIDES, new String[] {
+        "[default]param1=value1",
+        "[/config1]param2=value2"
+    });
     when(componentContext.getProperties()).thenReturn(config);
-    System.setProperty(SystemPropertyOverrideProvider.SYSTEM_PROPERTY_PREFIX + "[default]param1", "value1");
-    System.setProperty(SystemPropertyOverrideProvider.SYSTEM_PROPERTY_PREFIX + "[/config1]param2", "value2");
-  }
-
-  @After
-  public void tearDown() {
-    System.clearProperty(SystemPropertyOverrideProvider.SYSTEM_PROPERTY_PREFIX + "[default]param1");
-    System.clearProperty(SystemPropertyOverrideProvider.SYSTEM_PROPERTY_PREFIX + "[/config1]param2");
   }
 
   @Test
   public void testEnabled() {
-    SystemPropertyOverrideProvider provider = new SystemPropertyOverrideProvider();
-    when(config.get(SystemPropertyOverrideProvider.PROPERTY_ENABLED)).thenReturn(true);
+    OsgiConfigOverrideProvider provider = new OsgiConfigOverrideProvider();
+    config.put(OsgiConfigOverrideProvider.PROPERTY_ENABLED, true);
     provider.activate(componentContext);
 
     Map<String,String> overrideMap = provider.getOverrideMap();
@@ -68,8 +64,8 @@ public class SystemPropertyOverrideProviderTest {
 
   @Test
   public void testDisabled() {
-    SystemPropertyOverrideProvider provider = new SystemPropertyOverrideProvider();
-    when(config.get(SystemPropertyOverrideProvider.PROPERTY_ENABLED)).thenReturn(false);
+    OsgiConfigOverrideProvider provider = new OsgiConfigOverrideProvider();
+    config.put(OsgiConfigOverrideProvider.PROPERTY_ENABLED, false);
     provider.activate(componentContext);
 
     Map<String, String> overrideMap = provider.getOverrideMap();

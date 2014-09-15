@@ -44,7 +44,9 @@ import com.day.cq.wcm.api.WCMException;
 /**
  * Persistence provider that stores configuration values in pages in a path tools/config relative to the config id.
  */
-@Component(metatype = true, immediate = true)
+@Component(metatype = true, immediate = true,
+    label = "wcm.io Configuration Persistence Provider: /tools/config Pages",
+    description = "Allows to read and store configurations in /tools/config pages.")
 @Service(ParameterPersistenceProvider.class)
 public final class ToolsConfigPagePersistenceProvider implements ParameterPersistenceProvider {
 
@@ -59,7 +61,8 @@ public final class ToolsConfigPagePersistenceProvider implements ParameterPersis
   static final boolean DEFAULT_ENABLED = false;
 
   @Property(label = "Service Ranking", intValue = ToolsConfigPagePersistenceProvider.DEFAULT_RANKING,
-      description = "Priority of parameter persistence providers (lower = higher priority)")
+      description = "Priority of parameter persistence providers (lower = higher priority)",
+      propertyPrivate = false)
   static final String PROPERTY_RANKING = Constants.SERVICE_RANKING;
   static final int DEFAULT_RANKING = 1000;
 

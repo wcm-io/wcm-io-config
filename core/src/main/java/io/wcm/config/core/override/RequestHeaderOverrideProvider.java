@@ -47,7 +47,9 @@ import org.osgi.service.component.ComponentContext;
 /**
  * Provide parameter override map from current request header.
  */
-@Component(metatype = true, immediate = true)
+@Component(metatype = true, immediate = true,
+label = "wcm.io Configuration Property Override Provider: Request Header",
+description = "Allows to define configuration property default values or overrides from inconming request headers.")
 @Service({
   ParameterOverrideProvider.class, Filter.class
 })
@@ -67,13 +69,14 @@ public final class RequestHeaderOverrideProvider implements ParameterOverridePro
 
   @Property(label = "Enabled", boolValue = RequestHeaderOverrideProvider.DEFAULT_ENABLED,
       description = "Enable parameter override provider")
-  private static final String PROPERTY_ENABLED = "enabled";
-  private static final boolean DEFAULT_ENABLED = false;
+  static final String PROPERTY_ENABLED = "enabled";
+  static final boolean DEFAULT_ENABLED = false;
 
   @Property(label = "Service Ranking", intValue = RequestHeaderOverrideProvider.DEFAULT_RANKING,
-      description = "Priority of parameter override providers (lower = higher priority)")
-  private static final String PROPERTY_RANKING = Constants.SERVICE_RANKING;
-  private static final int DEFAULT_RANKING = 1000;
+      description = "Priority of parameter override providers (lower = higher priority)",
+      propertyPrivate = false)
+  static final String PROPERTY_RANKING = Constants.SERVICE_RANKING;
+  static final int DEFAULT_RANKING = 1000;
 
   private boolean enabled;
 

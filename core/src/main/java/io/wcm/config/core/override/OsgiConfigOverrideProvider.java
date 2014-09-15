@@ -23,12 +23,9 @@ import io.wcm.config.spi.ParameterOverrideProvider;
 
 import java.util.Collections;
 import java.util.Dictionary;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.felix.scr.annotations.Activate;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Property;
@@ -38,29 +35,35 @@ import org.osgi.framework.Constants;
 import org.osgi.service.component.ComponentContext;
 
 /**
- * Provide parameter override map from system properties.
+ * Provide parameter override map from OSGi factory configuration.
  */
-@Component(metatype = true, immediate = true,
-label = "wcm.io Configuration Property Override Provider: System Properties",
-description = "Allows to define configuration property default values or overrides from system environment properties.")
+@Component(metatype = true, immediate = true, configurationFactory = true,
+label = "wcm.io Configuration Property Override Provider: OSGi configuration",
+description = "Allows to define configuration property default values or overrides from OSGi configuration.")
 @Service(ParameterOverrideProvider.class)
-public final class SystemPropertyOverrideProvider implements ParameterOverrideProvider {
+public final class OsgiConfigOverrideProvider implements ParameterOverrideProvider {
 
-  /**
-   * Prefix for override system property
-   */
-  public static final String SYSTEM_PROPERTY_PREFIX = "config.override.";
-
-  @Property(label = "Enabled", boolValue = SystemPropertyOverrideProvider.DEFAULT_ENABLED,
+  @Property(label = "Enabled", boolValue = OsgiConfigOverrideProvider.DEFAULT_ENABLED,
       description = "Enable parameter override provider")
   static final String PROPERTY_ENABLED = "enabled";
   static final boolean DEFAULT_ENABLED = false;
 
-  @Property(label = "Service Ranking", intValue = SystemPropertyOverrideProvider.DEFAULT_RANKING,
+  @Property(label = "Service Ranking", intValue = OsgiConfigOverrideProvider.DEFAULT_RANKING,
       description = "Priority of parameter override providers (lower = higher priority)",
       propertyPrivate = false)
   static final String PROPERTY_RANKING = Constants.SERVICE_RANKING;
-  static final int DEFAULT_RANKING = 2000;
+  static final int DEFAULT_RANKING = 3000;
+
+  @Property(label = "Overrides", cardinality = Integer.MAX_VALUE,
+      description = "Key/Value pairs defining parameter overrides.\n"
+          + "Syntax: [{scope}]{parameterName}={value}\n"
+          + "Examples:\n"
+          + "[default]param1 - Override default value for parameter 'param1'\n"
+          + "param1 - Override value for parameter 'param1' for all configurations\n"
+          + "[/content/region1/site1]param1 - Override value for parameter 'param1' for the "
+          + "configurations at /content/region1/site1. This has higher precedence than the other variants.")
+  static final String PROPERTY_OVERRIDES = "overrides";
+  static final String[] DEFAULT_OVERRIDES = new String[0];
 
   private Map<String, String> overrideMap;
 
@@ -76,16 +79,9 @@ public final class SystemPropertyOverrideProvider implements ParameterOverridePr
 
     Map<String, String> map = new HashMap<>();
     if (enabled) {
-      Properties properties = System.getProperties();
-      Enumeration<Object> keys = properties.keys();
-      while (keys.hasMoreElements()) {
-        Object keyObject = keys.nextElement();
-        if (keyObject instanceof String) {
-          String key = (String)keyObject;
-          if (StringUtils.startsWith(key, SYSTEM_PROPERTY_PREFIX)) {
-            map.put(StringUtils.substringAfter(key, SYSTEM_PROPERTY_PREFIX), System.getProperty(key));
-          }
-        }
+      Map<String, String> overrides = PropertiesUtil.toMap(config.get(PROPERTY_OVERRIDES), DEFAULT_OVERRIDES);
+      if (overrides != null) {
+        map.putAll(overrides);
       }
     }
     this.overrideMap = Collections.unmodifiableMap(map);

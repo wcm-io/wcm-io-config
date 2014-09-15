@@ -68,7 +68,7 @@ public class RequestHeaderOverrideProviderTest {
   @Test
   public void testEnabled() throws IOException, ServletException {
     final RequestHeaderOverrideProvider provider = new RequestHeaderOverrideProvider();
-    when(config.get("enabled")).thenReturn(true);
+    when(config.get(RequestHeaderOverrideProvider.PROPERTY_ENABLED)).thenReturn(true);
     provider.activate(componentContext);
 
     provider.doFilter(request, response, new FilterChain() {
@@ -84,7 +84,7 @@ public class RequestHeaderOverrideProviderTest {
   @Test
   public void testDisabled() throws IOException, ServletException {
     final RequestHeaderOverrideProvider provider = new RequestHeaderOverrideProvider();
-    when(config.get("enabled")).thenReturn(false);
+    when(config.get(RequestHeaderOverrideProvider.PROPERTY_ENABLED)).thenReturn(false);
     provider.activate(componentContext);
 
     provider.doFilter(request, response, new FilterChain() {
