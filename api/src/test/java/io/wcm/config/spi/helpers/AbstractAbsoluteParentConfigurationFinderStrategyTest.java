@@ -25,13 +25,14 @@ import io.wcm.config.spi.ConfigurationFinderStrategy;
 
 import java.util.List;
 
-import org.apache.commons.collections4.IteratorUtils;
 import org.apache.sling.api.resource.Resource;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import com.google.common.collect.ImmutableList;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AbstractAbsoluteParentConfigurationFinderStrategyTest {
@@ -60,26 +61,26 @@ public class AbstractAbsoluteParentConfigurationFinderStrategyTest {
     List<String> configurationIds;
 
     when(resource.getPath()).thenReturn("/");
-    configurationIds = IteratorUtils.toList(underTest.findConfigurationIds(resource));
+    configurationIds = ImmutableList.copyOf(underTest.findConfigurationIds(resource));
     assertEquals(0, configurationIds.size());
 
     when(resource.getPath()).thenReturn("/content");
-    configurationIds = IteratorUtils.toList(underTest.findConfigurationIds(resource));
+    configurationIds = ImmutableList.copyOf(underTest.findConfigurationIds(resource));
     assertEquals(0, configurationIds.size());
 
     when(resource.getPath()).thenReturn("/content/region1");
-    configurationIds = IteratorUtils.toList(underTest.findConfigurationIds(resource));
+    configurationIds = ImmutableList.copyOf(underTest.findConfigurationIds(resource));
     assertEquals(1, configurationIds.size());
     assertEquals("/content/region1", configurationIds.get(0));
 
     when(resource.getPath()).thenReturn("/content/region1/site1");
-    configurationIds = IteratorUtils.toList(underTest.findConfigurationIds(resource));
+    configurationIds = ImmutableList.copyOf(underTest.findConfigurationIds(resource));
     assertEquals(2, configurationIds.size());
     assertEquals("/content/region1", configurationIds.get(0));
     assertEquals("/content/region1/site1", configurationIds.get(1));
 
     when(resource.getPath()).thenReturn("/content/region1/site1/page1");
-    configurationIds = IteratorUtils.toList(underTest.findConfigurationIds(resource));
+    configurationIds = ImmutableList.copyOf(underTest.findConfigurationIds(resource));
     assertEquals(2, configurationIds.size());
     assertEquals("/content/region1", configurationIds.get(0));
     assertEquals("/content/region1/site1", configurationIds.get(1));
