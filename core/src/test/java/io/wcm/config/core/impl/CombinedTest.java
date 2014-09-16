@@ -107,7 +107,7 @@ public class CombinedTest {
     context.registerInjectActivateService(new ApplicationImplementationPicker());
 
     // mount sample content
-    context.jsonImporter().importTo("/combined-test-content.json", "/content");
+    context.contentLoader().importTo("/combined-test-content.json", "/content");
     context.currentPage(CONFIG_ID);
   }
 
