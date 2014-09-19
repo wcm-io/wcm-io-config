@@ -1,6 +1,24 @@
 (function (angular) {
   "use strict";
   angular.module('io.wcm.config.directives', ["io.wcm.config.templateUrlList", "io.wcm.config.utilities", "io.wcm.config.templates"])
+  /**
+   * Directive for displaying the filters on the editor page. Wraps internally the CUI.Select widget.
+   * Parent Scope provides the model for the filter:
+   * {
+   *   name: "Filter Application",
+   *   filterParameter:"application",
+   *   options: [
+   *     {
+   *      "value": "/apps/viessmann",
+   *      "label": "Viessmann Responsive"
+   *     }
+   *   ]
+   * }
+   *
+   * filterParameter specifies the property name of the parameter, which will be used to apply the filtering
+   * Every change of the selection is applied to the "currentFilter" property from the parent scope. The parent scope has a
+   * watcher registered to this property and filters the displayed collection of the parameter n every change
+   */
     .directive("filterDropDownList", ['templateUrlList', function (templateList) {
       return {
         restrict: "E",
@@ -29,6 +47,16 @@
         }
       }
     }])
+  /**
+   * Directive to render the "i" button with a popover for the decription of the parameter. Wraps a coral UI Button and
+   * CUI.Popover widget. This directive transcludes the popup content elements. Example:
+   * <description-popup>
+   *   <popup-content>
+   *     Description Text
+   *   </popup-content>
+   * </description-popup>
+   *
+   */
     .directive("descriptionPopup", ['templateUrlList', "EditorUtilities", function (templateList, utils) {
       return {
         restrict: "E",
@@ -46,6 +74,13 @@
         }
       }
     }])
+  /**
+   * Renders the wrapping elements for the coral ui popover. The content itself is transcluded. The content can also contain markup
+   *   <popup-content>
+   *     Description Text
+   *   </popup-content>
+   *
+   */
     .directive("popupContent", ['templateUrlList', function (templateList) {
       return {
         restrict: "E",

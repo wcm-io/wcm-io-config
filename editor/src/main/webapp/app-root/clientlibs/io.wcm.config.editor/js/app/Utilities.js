@@ -2,10 +2,17 @@
   var uid = ['0', '0', '0' ];
 
   "use strict";
+  /**
+   * Utilities module
+   */
   angular.module('io.wcm.config.utilities', [])
 
     .factory('EditorUtilities', function () {
 
+      /**
+       *
+       * @returns unique Id
+       */
       var nextUid = function() {
         var index = uid.length;
         var digit;
