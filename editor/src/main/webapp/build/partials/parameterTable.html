@@ -1,0 +1,340 @@
+<table class="coral-Table coral-Table--hover">
+<thead>
+<tr class="coral-Table-row">
+  <th class="coral-Table-headerCell">Parameter</th>
+  <th class="coral-Table-headerCell">Value</th>
+  <th class="coral-Table-headerCell">Inherited</th>
+  <th class="coral-Table-headerCell">Lock</th>
+  <th class="coral-Table-headerCell">Description</th>
+  <th class="coral-Table-headerCell">Group</th>
+</tr>
+</thead>
+<tbody>
+
+<tr class="coral-Table-row" ng-repeat="parameter in parameters">
+  <td class="coral-Table-cell" ng-repeat="column in columns"></td>
+</tr>
+
+
+<tr class="coral-Table-row">
+  <td class="coral-Table-cell">
+    String Parameter
+  </td>
+  <td class="coral-Table-cell">
+    <input type="text" class="coral-Textfield" value="Value 1">
+  </td>
+  <td class="coral-Table-cell">
+  </td>
+  <td class="coral-Table-cell">
+    <label class="coral-Checkbox">
+      <input class="coral-Checkbox-input" name="c1" value="1" type="checkbox">
+      <span class="coral-Checkbox-checkmark"></span>
+    </label>
+  </td>
+  <td class="coral-Table-cell">
+    <button class="coral-MinimalButton" data-target="#defaultPopover" data-toggle="popover">
+      <i class="coral-Icon coral-Icon--infoCircle coral-Icon--sizeM coral-MinimalButton-icon"></i>
+    </button>
+    <div id="defaultPopover" class="coral-Popover">
+      <div class="coral-Popover-content u-coral-padding">
+        <h3>String Parameter</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus imperdiet interdum convallis.
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus imperdiet interdum convallis.</p>
+        <ul>
+          <li>Item 1</li>
+          <li>Item 2</li>
+          <li>Item 3</li>
+        </ul>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus imperdiet interdum convallis.
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus imperdiet interdum convallis.</p>
+      </div>
+    </div>
+  </td>
+  <td class="coral-Table-cell">
+    Group
+  </td>
+  </td>
+</tr>
+
+<tr class="coral-Table-row">
+  <td class="coral-Table-cell">
+    String Parameter (inherited)
+  </td>
+  <td class="coral-Table-cell">
+    Value 1
+  </td>
+  <td class="coral-Table-cell">
+    <label class="coral-Checkbox">
+      <input class="coral-Checkbox-input" name="c11" value="1" checked="" type="checkbox">
+      <span class="coral-Checkbox-checkmark"></span>
+    </label>
+  </td>
+  <td class="coral-Table-cell">
+    <label class="coral-Checkbox">
+      <input class="coral-Checkbox-input" name="c1" value="1" type="checkbox">
+      <span class="coral-Checkbox-checkmark"></span>
+    </label>
+  </td>
+  <td class="coral-Table-cell">
+    <button class="coral-MinimalButton" data-target="#defaultPopover" data-toggle="popover">
+      <i class="coral-Icon coral-Icon--infoCircle coral-Icon--sizeM coral-MinimalButton-icon"></i>
+    </button>
+    <div id="defaultPopover" class="coral-Popover">
+      <div class="coral-Popover-content u-coral-padding">Description</div>
+    </div>
+  </td>
+  <td class="coral-Table-cell">
+    Group
+  </td>
+</tr>
+
+<tr class="coral-Table-row">
+  <td class="coral-Table-cell">
+    String Parameter (disabled)
+  </td>
+  <td class="coral-Table-cell">
+    Value 1
+  </td>
+  <td class="coral-Table-cell">
+    <label class="coral-Checkbox">
+      <input class="coral-Checkbox-input" name="c5" value="5" disabled="disabled" checked="" type="checkbox">
+      <span class="coral-Checkbox-checkmark"></span>
+    </label>
+  </td>
+  <td class="coral-Table-cell">
+    <label class="coral-Checkbox">
+      <input class="coral-Checkbox-input" name="c1" value="1" type="checkbox">
+      <span class="coral-Checkbox-checkmark"></span>
+    </label>
+  </td>
+  <td class="coral-Table-cell">
+    <button class="coral-MinimalButton" data-target="#defaultPopover" data-toggle="popover">
+      <i class="coral-Icon coral-Icon--infoCircle coral-Icon--sizeM coral-MinimalButton-icon"></i>
+    </button>
+    <div id="defaultPopover" class="coral-Popover">
+      <div class="coral-Popover-content u-coral-padding">Description</div>
+    </div>
+  </td>
+  <td class="coral-Table-cell">
+    Group
+  </td>
+</tr>
+
+<tr class="coral-Table-row">
+  <td class="coral-Table-cell">
+    String Parameter (Data Error)
+  </td>
+  <td class="coral-Table-cell">
+    <input type="text" class="coral-Textfield is-invalid" value="Value 1">
+  </td>
+  <td class="coral-Table-cell">
+  </td>
+  <td class="coral-Table-cell">
+    <label class="coral-Checkbox">
+      <input class="coral-Checkbox-input" name="c1" value="1" type="checkbox">
+      <span class="coral-Checkbox-checkmark"></span>
+    </label>
+  </td>
+  <td class="coral-Table-cell">
+    <button class="coral-MinimalButton" data-target="#defaultPopover" data-toggle="popover">
+      <i class="coral-Icon coral-Icon--infoCircle coral-Icon--sizeM coral-MinimalButton-icon"></i>
+    </button>
+    <div id="defaultPopover" class="coral-Popover">
+      <div class="coral-Popover-content u-coral-padding">Description</div>
+    </div>
+  </td>
+  <td class="coral-Table-cell">
+    Group
+  </td>
+  </td>
+</tr>
+
+<tr class="coral-Table-row">
+  <td class="coral-Table-cell">
+    Multiline String Parameter
+  </td>
+  <td class="coral-Table-cell">
+    <textarea class="coral-Textfield coral-Textfield--multiline">Value 1
+      Value 2
+      Value 3</textarea>
+  </td>
+  <td class="coral-Table-cell">
+  </td>
+  <td class="coral-Table-cell">
+    <label class="coral-Checkbox">
+      <input class="coral-Checkbox-input" name="c1" value="1" type="checkbox">
+      <span class="coral-Checkbox-checkmark"></span>
+    </label>
+  </td>
+  <td class="coral-Table-cell">
+    <button class="coral-MinimalButton" data-target="#defaultPopover" data-toggle="popover">
+      <i class="coral-Icon coral-Icon--infoCircle coral-Icon--sizeM coral-MinimalButton-icon"></i>
+    </button>
+    <div id="defaultPopover" class="coral-Popover">
+      <div class="coral-Popover-content u-coral-padding">
+        <h3>String Parameter</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus imperdiet interdum convallis.
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus imperdiet interdum convallis.</p>
+        <ul>
+          <li>Item 1</li>
+          <li>Item 2</li>
+          <li>Item 3</li>
+        </ul>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus imperdiet interdum convallis.
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus imperdiet interdum convallis.</p>
+      </div>
+    </div>
+  </td>
+  <td class="coral-Table-cell">
+    Group
+  </td>
+  </td>
+</tr>
+
+<tr class="coral-Table-row">
+  <td class="coral-Table-cell">
+    Single Selection
+  </td>
+  <td class="coral-Table-cell">
+            <span class="coral-Select" data-init="select">
+              <button type="button" class="coral-Select-button coral-MinimalButton">
+                <span class="coral-Select-button-text">One</span>
+              </button>
+              <select class="coral-Select-select">
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+                <option value="4">One Two Three Four Five Six Seven Eight Nine Ten</option>
+              </select>
+            </span>
+  </td>
+  <td class="coral-Table-cell">
+  </td>
+  <td class="coral-Table-cell">
+    <label class="coral-Checkbox">
+      <input class="coral-Checkbox-input" name="c1" value="1" type="checkbox">
+      <span class="coral-Checkbox-checkmark"></span>
+    </label>
+  </td>
+  <td class="coral-Table-cell">
+    <button class="coral-MinimalButton" data-target="#defaultPopover" data-toggle="popover">
+      <i class="coral-Icon coral-Icon--infoCircle coral-Icon--sizeM coral-MinimalButton-icon"></i>
+    </button>
+    <div id="defaultPopover" class="coral-Popover">
+      <div class="coral-Popover-content u-coral-padding">Description</div>
+    </div>
+  </td>
+  <td class="coral-Table-cell">
+    Group
+  </td>
+  </td>
+</tr>
+
+<tr class="coral-Table-row">
+  <td class="coral-Table-cell">
+    Multiple Selection
+  </td>
+  <td class="coral-Table-cell">
+            <span class="coral-Select" data-init="select">
+              <button type="button" class="coral-Select-button coral-MinimalButton">
+                <span class="coral-Select-button-text">Select</span>
+              </button>
+              <select class="coral-Select-select" multiple="true">
+                <option value="1" selected="">One</option>
+                <option value="2">Two</option>
+                <option value="3" selected="">Three</option>
+              </select>
+            </span>
+  </td>
+  <td class="coral-Table-cell">
+  </td>
+  <td class="coral-Table-cell">
+    <label class="coral-Checkbox">
+      <input class="coral-Checkbox-input" name="c1" value="1" type="checkbox">
+      <span class="coral-Checkbox-checkmark"></span>
+    </label>
+  </td>
+  <td class="coral-Table-cell">
+    <button class="coral-MinimalButton" data-target="#defaultPopover" data-toggle="popover">
+      <i class="coral-Icon coral-Icon--infoCircle coral-Icon--sizeM coral-MinimalButton-icon"></i>
+    </button>
+    <div id="defaultPopover" class="coral-Popover">
+      <div class="coral-Popover-content u-coral-padding">Description</div>
+    </div>
+  </td>
+  <td class="coral-Table-cell">
+    Group
+  </td>
+  </td>
+</tr>
+
+<tr class="coral-Table-row">
+  <td class="coral-Table-cell">
+    Checkbox
+  </td>
+  <td class="coral-Table-cell">
+    <label class="coral-Checkbox">
+      <input class="coral-Checkbox-input" name="c1" value="1" type="checkbox">
+      <span class="coral-Checkbox-checkmark"></span>
+    </label>
+  </td>
+  <td class="coral-Table-cell">
+  </td>
+  <td class="coral-Table-cell">
+    <label class="coral-Checkbox">
+      <input class="coral-Checkbox-input" name="c1" value="1" type="checkbox">
+      <span class="coral-Checkbox-checkmark"></span>
+    </label>
+  </td>
+  <td class="coral-Table-cell">
+    <button class="coral-MinimalButton" data-target="#defaultPopover" data-toggle="popover">
+      <i class="coral-Icon coral-Icon--infoCircle coral-Icon--sizeM coral-MinimalButton-icon"></i>
+    </button>
+    <div id="defaultPopover" class="coral-Popover">
+      <div class="coral-Popover-content u-coral-padding">Description</div>
+    </div>
+  </td>
+  <td class="coral-Table-cell">
+    Group
+  </td>
+  </td>
+</tr>
+
+<tr class="coral-Table-row">
+  <td class="coral-Table-cell">
+    Checkbox (Inherited)
+  </td>
+  <td class="coral-Table-cell">
+    <i class="coral-Icon coral-Icon--check coral-Icon--sizeS"></i>
+  </td>
+  <td class="coral-Table-cell">
+    <label class="coral-Checkbox">
+      <input class="coral-Checkbox-input" name="c12" value="1" checked="" type="checkbox">
+      <span class="coral-Checkbox-checkmark"></span>
+    </label>
+  </td>
+  <td class="coral-Table-cell">
+    <label class="coral-Checkbox">
+      <input class="coral-Checkbox-input" name="c1" value="1" type="checkbox">
+      <span class="coral-Checkbox-checkmark"></span>
+    </label>
+  </td>
+  <td class="coral-Table-cell">
+    <button class="coral-MinimalButton" data-target="#defaultPopover" data-toggle="popover">
+      <i class="coral-Icon coral-Icon--infoCircle coral-Icon--sizeM coral-MinimalButton-icon"></i>
+    </button>
+    <div id="defaultPopover" class="coral-Popover">
+      <div class="coral-Popover-content u-coral-padding">Description</div>
+    </div>
+  </td>
+  <td class="coral-Table-cell">
+    Group
+  </td>
+  </td>
+</tr>
+
+
+
+
+</tbody>
+</table>
