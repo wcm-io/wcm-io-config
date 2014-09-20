@@ -6,10 +6,26 @@
       $scope.displayedCollection = [];
 
       $scope.parameterCollection = [];
-      $scope.parameterCollection.push({"name": "String Parameter", "value": "Test",
-        group: "Dealer Locator", application: "/apps/viessmann", description:"Das ist ein parameter, für die konfoguration des Dealers"});
-      $scope.parameterCollection.push({"name": "String Parameter 2", "value": "Test 2",
-        group: "Link Handling", application: "/apps/wcm-io/linkhandler", description:"Das ist ein parameter, für die konfoguration des Link Handlings"});
+      $scope.parameterCollection.push({
+        "name": "String Parameter",
+        "value": "Test",
+        group: "Dealer Locator",
+        application: "/apps/viessmann",
+        description:"Das ist ein parameter, für die konfoguration des Dealers",
+        inherited: true,
+        locked: true,
+        widgetType: "stringfield"
+      });
+      $scope.parameterCollection.push({
+        "name": "Textarea Parameter 2",
+        "value": "Test 2",
+        group: "Link Handling",
+        application: "/apps/wcm-io/linkhandler",
+        description:"Das ist ein parameter, für die konfoguration des Link Handlings",
+        inherited: "false",
+        locked: false,
+        widgetType: "textarea"
+      });
 
       $scope.filters = [];
 

@@ -1,4 +1,4 @@
-angular.module('io.wcm.config.templates', ['filterDropDownList.html', 'parameterTable.html', 'popupContainer.html', 'popupContent.html']);
+angular.module('io.wcm.config.templates', ['filterDropDownList.html', 'parameterTable.html', 'parameterValue.html', 'popupContainer.html', 'popupContent.html']);
 
 angular.module("filterDropDownList.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("filterDropDownList.html",
@@ -30,6 +30,40 @@ angular.module("parameterTable.html", []).run(["$templateCache", function($templ
     "<tr class=\"coral-Table-row\" ng-repeat=\"parameter in parameters\">\n" +
     "  <td class=\"coral-Table-cell\" ng-repeat=\"column in columns\"></td>\n" +
     "</tr>\n" +
+    "\n" +
+    "\n" +
+    "<tr class=\"coral-Table-row\" ng-repeat=\"parameter in displayedCollection\" ng-cloak>\n" +
+    "  <td class=\"coral-Table-cell\">\n" +
+    "    {{parameter.name}}\n" +
+    "  </td>\n" +
+    "  <td class=\"coral-Table-cell\" input-widget-type=\"{{parameter.widgetType}}\">\n" +
+    "    {{parameter.value}}\n" +
+    "  </td>\n" +
+    "  <td class=\"coral-Table-cell\">\n" +
+    "    <label class=\"coral-Checkbox\">\n" +
+    "      <input class=\"coral-Checkbox-input\" name=\"c1\" value=\"1\" type=\"checkbox\">\n" +
+    "      <span class=\"coral-Checkbox-checkmark\"></span>\n" +
+    "    </label>\n" +
+    "  </td>\n" +
+    "  <td class=\"coral-Table-cell\">\n" +
+    "    <label class=\"coral-Checkbox\">\n" +
+    "      <input class=\"coral-Checkbox-input\" name=\"c1\" value=\"1\" type=\"checkbox\">\n" +
+    "      <span class=\"coral-Checkbox-checkmark\"></span>\n" +
+    "    </label>\n" +
+    "  </td>\n" +
+    "  <td class=\"coral-Table-cell\">\n" +
+    "    <description-popup>\n" +
+    "      <popup-content>\n" +
+    "        {{parameter.description}}\n" +
+    "      </popup-content>\n" +
+    "    </description-popup>\n" +
+    "  </td>\n" +
+    "  <td class=\"coral-Table-cell\">\n" +
+    "    {{parameter.group}}\n" +
+    "  </td>\n" +
+    "</tr>\n" +
+    "\n" +
+    "\n" +
     "\n" +
     "\n" +
     "<tr class=\"coral-Table-row\">\n" +
@@ -355,6 +389,15 @@ angular.module("parameterTable.html", []).run(["$templateCache", function($templ
     "</tbody>\n" +
     "</table>\n" +
     "");
+}]);
+
+angular.module("parameterValue.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("parameterValue.html",
+    "<div ng-switch on=\"type\">\n" +
+    "  <input required=\"required\" ng-switch-when=\"stringfield\" type=\"text\" class=\"coral-Textfield\" ng-model=\"parameter.value\"/>\n" +
+    "  <textarea ng-switch-when=\"textarea\" class=\"coral-Textfield coral-Textfield--multiline\" ng-model=\"parameter.value\"></textarea>\n" +
+    "  <span ng-switch-default>{{parameter.value}}</span>\n" +
+    "</div>");
 }]);
 
 angular.module("popupContainer.html", []).run(["$templateCache", function($templateCache) {

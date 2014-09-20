@@ -88,5 +88,38 @@
         transclude: true,
         templateUrl: templateList.popupContent
       }
+    }])
+    .directive("parameterValue", ['templateUrlList', function (templateList) {
+      return {
+        restrict: "A",
+        replace: false,
+        templateUrl: templateList.parameterValue,
+        scope: {
+          parameter: '=parameterValue',
+          type: '@widgetType'
+        },
+        link: function(scope, element, attr) {
+          scope.originalType = scope.type;
+          scope.originalValue = scope.parameter.value;
+
+          scope.$watch("parameter.inherited", function(newvalue, oldvalue){
+            if (newvalue === true) {
+              scope.type = "disabled";
+              scope.parameter.value = scope.originalValue;
+            } else {
+              scope.type = scope.originalType;
+            }
+          });
+          scope.$watch("parameter.locked", function(newvalue, oldvalue){
+            if (newvalue === true) {
+              scope.type = "disabled";
+            } else if (scope.parameter.inherited === true) {
+              scope.type = "disabled";
+            } else {
+              scope.type = scope.originalType;
+            }
+          });
+        }
+      }
     }]);
 })(angular);

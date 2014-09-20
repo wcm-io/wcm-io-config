@@ -22,32 +22,30 @@
     <table class="coral-Table coral-Table--hover" ng-cloak>
       <thead>
       <tr class="coral-Table-row">
-        <th class="coral-Table-headerCell">Parameter</th>
-        <th class="coral-Table-headerCell">Value</th>
-        <th class="coral-Table-headerCell">Inherited</th>
-        <th class="coral-Table-headerCell">Lock</th>
-        <th class="coral-Table-headerCell">Description</th>
-        <th class="coral-Table-headerCell">Group</th>
+        <th class="coral-Table-headerCell">${'io.wcm.config.editor.column.name' @ i18n}</th>
+        <th class="coral-Table-headerCell">${'io.wcm.config.editor.column.value' @ i18n}</th>
+        <th class="coral-Table-headerCell">${'io.wcm.config.editor.column.inherited' @ i18n}</th>
+        <th class="coral-Table-headerCell">${'io.wcm.config.editor.column.lock' @ i18n}</th>
+        <th class="coral-Table-headerCell">${'io.wcm.config.editor.column.description' @ i18n}</th>
+        <th class="coral-Table-headerCell">${'io.wcm.config.editor.column.group' @ i18n}</th>
       </tr>
       </thead>
       <tbody>
-
         <tr class="coral-Table-row" ng-repeat="parameter in displayedCollection" ng-cloak>
           <td class="coral-Table-cell">
             {{parameter.name}}
           </td>
-          <td class="coral-Table-cell">
-            {{parameter.value}}
+          <td class="coral-Table-cell" parameter-value="parameter" widget-type="{{parameter.widgetType}}">
           </td>
           <td class="coral-Table-cell">
             <label class="coral-Checkbox">
-              <input class="coral-Checkbox-input" name="c1" value="1" type="checkbox">
+              <input class="coral-Checkbox-input" type="checkbox" ng-model="parameter.inherited" ng-disabled="parameter.locked">
               <span class="coral-Checkbox-checkmark"></span>
             </label>
           </td>
           <td class="coral-Table-cell">
             <label class="coral-Checkbox">
-              <input class="coral-Checkbox-input" name="c1" value="1" type="checkbox">
+              <input class="coral-Checkbox-input" type="checkbox" ng-model="parameter.locked">
               <span class="coral-Checkbox-checkmark"></span>
             </label>
           </td>
@@ -61,7 +59,6 @@
           <td class="coral-Table-cell">
             {{parameter.group}}
           </td>
-        </td>
       </tr>
       </tbody>
     </table>

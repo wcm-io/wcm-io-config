@@ -16,6 +16,40 @@
 </tr>
 
 
+<tr class="coral-Table-row" ng-repeat="parameter in displayedCollection" ng-cloak>
+  <td class="coral-Table-cell">
+    {{parameter.name}}
+  </td>
+  <td class="coral-Table-cell" input-widget-type="{{parameter.widgetType}}">
+    {{parameter.value}}
+  </td>
+  <td class="coral-Table-cell">
+    <label class="coral-Checkbox">
+      <input class="coral-Checkbox-input" name="c1" value="1" type="checkbox">
+      <span class="coral-Checkbox-checkmark"></span>
+    </label>
+  </td>
+  <td class="coral-Table-cell">
+    <label class="coral-Checkbox">
+      <input class="coral-Checkbox-input" name="c1" value="1" type="checkbox">
+      <span class="coral-Checkbox-checkmark"></span>
+    </label>
+  </td>
+  <td class="coral-Table-cell">
+    <description-popup>
+      <popup-content>
+        {{parameter.description}}
+      </popup-content>
+    </description-popup>
+  </td>
+  <td class="coral-Table-cell">
+    {{parameter.group}}
+  </td>
+</tr>
+
+
+
+
 <tr class="coral-Table-row">
   <td class="coral-Table-cell">
     String Parameter

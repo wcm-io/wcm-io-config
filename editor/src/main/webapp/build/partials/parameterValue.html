@@ -1,0 +1,5 @@
+<div ng-switch on="type">
+  <input required="required" ng-switch-when="stringfield" type="text" class="coral-Textfield" ng-model="parameter.value"/>
+  <textarea ng-switch-when="textarea" class="coral-Textfield coral-Textfield--multiline" ng-model="parameter.value"></textarea>
+  <span ng-switch-default>{{parameter.value}}</span>
+</div>

@@ -7,6 +7,7 @@
     .constant('templateUrlList', {
       filterDropDownList: 'filterDropDownList.html',
       parameterTable: 'parameterTable.html',
+      parameterValue: 'parameterValue.html',
       popupContainer: 'popupContainer.html',
       popupContent: 'popupContent.html'
     });
