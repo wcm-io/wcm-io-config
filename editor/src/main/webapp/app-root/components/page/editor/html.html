@@ -13,24 +13,24 @@
 
     <h1 class="coral-Heading coral-Heading--1">${'io.wcm.config.editor.title' @ i18n}</h1>
 
-    <filter-drop-down-list ng-repeat="filter in filters" model="filter" current-filter="currentFilter"></filter-drop-down-list>
+    <form id="configuration" name="configForm">
+      <filter-drop-down-list ng-repeat="filter in filters" model="filter" current-filter="currentFilter"></filter-drop-down-list>
+      <button ng-disabled="!configForm.$valid" class="coral-Button coral-Button--primary" ng-click="save()" >Save</button>
 
-    <button class="coral-Button coral-Button--primary" ng-click="save()" >Save</button>
+      <p>Configuration for: <code>/config/abc</code></p>
 
-    <p>Configuration for: <code>/config/abc</code></p>
-
-    <table class="coral-Table coral-Table--hover" ng-cloak>
-      <thead>
-      <tr class="coral-Table-row">
-        <th class="coral-Table-headerCell">${'io.wcm.config.editor.column.name' @ i18n}</th>
-        <th class="coral-Table-headerCell">${'io.wcm.config.editor.column.value' @ i18n}</th>
-        <th class="coral-Table-headerCell">${'io.wcm.config.editor.column.inherited' @ i18n}</th>
-        <th class="coral-Table-headerCell">${'io.wcm.config.editor.column.lock' @ i18n}</th>
-        <th class="coral-Table-headerCell">${'io.wcm.config.editor.column.description' @ i18n}</th>
-        <th class="coral-Table-headerCell">${'io.wcm.config.editor.column.group' @ i18n}</th>
-      </tr>
-      </thead>
-      <tbody>
+      <table class="coral-Table coral-Table--hover" ng-cloak>
+        <thead>
+        <tr class="coral-Table-row">
+          <th class="coral-Table-headerCell">${'io.wcm.config.editor.column.name' @ i18n}</th>
+          <th class="coral-Table-headerCell">${'io.wcm.config.editor.column.value' @ i18n}</th>
+          <th class="coral-Table-headerCell">${'io.wcm.config.editor.column.inherited' @ i18n}</th>
+          <th class="coral-Table-headerCell">${'io.wcm.config.editor.column.lock' @ i18n}</th>
+          <th class="coral-Table-headerCell">${'io.wcm.config.editor.column.description' @ i18n}</th>
+          <th class="coral-Table-headerCell">${'io.wcm.config.editor.column.group' @ i18n}</th>
+        </tr>
+        </thead>
+        <tbody>
         <tr class="coral-Table-row" ng-repeat="parameter in displayedCollection" ng-cloak>
           <td class="coral-Table-cell">
             {{parameter.name}}
@@ -45,7 +45,7 @@
           </td>
           <td class="coral-Table-cell">
             <label class="coral-Checkbox">
-              <input class="coral-Checkbox-input" type="checkbox" ng-model="parameter.locked">
+              <input class="coral-Checkbox-input" type="checkbox" ng-model="parameter.locked" ng-disabled="parameter.lockedInherited || !configForm.$valid">
               <span class="coral-Checkbox-checkmark"></span>
             </label>
           </td>
@@ -59,10 +59,10 @@
           <td class="coral-Table-cell">
             {{parameter.group}}
           </td>
-      </tr>
-      </tbody>
-    </table>
-
+        </tr>
+        </tbody>
+      </table>
+    </form>
     <meta data-sly-call="${clientLib.js @ categories='io.wcm.config.editor'}" data-sly-unwrap></meta>
 
   </body>

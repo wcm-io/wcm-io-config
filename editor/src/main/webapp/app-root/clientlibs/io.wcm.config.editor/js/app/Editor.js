@@ -7,24 +7,60 @@
 
       $scope.parameterCollection = [];
       $scope.parameterCollection.push({
-        "name": "String Parameter",
+        "name": "Locked String Parameter",
         "value": "Test",
         group: "Dealer Locator",
         application: "/apps/viessmann",
         description:"Das ist ein parameter, für die konfoguration des Dealers",
         inherited: true,
         locked: true,
-        widgetType: "stringfield"
+        "widgetType": "stringfield",
+        lockedInherited: true
       });
       $scope.parameterCollection.push({
-        "name": "Textarea Parameter 2",
-        "value": "Test 2",
+        "name": "String Parameter",
+        "value": "Test",
+        group: "Dealer Locator",
+        application: "/apps/viessmann",
+        description:"Das ist ein Texfield parameter, für die Konfiguration des Dealers",
+        inherited: true,
+        widgetType: "textfield"
+      });
+      $scope.parameterCollection.push({
+        "name": "Textarea Parameter Only for Digits",
+        "value": "123",
         group: "Link Handling",
         application: "/apps/wcm-io/linkhandler",
-        description:"Das ist ein parameter, für die konfoguration des Link Handlings",
+        description:"Das ist Textarea Prameter mit der Pattern-Validierung für maximal 5 numerische Zeichen",
         inherited: "false",
         locked: false,
-        widgetType: "textarea"
+        widgetType: "textarea",
+        rows: "10",
+        maxlength: "5",
+        pattern: "/^[0-9]*$/",
+        required: true
+      });
+      $scope.parameterCollection.push({
+        "name": "Pathbrowser Parameter",
+        "value": "",
+        group: "Link Handling",
+        application: "/apps/wcm-io/linkhandler",
+        description:"Das ist ein parameter, für die Konfiguration eines Pfades",
+        inherited: "false",
+        locked: false,
+        widgetType: "pathbrowser",
+        rootPath: "/content"
+      });
+      $scope.parameterCollection.push({
+        "name": "Checkbox Parameter",
+        "value": true,
+        group: "Link Handling",
+        application: "/apps/wcm-io/linkhandler",
+        description:"Das ist ein parameter, für die Konfiguration eines Boolen Wertes",
+        inherited: "false",
+        locked: false,
+        widgetType: "checkbox",
+        required: true
       });
 
       $scope.filters = [];
@@ -45,12 +81,16 @@
 
       $scope.filters.push(groupFilter);
 
-
-
       $scope.save = function() {
         console.log("Sending data to backend")
       };
 
+      /**
+       * Filters the shown parameters based on the currently selected filtered.
+       * Triggered when the $scope.currentFilter is modified
+       * @param newValue
+       * @param oldValue
+       */
       function filterDisplayedParameters(newValue, oldValue) {
 
         var filteredParameters = $scope.parameterCollection;

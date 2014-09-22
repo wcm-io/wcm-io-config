@@ -63,7 +63,6 @@
         replace: true,
         templateUrl: templateList.popupContainer,
         transclude: true,
-        scope:{},
         link: function(scope, element, attr) {
           var widget;
 
@@ -89,22 +88,36 @@
         templateUrl: templateList.popupContent
       }
     }])
-    .directive("parameterValue", ['templateUrlList', function (templateList) {
+  /**
+   * General directive for the widget column to edit the parameters value.
+   */
+    .directive("parameterValue", ['templateUrlList', "EditorUtilities", function (templateList, utils) {
       return {
         restrict: "A",
         replace: false,
+        require: '^form',
         templateUrl: templateList.parameterValue,
         scope: {
           parameter: '=parameterValue',
           type: '@widgetType'
         },
-        link: function(scope, element, attr) {
+        link: function(scope, element, attr, ctrl) {
+          var widget;
+
           scope.originalType = scope.type;
           scope.originalValue = scope.parameter.value;
 
+          function getDisabledType() {
+            if (scope.originalType === "checkbox") {
+              return "disabledCheckbox";
+            } else {
+              return "disabled";
+            }
+          }
+
           scope.$watch("parameter.inherited", function(newvalue, oldvalue){
             if (newvalue === true) {
-              scope.type = "disabled";
+              scope.type = getDisabledType();
               scope.parameter.value = scope.originalValue;
             } else {
               scope.type = scope.originalType;
@@ -112,13 +125,45 @@
           });
           scope.$watch("parameter.locked", function(newvalue, oldvalue){
             if (newvalue === true) {
-              scope.type = "disabled";
+              scope.type = getDisabledType();
             } else if (scope.parameter.inherited === true) {
-              scope.type = "disabled";
+              scope.type = getDisabledType();
             } else {
               scope.type = scope.originalType;
             }
           });
+        }
+      }
+    }])
+  /**
+   * Path browser directive to allow select pages from the siteadmin. Utilizes the CUI.PathBrowser
+   */
+    .directive("pathBrowser",['templateUrlList', "EditorUtilities", function (templateList, utils) {
+      return {
+        restrict: "E",
+        replace: true,
+        templateUrl: templateList.pathBrowser,
+        scope: {
+          parameter: '=',
+          rootPath: "@"
+        },
+        link: function (scope, element, attr) {
+          var widget = new CUI.PathBrowser({element: element,
+            optionLoader: utils.loadAutocompleteOptions,
+            rootPath: scope.rootPath
+          });
+
+          // apply value changes to the model
+          widget.dropdownList.on("selected", function() {
+            scope.$apply(function() {
+              scope.parameter.value = widget.inputElement.val()
+            });
+          });
+
+          scope.$on("$destroy", function(){
+            // remove listeners
+            widget.off();
+          })
         }
       }
     }]);

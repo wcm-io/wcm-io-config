@@ -9,3 +9,15 @@ body {
 .coral-Table .coral-Select {
   width: 100%;
 }
+
+form#configuration.ng-dirty textarea.ng-dirty.ng-invalid {
+  border: 1px solid red;
+}
+
+span.wcm-io-editor-pathbrowser {
+  width: 100% !important;
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}

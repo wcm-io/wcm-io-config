@@ -8,6 +8,7 @@
       filterDropDownList: 'filterDropDownList.html',
       parameterTable: 'parameterTable.html',
       parameterValue: 'parameterValue.html',
+      pathBrowser: 'pathBrowser.html',
       popupContainer: 'popupContainer.html',
       popupContent: 'popupContent.html'
     });

@@ -1,4 +1,4 @@
-angular.module('io.wcm.config.templates', ['filterDropDownList.html', 'parameterTable.html', 'parameterValue.html', 'popupContainer.html', 'popupContent.html']);
+angular.module('io.wcm.config.templates', ['filterDropDownList.html', 'parameterTable.html', 'parameterValue.html', 'pathBrowser.html', 'popupContainer.html', 'popupContent.html']);
 
 angular.module("filterDropDownList.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("filterDropDownList.html",
@@ -394,10 +394,42 @@ angular.module("parameterTable.html", []).run(["$templateCache", function($templ
 angular.module("parameterValue.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("parameterValue.html",
     "<div ng-switch on=\"type\">\n" +
-    "  <input required=\"required\" ng-switch-when=\"stringfield\" type=\"text\" class=\"coral-Textfield\" ng-model=\"parameter.value\"/>\n" +
-    "  <textarea ng-switch-when=\"textarea\" class=\"coral-Textfield coral-Textfield--multiline\" ng-model=\"parameter.value\"></textarea>\n" +
+    "\n" +
+    "  <input ng-switch-when=\"textfield\"\n" +
+    "         type=\"text\" class=\"coral-Textfield\"\n" +
+    "         ng-model=\"parameter.value\"\n" +
+    "         ng-maxlength=\"{{parameter.maxlength}}\"\n" +
+    "         ng-minlength=\"{{parameter.minlength}}\"\n" +
+    "         ng-pattern=\"{{parameter.pattern}}\"\n" +
+    "         ng-required=\"{{parameter.required}}\"/>\n" +
+    "\n" +
+    "  <textarea ng-switch-when=\"textarea\" class=\"coral-Textfield coral-Textfield--multiline\" name=\"parameter\"\n" +
+    "             ng-model=\"parameter.value\"\n" +
+    "             ng-maxlength=\"{{parameter.maxlength}}\"\n" +
+    "             ng-minlength=\"{{parameter.minlength}}\"\n" +
+    "             ng-pattern=\"{{parameter.pattern}}\"\n" +
+    "             ng-required=\"{{parameter.required}}\"\n" +
+    "             ng-attr-rows=\"{{parameter.rows}}\"></textarea>\n" +
+    "\n" +
+    "  <path-browser ng-switch-when=\"pathbrowser\" parameter=\"parameter\" root-path=\"{{parameter.rootPath}}\"></path-browser>\n" +
+    "\n" +
+    "  <label ng-switch-when=\"checkbox\" class=\"coral-Checkbox\">\n" +
+    "    <input ng-required=\"{{parameter.required}}\" class=\"coral-Checkbox-input\" ng-model=\"parameter.value\" type=\"checkbox\">\n" +
+    "    <span class=\"coral-Checkbox-checkmark\"></span>\n" +
+    "  </label>\n" +
+    "\n" +
+    "  <i ng-switch-when=\"disabledCheckbox\" ng-class=\"{'coral-Icon--check': parameter.value}\" class=\"coral-Icon coral-Icon--sizeS\"></i>\n" +
+    "\n" +
     "  <span ng-switch-default>{{parameter.value}}</span>\n" +
     "</div>");
+}]);
+
+angular.module("pathBrowser.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("pathBrowser.html",
+    "<span class=\"coral-Form-field coral-InputGroup wcm-io-editor-pathbrowser\" id=\"pathbrowser\">\n" +
+    "    <input class=\"coral-InputGroup-input coral-Textfield js-coral-pathbrowser-input\" type=\"text\" ng-model=\"parameter.value\" autocomplete=\"off\">\n" +
+    "</span>\n" +
+    "");
 }]);
 
 angular.module("popupContainer.html", []).run(["$templateCache", function($templateCache) {

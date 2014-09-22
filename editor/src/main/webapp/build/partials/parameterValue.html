@@ -1,5 +1,29 @@
 <div ng-switch on="type">
-  <input required="required" ng-switch-when="stringfield" type="text" class="coral-Textfield" ng-model="parameter.value"/>
-  <textarea ng-switch-when="textarea" class="coral-Textfield coral-Textfield--multiline" ng-model="parameter.value"></textarea>
+
+  <input ng-switch-when="textfield"
+         type="text" class="coral-Textfield"
+         ng-model="parameter.value"
+         ng-maxlength="{{parameter.maxlength}}"
+         ng-minlength="{{parameter.minlength}}"
+         ng-pattern="{{parameter.pattern}}"
+         ng-required="{{parameter.required}}"/>
+
+  <textarea ng-switch-when="textarea" class="coral-Textfield coral-Textfield--multiline" name="parameter"
+             ng-model="parameter.value"
+             ng-maxlength="{{parameter.maxlength}}"
+             ng-minlength="{{parameter.minlength}}"
+             ng-pattern="{{parameter.pattern}}"
+             ng-required="{{parameter.required}}"
+             ng-attr-rows="{{parameter.rows}}"></textarea>
+
+  <path-browser ng-switch-when="pathbrowser" parameter="parameter" root-path="{{parameter.rootPath}}"></path-browser>
+
+  <label ng-switch-when="checkbox" class="coral-Checkbox">
+    <input ng-required="{{parameter.required}}" class="coral-Checkbox-input" ng-model="parameter.value" type="checkbox">
+    <span class="coral-Checkbox-checkmark"></span>
+  </label>
+
+  <i ng-switch-when="disabledCheckbox" ng-class="{'coral-Icon--check': parameter.value}" class="coral-Icon coral-Icon--sizeS"></i>
+
   <span ng-switch-default>{{parameter.value}}</span>
 </div>
