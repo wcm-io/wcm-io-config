@@ -50,10 +50,23 @@
         return false;
       };
 
+      var contains = function(array, object) {
+        var contains = false;
+        if (array) {
+          for(var i = 0; i < array.length; i++) {
+            if (array[i].value == object.value) {
+              contains = true;
+              break;
+            }
+          }
+        }
+        return contains;
+      };
 
       return {
         nextUid: nextUid,
-        loadAutocompleteOptions: loadAutocompleteOptions
+        loadAutocompleteOptions: loadAutocompleteOptions,
+        contains: contains
       };
     });
 })(angular);

@@ -64,6 +64,10 @@
       </table>
     </form>
     <meta data-sly-call="${clientLib.js @ categories='io.wcm.config.editor'}" data-sly-unwrap></meta>
-
+    <script>
+      angular.module("io.wcm.config.services").config(["parametersProvider", function(parametersProvider){
+        parametersProvider.setConfig({url: "http://localhost:4516/content/vi-sample/viessmann-de/de/tools/config.json"})
+      }]);
+    </script>
   </body>
 </html>

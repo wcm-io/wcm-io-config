@@ -1,6 +1,7 @@
 #base=js/app
 
 Utilities.js
+Services.js
 Directives.js
 Template.js
 TemplateUrlList.js
