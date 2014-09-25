@@ -3,4 +3,4 @@
  */
  
 // define namespace
-<io-wcm-config = 'http://wcm.io/config'>
+<io_wcm_config = 'http://wcm.io/config'>

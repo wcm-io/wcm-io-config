@@ -29,7 +29,7 @@ public interface ParameterPersistence {
   /**
    * Control property holding String Array with list of locked parameter names.
    */
-  String PN_LOCKED_PARAMETER_NAMES = "io-wcm-config:lockedParameterNames";
+  String PN_LOCKED_PARAMETER_NAMES = "io_wcm_config:lockedParameterNames";
 
   /**
    * Get all parameter values stored for a configuration.
