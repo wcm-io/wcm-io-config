@@ -11,7 +11,7 @@
        */
       Parameters.loadParameters().then(
         function success(result){
-          var parsedData = Parameters.parseData(result);
+          var parsedData = Parameters.parseData(result.data);
           $scope.$evalAsync(function() {
             $scope.filters = parsedData.filters;
             $scope.parameterCollection = parsedData.parameters;

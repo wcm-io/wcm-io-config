@@ -105,7 +105,7 @@
           var widget;
 
           scope.originalType = scope.type;
-          scope.originalValue = scope.parameter.value;
+          scope.originalValue = scope.parameter.inheritedValue;
 
           function getDisabledType() {
             if (scope.originalType === "checkbox") {
@@ -123,15 +123,15 @@
               scope.type = scope.originalType;
             }
           });
-          scope.$watch("parameter.locked", function(newvalue, oldvalue){
-            if (newvalue === true) {
-              scope.type = getDisabledType();
-            } else if (scope.parameter.inherited === true) {
-              scope.type = getDisabledType();
-            } else {
-              scope.type = scope.originalType;
-            }
-          });
+//          scope.$watch("parameter.locked", function(newvalue, oldvalue){
+//            if (newvalue === true) {
+//              scope.type = getDisabledType();
+//            } else if (scope.parameter.inherited === true) {
+//              scope.type = getDisabledType();
+//            } else {
+//              scope.type = scope.originalType;
+//            }
+//          });
         }
       }
     }])

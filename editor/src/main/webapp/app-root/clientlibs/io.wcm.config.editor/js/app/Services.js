@@ -11,10 +11,9 @@
 
         /**
          * Extracts the filter options for the specific filter
-         * @param filterName
-         * @param propertyName which will be used for filtering
+         * @param filter
+         * @param propertyName
          * @param parameters
-         * @param result
          */
         function extractFilter(filter, propertyName, parameters) {
           _.map(parameters, function(parameter){

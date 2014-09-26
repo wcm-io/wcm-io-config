@@ -92,13 +92,12 @@
               SLING-INF/app-root;overwrite:=true;ignoreImportProviders:=xml;path:=/apps/wcm-io/config/editor
             </Sling-Initial-Content>
             <Export-Package>
-              io.wcm.config.editor.*;version=${project.version}
+              io.wcm.config.editor;version=${project.version},
+              io.wcm.config.editor.widgets;version=${project.version}
             </Export-Package>
-            <!--
             <Sling-Model-Packages>
               io.wcm.config.editor
             </Sling-Model-Packages>
-            -->
           </instructions>
         </configuration>
       </plugin>

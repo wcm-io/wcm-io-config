@@ -100,14 +100,44 @@ public enum WidgetTypes {
     public static final String PN_WIDGET_TYPE = "widgetType";
 
     /**
-     * Name of the property to set the minimum length value for the text field and are
+     * Name of the property to set the the application id of the parameter
+     */
+    public static final String PN_PARAMETER_NAME = "name";
+
+    /**
+     * Name of the property to set the the application id of the parameter
+     */
+    public static final String PN_PARAMETER_VALUE = "value";
+
+    /**
+     * Name of the property to set the the application id of the parameter
+     */
+    public static final String PN_INHERITED_VALUE = "inheritedValue";
+
+    /**
+     * Name of the property to set the the application id of the parameter
+     */
+    public static final String PN_APPLICATION_ID = "application";
+
+    /**
+     * Name of the property to set the the group of the parameter
+     */
+    public static final String PN_GROUP = "group";
+
+    /**
+     * Name of the property to set the minimum length value for the text field
      */
     public static final String PN_MINLENGTH = "minlength";
 
     /**
-     * Name of the property to set the maximum length value for the text field and are
+     * Name of the property to set the maximum length value for the text field
      */
     public static final String PN_MAXLENGTH = "minlength";
+
+    /**
+     * Name of the property to set the number of rows on the text area
+     */
+    public static final String PN_ROWS = "rows";
 
     /**
      * Name of the property to set the "required" flag
@@ -124,6 +154,21 @@ public enum WidgetTypes {
      */
     public static final String PN_ROOT_PATH = "rootPath";
 
+    /**
+     * Name of the property to set the flag whether the parameter value is inherited
+     */
+    public static final String PN_INHERITED = "inherited";
+
+    /**
+     * Name of the property to set the flag whether the parameter value is locked
+     */
+    public static final String PN_LOCKED = "locked";
+
+    /**
+     * Name of the property to set the flag whether the parameter value was locked and cannot be unlocked
+     */
+    public static final String PN_LOCKED_INHERITED = "lockedInherited";
+
     private static final Map<String, Object> DEFAULT_TEXTFIELD_CONFIGURATION = new HashMap<>();
     static {
       DEFAULT_TEXTFIELD_CONFIGURATION.put(PN_WIDGET_TYPE, "textfield");
@@ -131,12 +176,13 @@ public enum WidgetTypes {
 
     private static final Map<String, Object> DEFAULT_TEXTAREA_CONFIGURATION = new HashMap<>();
     static {
-      DEFAULT_TEXTAREA_CONFIGURATION.put(PN_WIDGET_TYPE, "textfield");
+      DEFAULT_TEXTAREA_CONFIGURATION.put(PN_WIDGET_TYPE, "textarea");
+      DEFAULT_TEXTAREA_CONFIGURATION.put(PN_ROWS, "10");
     }
 
     private static final Map<String, Object> DEFAULT_CHECKBOX_CONFIGURATION = new HashMap<>();
     static {
-      DEFAULT_TEXTAREA_CONFIGURATION.put(PN_WIDGET_TYPE, "checkbox");
+      DEFAULT_CHECKBOX_CONFIGURATION.put(PN_WIDGET_TYPE, "checkbox");
     }
 
     private static final Map<String, Object> DEFAULT_PATHBROWSER_CONFIGURATION = new HashMap<>();
