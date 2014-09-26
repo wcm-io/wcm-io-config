@@ -37,7 +37,7 @@ import org.apache.sling.api.resource.Resource;
 /**
  * Default implementation of {@link ApplicationFinder}.
  */
-@Component(metatype = false, immediate = true)
+@Component(immediate = true, metatype = false)
 @Service(ApplicationFinder.class)
 public final class ApplicationFinderImpl implements ApplicationFinder {
 

@@ -40,7 +40,7 @@ import org.osgi.framework.Constants;
  * first implementation without @Application annotation is used.
  * </p>
  */
-@Component
+@Component(immediate = true)
 @Service(ImplementationPicker.class)
 @Property(name = Constants.SERVICE_RANKING, intValue = 1000)
 public class ApplicationImplementationPicker implements ImplementationPicker {

@@ -47,7 +47,7 @@ import org.osgi.service.component.ComponentContext;
 /**
  * Provide parameter override map from current request header.
  */
-@Component(metatype = true, immediate = true,
+@Component(immediate = true, metatype = true,
 label = "wcm.io Configuration Property Override Provider: Request Header",
 description = "Allows to define configuration property default values or overrides from inconming request headers.")
 @Service({

@@ -44,9 +44,9 @@ import com.day.cq.wcm.api.WCMException;
 /**
  * Persistence provider that stores configuration values in pages in a path tools/config relative to the config id.
  */
-@Component(metatype = true, immediate = true,
-    label = "wcm.io Configuration Persistence Provider: /tools/config Pages",
-    description = "Allows to read and store configurations in /tools/config pages.")
+@Component(immediate = true, metatype = true,
+label = "wcm.io Configuration Persistence Provider: /tools/config Pages",
+description = "Allows to read and store configurations in /tools/config pages.")
 @Service(ParameterPersistenceProvider.class)
 public final class ToolsConfigPagePersistenceProvider implements ParameterPersistenceProvider {
 
