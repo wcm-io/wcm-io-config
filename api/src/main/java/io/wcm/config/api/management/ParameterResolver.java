@@ -19,6 +19,8 @@
  */
 package io.wcm.config.api.management;
 
+import io.wcm.config.api.Parameter;
+
 import java.util.Collection;
 import java.util.Map;
 
@@ -37,4 +39,8 @@ public interface ParameterResolver {
    */
   Map<String, Object> getEffectiveValues(ResourceResolver resolver, Collection<String> configurationIds);
 
+  /**
+   * @return {@link Map}
+   */
+  Map<String, Parameter<?>> getAllParameters();
 }

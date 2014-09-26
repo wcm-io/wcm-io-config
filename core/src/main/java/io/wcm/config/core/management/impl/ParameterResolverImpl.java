@@ -105,7 +105,8 @@ public final class ParameterResolverImpl implements ParameterResolver {
    * Get all parameter definitions from all parameter providers.
    * @return Parameter definitions (key = name, value = definition)
    */
-  private Map<String, Parameter<?>> getAllParameters() {
+  @Override
+  public Map<String, Parameter<?>> getAllParameters() {
     Set<Parameter<?>> parameters = new HashSet<>();
     for (ParameterProvider provider : this.parameterProviders) {
       parameters.addAll(provider.getParameters());
