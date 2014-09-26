@@ -41,9 +41,12 @@ import org.apache.sling.api.resource.Resource;
 @Component(immediate = true, metatype = false)
 @Service(AdapterFactory.class)
 @Properties({
-  @Property(name = ADAPTABLE_CLASSES, value = "org.apache.sling.api.resource.Resource"),
+  @Property(name = ADAPTABLE_CLASSES, value = {
+      "org.apache.sling.api.SlingHttpServletRequest",
+      "org.apache.sling.api.resource.Resource"
+  }),
   @Property(name = ADAPTER_CLASSES, value = "io.wcm.config.api.Configuration"),
-  @Property(name = "adapter.condition", value = "If a configuration can be found for the given resource or it's parents.")
+    @Property(name = "adapter.condition", value = "If a configuration can be found for the current/given resource or it's parents.")
 })
 public final class ConfigurationAdapterFactory implements AdapterFactory {
 
