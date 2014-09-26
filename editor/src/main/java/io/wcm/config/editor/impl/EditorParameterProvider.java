@@ -117,7 +117,7 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
         // set inherited flag
         setInherited(jsonParameter, effectiveValue, persistedValue);
 
-        addValue(jsonParameter, effectiveValue);
+        addValue(jsonParameter, effectiveValue, parameter.getDefaultValue());
       }
     }
   }
@@ -146,14 +146,14 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
     }
   }
 
-  private void addValue(JSONObject jsonParameter, Object effectiveValue) throws JSONException {
+  private void addValue(JSONObject jsonParameter, Object effectiveValue, Object defaultValue) throws JSONException {
     Object previousValue = null;
 
     try {
       previousValue = jsonParameter.get(WidgetTypes.Defaults.PN_PARAMETER_VALUE);
     }
     catch (JSONException ex) {
-      previousValue = effectiveValue;
+      previousValue = defaultValue;
     }
 
     jsonParameter.put(WidgetTypes.Defaults.PN_INHERITED_VALUE, previousValue);
