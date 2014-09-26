@@ -41,7 +41,7 @@ import com.google.common.collect.ImmutableMap;
 /**
  * Provide parameter override map from system properties.
  */
-@Component(metatype = true, immediate = true,
+@Component(immediate = true, metatype = true,
 label = "wcm.io Configuration Property Override Provider: System Properties",
 description = "Allows to define configuration property default values or overrides from system environment properties.")
 @Service(ParameterOverrideProvider.class)

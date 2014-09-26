@@ -38,7 +38,7 @@ import org.apache.sling.api.resource.Resource;
 /**
  * AdapterFactory that adapts resources to effective configurations and applications.
  */
-@Component(metatype = false, immediate = true)
+@Component(immediate = true, metatype = false)
 @Service(AdapterFactory.class)
 @Properties({
   @Property(name = ADAPTABLE_CLASSES, value = "org.apache.sling.api.resource.Resource"),

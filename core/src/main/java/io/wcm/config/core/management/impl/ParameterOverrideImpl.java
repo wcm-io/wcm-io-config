@@ -36,7 +36,7 @@ import org.apache.felix.scr.annotations.Service;
 /**
  * Default implementation of {@link ParameterOverride}.
  */
-@Component(metatype = false, immediate = true)
+@Component(immediate = true, metatype = false)
 @Service(ParameterOverride.class)
 public final class ParameterOverrideImpl implements ParameterOverride {
 

@@ -50,7 +50,7 @@ import org.apache.sling.api.resource.ResourceResolver;
 /**
  * Default implementation of {@link ConfigurationFinder}.
  */
-@Component(metatype = false, immediate = true)
+@Component(immediate = true, metatype = false)
 @Service(ConfigurationFinder.class)
 public final class ConfigurationFinderImpl implements ConfigurationFinder {
 

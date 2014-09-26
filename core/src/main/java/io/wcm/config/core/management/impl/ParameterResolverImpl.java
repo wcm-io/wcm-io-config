@@ -57,7 +57,7 @@ import com.google.common.collect.Iterators;
 /**
  * Default implementation of {@link ParameterResolver}.
  */
-@Component(metatype = false, immediate = true)
+@Component(immediate = true, metatype = false)
 @Service(ParameterResolver.class)
 public final class ParameterResolverImpl implements ParameterResolver {
 

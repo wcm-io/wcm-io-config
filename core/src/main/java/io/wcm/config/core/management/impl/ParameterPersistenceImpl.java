@@ -43,7 +43,7 @@ import com.google.common.collect.ImmutableSortedSet;
 /**
  * Default implementation of {@link ParameterPersistence}.
  */
-@Component(metatype = false, immediate = true)
+@Component(immediate = true, metatype = false)
 @Service(ParameterPersistence.class)
 public final class ParameterPersistenceImpl implements ParameterPersistence {
 
