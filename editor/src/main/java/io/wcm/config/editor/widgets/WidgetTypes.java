@@ -125,6 +125,11 @@ public enum WidgetTypes {
     public static final String PN_GROUP = "group";
 
     /**
+     * Name of the property to set the the description of the parameter
+     */
+    public static final String PN_DESCRIPTION = "description";
+
+    /**
      * Name of the property to set the minimum length value for the text field
      */
     public static final String PN_MINLENGTH = "minlength";
