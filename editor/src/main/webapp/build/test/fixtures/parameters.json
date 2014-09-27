@@ -18,6 +18,8 @@
       "application": "/apps/viessmann",
       "description":"Das ist ein Texfield parameter, für die Konfiguration des Dealers",
       "inherited": true,
+      "locked": true,
+      "lockedInherited": false,
       "widgetType": "textfield"
     },
     {
@@ -26,7 +28,7 @@
       "group": "Link Handling",
       "application": "/apps/wcm-io/linkhandler",
       "description": "Das ist Textarea Prameter mit der Pattern-Validierung für maximal 5 numerische Zeichen",
-      "inherited": "false",
+      "inherited": false,
       "locked": false,
       "widgetType": "textarea",
       "rows": "10",
@@ -40,7 +42,7 @@
       "group": "Link Handling",
       "application": "/apps/wcm-io/linkhandler",
       "description":"Das ist ein parameter, für die Konfiguration eines Pfades",
-      "inherited": "false",
+      "inherited": false,
       "locked": false,
       "widgetType": "pathbrowser",
       "rootPath": "/content"
@@ -51,7 +53,7 @@
       "group": "Link Handling",
       "application": "/apps/wcm-io/linkhandler",
       "description":"Das ist ein parameter, für die Konfiguration eines Boolen Wertes",
-      "inherited": "false",
+      "inherited": false,
       "locked": false,
       "widgetType": "checkbox",
       "required": true

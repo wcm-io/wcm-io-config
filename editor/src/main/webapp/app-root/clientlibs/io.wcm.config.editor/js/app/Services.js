@@ -20,7 +20,7 @@
             var value = parameter[propertyName];
             if (value) {
               var option = {value: value, label: value};
-              if (!utils.contains(filter.options, option)) {
+              if (!utils.containsValue(filter.options, option)) {
                 filter.options.push(option);
               }
             }
@@ -65,6 +65,46 @@
 
         this.saveParameters = function(data) {
 
+          function transformRequestAsFormPost(data, getHeaders){
+            var headers = getHeaders();
+            headers["Content-Type" ] = "application/x-www-form-urlencoded;charset=utf-8";
+            return serializeData(data);
+          }
+
+          function serializeData(data) {
+            if ( ! angular.isObject( data ) ) {
+              return( ( data == null ) ? "" : data.toString() );
+            }
+
+            var lockedParameters = [];
+            var buffer = [];
+            _.map(data, function(parameter){
+              if (!parameter.inherited) {
+                buffer.push(
+                    encodeURIComponent( parameter.name ) +
+                    "=" +
+                    encodeURIComponent( ( parameter.value == null ) ? "" : parameter.value )
+                );
+              }
+              if (parameter.locked && !parameter.lockedInherited) {
+                lockedParameters.push(encodeURIComponent(parameter.name));
+              }
+            });
+
+            var serialzedData = "";
+            if (buffer.length > 0) {
+              serialzedData = buffer.join( "&" );
+              serialzedData = serialzedData + "&" + config.lockedParameterName + "=" + lockedParameters.join(",")
+            }
+            return serialzedData;
+          }
+
+          $http({
+            method: "post",
+            url: config.url,
+            transformRequest: transformRequestAsFormPost,
+            data: data
+          });
         };
       }
 

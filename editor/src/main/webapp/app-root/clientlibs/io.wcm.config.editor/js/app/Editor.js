@@ -23,7 +23,8 @@
       );
 
       $scope.save = function() {
-        console.log("Sending data to backend")
+
+
       };
 
       /**

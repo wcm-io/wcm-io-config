@@ -50,7 +50,7 @@
         return false;
       };
 
-      var contains = function(array, object) {
+      var containsValue = function(array, object) {
         var contains = false;
         if (array) {
           for(var i = 0; i < array.length; i++) {
@@ -63,9 +63,23 @@
         return contains;
       };
 
+      var contains = function(array, object) {
+        var contains = false;
+        if (array) {
+          for(var i = 0; i < array.length; i++) {
+            if (array[i] == object) {
+              contains = true;
+              break;
+            }
+          }
+        }
+        return contains;
+      };
+
       return {
         nextUid: nextUid,
         loadAutocompleteOptions: loadAutocompleteOptions,
+        containsValue: containsValue,
         contains: contains
       };
     });
