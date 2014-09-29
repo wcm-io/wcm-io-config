@@ -93,8 +93,8 @@ public final class ParameterPersistenceImpl implements ParameterPersistence {
     if (mergeWithExisting) {
       // values
       ParameterPersistenceData existingData = getData(resolver, configurationId);
-      valuesToStore.putAll(existingData.getValues());
-      valuesToStore.putAll(data.getValues());
+      putAllAndConvertToPersistenceTypes(valuesToStore, existingData.getValues());
+      putAllAndConvertToPersistenceTypes(valuesToStore, data.getValues());
 
       // locked parameter names
       SortedSet<String> lockedParameterNames = new TreeSet<>();
@@ -106,7 +106,7 @@ public final class ParameterPersistenceImpl implements ParameterPersistence {
     }
     else {
       // values
-      valuesToStore.putAll(data.getValues());
+      putAllAndConvertToPersistenceTypes(valuesToStore, data.getValues());
 
       // locked parameter names
       if (!data.getLockedParameterNames().isEmpty()) {
@@ -125,6 +125,19 @@ public final class ParameterPersistenceImpl implements ParameterPersistence {
 
   private String[] toArray(Set<String> set) {
     return set.toArray(new String[set.size()]);
+  }
+
+  private void putAllAndConvertToPersistenceTypes(Map<String, Object> destinationMap, Map<String, Object> sourceMap) {
+    for (Map.Entry<String, Object> entry : sourceMap.entrySet()) {
+      destinationMap.put(entry.getKey(), toPersistenceValue(entry.getValue()));
+    }
+  }
+
+  private Object toPersistenceValue(Object value) {
+    if (value == null) {
+      return value;
+    }
+    return PersistenceTypeConversion.toPersistenceType(value, value.getClass());
   }
 
   void bindParameterPersistenceProvider(ParameterPersistenceProvider service, Map<String, Object> props) {

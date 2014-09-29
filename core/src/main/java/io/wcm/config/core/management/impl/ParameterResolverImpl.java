@@ -206,36 +206,32 @@ public final class ParameterResolverImpl implements ParameterResolver {
 
   /**
    * Make sure value types match with declared parameter types. Values which types do not match, or for which no
-   * parameter definition exists are removed.
+   * parameter definition exists are removed. Types are converted from persistence format if required.
    * @param parameters Parameter definitions
    * @param parameterValues Parameter values
    * @return Cleaned up parameter values
    */
   private Map<String, Object> ensureValidValueTypes(Map<String, Parameter<?>> parameters, Map<String, Object> parameterValues) {
-    Set<String> invalidParameterNames = new HashSet<>();
+    Map<String, Object> transformedParameterValues = new HashMap<>();
     for (Map.Entry<String, Object> entry : parameterValues.entrySet()) {
       if (entry.getKey() == null || entry.getValue() == null) {
-        invalidParameterNames.add(entry.getKey());
+        continue;
       }
       else {
         Parameter<?> parameter = parameters.get(entry.getKey());
-        if (parameter == null || !parameter.getType().isAssignableFrom(entry.getValue().getClass())) {
-          invalidParameterNames.add(entry.getKey());
+        if (parameter == null) {
+          continue;
+        }
+        else {
+          Object transformedValue = PersistenceTypeConversion.fromPersistenceType(entry.getValue(), parameter.getType());
+          if (!parameter.getType().isAssignableFrom(transformedValue.getClass())) {
+            continue;
+          }
+          transformedParameterValues.put(entry.getKey(), transformedValue);
         }
       }
     }
-    if (invalidParameterNames.isEmpty()) {
-      return parameterValues;
-    }
-    else {
-      Map<String, Object> cleanedUpParameterValues = new HashMap<>();
-      for (Map.Entry<String, Object> entry : parameterValues.entrySet()) {
-        if (!invalidParameterNames.contains(entry.getKey())) {
-          cleanedUpParameterValues.put(entry.getKey(), entry.getValue());
-        }
-      }
-      return cleanedUpParameterValues;
-    }
+    return transformedParameterValues;
   }
 
   /**

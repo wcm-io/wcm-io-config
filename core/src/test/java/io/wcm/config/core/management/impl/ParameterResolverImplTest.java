@@ -19,6 +19,7 @@
  */
 package io.wcm.config.core.management.impl;
 
+import static io.wcm.config.api.ParameterBuilder.create;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -79,21 +80,20 @@ public class ParameterResolverImplTest {
   private static final Map<String, Object> SERVICE_PROPS_1 =
       ImmutableMap.<String, Object>of(Constants.SERVICE_ID, 1L,
           Constants.SERVICE_RANKING, 10);
-  private static final Parameter<String> PARAM11 =
-      ParameterBuilder.create("param11", String.class, APP_ID_1).build();
-  private static final Parameter<String> PARAM12 =
-      ParameterBuilder.create("param12", String.class, APP_ID_1).defaultValue("defValue").build();
-  private static final Parameter<String> PARAM13 =
-      ParameterBuilder.create("param13", String.class, APP_ID_1).defaultValue("defValue")
-      .defaultOsgiConfigProperty("my.service:prop1").build();
+  private static final Parameter<String> PARAM11 = create("param11", String.class, APP_ID_1).build();
+  private static final Parameter<String> PARAM12 = create("param12", String.class, APP_ID_1)
+      .defaultValue("defValue").build();
+  private static final Parameter<String> PARAM13 = create("param13", String.class, APP_ID_1)
+      .defaultValue("defValue").defaultOsgiConfigProperty("my.service:prop1").build();
+  private static final Parameter<Map> PARAM_MAP = create("paramMap", Map.class, APP_ID_1).build();
 
   @Mock
   private ParameterProvider parameterProvider2;
-  private static final Map<String, Object> SERVICE_PROPS_2 =
-      ImmutableMap.<String, Object>of(Constants.SERVICE_ID, 2L,
-          Constants.SERVICE_RANKING, 20);
-  private static final Parameter<Integer> PARAM21 =
-      ParameterBuilder.create("param21", Integer.class, APP_ID_2).defaultValue(55).build();
+  private static final Map<String, Object> SERVICE_PROPS_2 = ImmutableMap.<String, Object>of(
+      Constants.SERVICE_ID, 2L,
+      Constants.SERVICE_RANKING, 20);
+  private static final Parameter<Integer> PARAM21 = create("param21", Integer.class, APP_ID_2)
+      .defaultValue(55).build();
 
   @InjectMocks
   private ParameterResolverImpl underTest;
@@ -113,6 +113,7 @@ public class ParameterResolverImplTest {
     params1.add(PARAM11);
     params1.add(PARAM12);
     params1.add(PARAM13);
+    params1.add(PARAM_MAP);
     when(parameterProvider1.getParameters()).thenReturn(params1);
 
     Set<Parameter<?>> params2 = new HashSet<>();
@@ -337,6 +338,18 @@ public class ParameterResolverImplTest {
     assertEquals("r12", values.get("param12"));
     assertEquals("override13", values.get("param13"));
     assertEquals(66, values.get("param21"));
+  }
+
+  @Test
+  public void testMapValue() {
+    when(parameterPersistence.getData(resolver, "/config1")).thenReturn(toData(ImmutableMap.<String, Object>builder()
+        .put("param11", "value1")
+        .put("paramMap", PersistenceTypeConversionTest.SAMPLE_MAP_PERSISTENCE)
+        .build()));
+
+    Map<String, Object> values = underTest.getEffectiveValues(resolver, ImmutableList.of("/config1"));
+    assertEquals("value1", values.get("param11"));
+    assertEquals(PersistenceTypeConversionTest.SAMPLE_MAP, values.get("paramMap"));
   }
 
 

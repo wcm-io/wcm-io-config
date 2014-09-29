@@ -107,4 +107,9 @@ public final class Parameter<T> implements Comparable<Parameter> {
     return this.name.compareTo(o.getName());
   }
 
+  @Override
+  public String toString() {
+    return this.name + "[" + this.type.getSimpleName() + "]";
+  }
+
 }

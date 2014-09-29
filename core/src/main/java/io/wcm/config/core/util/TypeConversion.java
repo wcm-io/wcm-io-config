@@ -126,9 +126,9 @@ public final class TypeConversion {
       Map.Entry<?, ?>[] entries = Iterators.toArray(map.entrySet().iterator(), Map.Entry.class);
       for (int i = 0; i < entries.length; i++) {
         Map.Entry<?, ?> entry = entries[i];
-        stringValue.append(ObjectUtils.toString(entry.getKey()))
-        .append(KEY_VALUE_DELIMITER)
-        .append(ObjectUtils.toString(entry.getValue()));
+        String entryKey = ObjectUtils.toString(entry.getKey());
+        String entryValue = ObjectUtils.toString(entry.getValue());
+        stringValue.append(entryKey).append(KEY_VALUE_DELIMITER).append(entryValue);
         if (i < entries.length - 1) {
           stringValue.append(ARRAY_DELIMITER);
         }
