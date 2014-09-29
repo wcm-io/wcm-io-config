@@ -80,7 +80,7 @@ public final class ParameterResolverImpl implements ParameterResolver {
    */
   @Reference(name = "parameterProvider", referenceInterface = ParameterProvider.class,
       cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
-  private final RankedServices<ParameterProvider> parameterProviders = new RankedServices<>();
+  private final RankedServices<ParameterProvider> parameterProviders = new RankedServices<>(new ParameterProviderChangeListener());
 
   @Override
   public Map<String, Object> getEffectiveValues(ResourceResolver resolver, Collection<String> configurationIds) {
@@ -279,32 +279,36 @@ public final class ParameterResolverImpl implements ParameterResolver {
   }
 
   void bindParameterProvider(ParameterProvider service, Map<String, Object> props) {
-    synchronized (parameterProviders) {
-      parameterProviders.bind(service, props);
-      updateParameterColletions();
-    }
+    parameterProviders.bind(service, props);
     validateParameterProviders();
   }
 
   void unbindParameterProvider(ParameterProvider service, Map<String, Object> props) {
-    synchronized (parameterProviders) {
-      parameterProviders.unbind(service, props);
-      updateParameterColletions();
-    }
+    parameterProviders.unbind(service, props);
   }
 
-  private void updateParameterColletions() {
-    SortedSet<Parameter<?>> parameters = new TreeSet<>();
-    for (ParameterProvider provider : this.parameterProviders) {
-      parameters.addAll(provider.getParameters());
-    }
-    this.allParameters = ImmutableSortedSet.copyOf(parameters);
 
-    Map<String, Parameter<?>> parameterMap = new TreeMap<>();
-    for (Parameter<?> parameter : this.allParameters) {
-      parameterMap.put(parameter.getName(), parameter);
+  /**
+   * Synchronizes the fields allParameters and allParametersMap whenever a parameter provider service
+   * is added or removed.
+   */
+  private class ParameterProviderChangeListener implements RankedServices.ChangeListener {
+
+    @Override
+    public void changed() {
+      SortedSet<Parameter<?>> parameters = new TreeSet<>();
+      for (ParameterProvider provider : ParameterResolverImpl.this.parameterProviders) {
+        parameters.addAll(provider.getParameters());
+      }
+      ParameterResolverImpl.this.allParameters = ImmutableSortedSet.copyOf(parameters);
+
+      Map<String, Parameter<?>> parameterMap = new TreeMap<>();
+      for (Parameter<?> parameter : ParameterResolverImpl.this.allParameters) {
+        parameterMap.put(parameter.getName(), parameter);
+      }
+      ParameterResolverImpl.this.allParametersMap = ImmutableMap.copyOf(parameterMap);
     }
-    this.allParametersMap = ImmutableMap.copyOf(parameterMap);
+
   }
 
 }
