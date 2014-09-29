@@ -20,25 +20,19 @@
 package io.wcm.config.editor;
 
 import io.wcm.config.core.management.ParameterPersistence;
-import io.wcm.handler.url.UrlHandler;
 import io.wcm.sling.models.annotations.AemObject;
-import io.wcm.wcm.commons.contenttype.FileExtension;
 
 import javax.inject.Inject;
 
 import org.apache.sling.api.SlingHttpServletRequest;
-import org.apache.sling.api.adapter.Adaptable;
-import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectorspecific.Self;
-import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 
 import com.day.cq.wcm.api.Page;
 
 /**
- * {@link EditorConfig} implementation for the editor pages created under /tools/config
+ * Provides editor configuration options
  */
-@Model(adaptables = SlingHttpServletRequest.class)
+@Model(adaptables = SlingHttpServletRequest.class, adapters = EditorConfig.class)
 public class EditorConfig {
 
   private final String lockedNamesAttributeName;
@@ -46,19 +40,11 @@ public class EditorConfig {
 
   /**
    * @param currentPage
-   * @param resourceResolver
-   * @param self
    */
   @Inject
-  public EditorConfig(
-      @AemObject Page currentPage,
-      @SlingObject ResourceResolver resourceResolver,
-      @Self Adaptable self) {
+  public EditorConfig(@AemObject Page currentPage) {
     lockedNamesAttributeName = ParameterPersistence.PN_LOCKED_PARAMETER_NAMES;
-    UrlHandler urlHandler = self.adaptTo(UrlHandler.class);
-
-    providerUrl = urlHandler.url(currentPage.getContentResource().getPath()).selectors("configProvider")
-        .extension(FileExtension.JSON).externalizeResource().build();
+    providerUrl = currentPage.getContentResource().getPath() + ".configProvider.json";
   }
 
   public String getLockedNamesAttributeName() {
