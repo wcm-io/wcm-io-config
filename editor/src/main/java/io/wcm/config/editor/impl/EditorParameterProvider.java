@@ -27,7 +27,6 @@ import io.wcm.config.core.management.ParameterPersistence;
 import io.wcm.config.core.management.ParameterPersistenceData;
 import io.wcm.config.core.management.ParameterResolver;
 import io.wcm.config.core.util.TypeConversion;
-import io.wcm.config.editor.EditorConfig;
 import io.wcm.config.editor.widgets.WidgetTypes;
 import io.wcm.wcm.commons.contenttype.FileExtension;
 
@@ -116,7 +115,7 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
     Set<String> lockedParameterNames = persistedData.getLockedParameterNames();
 
     Iterator<Parameter<?>> parameterIterator = allParameters.iterator();
-    while (allParameters.iterator().hasNext()) {
+    while (parameterIterator.hasNext()) {
       Parameter parameter = parameterIterator.next();
       String parameterName = parameter.getName();
       if (isEditable(parameter)) {
@@ -232,11 +231,7 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
 
   private Iterator<Configuration> getConfigurations(SlingHttpServletRequest request) {
     if (configurationFinder != null) {
-      EditorConfig config = request.adaptTo(EditorConfig.class);
       Resource resource = request.getResource();
-      if (config != null && config.getResourceForConfigurationFinder() != null) {
-        resource = config.getResourceForConfigurationFinder();
-      }
       return configurationFinder.findAll(resource);
     }
 

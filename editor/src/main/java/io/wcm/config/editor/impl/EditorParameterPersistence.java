@@ -26,7 +26,6 @@ import io.wcm.config.core.management.ParameterPersistence;
 import io.wcm.config.core.management.ParameterPersistenceData;
 import io.wcm.config.core.management.ParameterResolver;
 import io.wcm.config.core.util.TypeConversion;
-import io.wcm.config.editor.EditorConfig;
 import io.wcm.wcm.commons.contenttype.FileExtension;
 
 import java.io.IOException;
@@ -132,12 +131,7 @@ public class EditorParameterPersistence extends SlingAllMethodsServlet {
   private Object getValue(String[] values, Parameter<?> parameter) {
     Object value = null;
     if (values != null && values.length > 0) {
-      if (parameter.getType() != Map.class) {
-        value = TypeConversion.stringToObject(values[0], parameter.getType());
-      }
-      else {
-        value = values[0];
-      }
+      value = TypeConversion.stringToObject(values[0], parameter.getType());
     }
     return value;
   }
@@ -150,11 +144,7 @@ public class EditorParameterPersistence extends SlingAllMethodsServlet {
 
   private String getCurrentConfigurationId(SlingHttpServletRequest request) {
     if (configurationFinder != null) {
-      EditorConfig config = request.adaptTo(EditorConfig.class);
       Resource resource = request.getResource();
-      if (config != null && config.getResourceForConfigurationFinder() != null) {
-        resource = config.getResourceForConfigurationFinder();
-      }
       Configuration configuration = configurationFinder.find(resource);
       return configuration != null ? configuration.getConfigurationId() : StringUtils.EMPTY;
     }

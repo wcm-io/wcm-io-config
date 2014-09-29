@@ -26,14 +26,12 @@ import javax.inject.Inject;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.adapter.Adaptable;
-import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 
 import com.day.cq.wcm.api.Page;
-import com.day.jcr.vault.util.Text;
 
 /**
  * {@link EditorConfig} implementation for the editor pages created under /tools/config
@@ -43,7 +41,6 @@ public class EditorConfig {
 
   private final String lockedNamesAttributeName;
   private final String providerUrl;
-  private final Resource configResource;
 
   /**
    * @param currentPage
@@ -57,12 +54,6 @@ public class EditorConfig {
       @Self Adaptable self) {
     lockedNamesAttributeName = ParameterPersistence.PN_LOCKED_PARAMETER_NAMES;
     providerUrl = "";
-    String path = Text.getRelativeParent(currentPage.getPath(), 2);
-    configResource = resourceResolver.getResource(path);
-  }
-
-  public Resource getResourceForConfigurationFinder() {
-    return configResource;
   }
 
   public String getLockedNamesAttributeName() {

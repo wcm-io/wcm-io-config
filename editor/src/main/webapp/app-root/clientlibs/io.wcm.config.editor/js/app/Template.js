@@ -89,7 +89,7 @@ angular.module("textMultifield.html", []).run(["$templateCache", function($templ
     "        <i class=\"coral-Icon coral-Icon--add\"></i>\n" +
     "      </button>\n" +
     "      <button ng-click=\"removeValue(value)\" class=\"coral-ButtonGroup-item coral-Button coral-Button--secondary\">\n" +
-    "        <i class=\"coral-Icon coral-Icon--delete\"></i>\n" +
+    "        <i class=\"coral-Icon coral-Icon--minus\"></i>\n" +
     "      </button>\n" +
     "    </div>\n" +
     "  </div>\n" +
