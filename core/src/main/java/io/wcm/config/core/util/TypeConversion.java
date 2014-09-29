@@ -19,10 +19,6 @@
  */
 package io.wcm.config.core.util;
 
-
-import static io.wcm.config.api.management.ParameterOverride.ARRAY_DELIMITER;
-import static io.wcm.config.api.management.ParameterOverride.KEY_VALUE_DELIMITER;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -37,21 +33,31 @@ import com.google.common.collect.Iterators;
 /**
  * Helps converting types from object to parameter type.
  */
-public final class TypeUtil {
+public final class TypeConversion {
 
-  private TypeUtil() {
+  /**
+   * Delimiter for string array values an map rows
+   */
+  public static final String ARRAY_DELIMITER = ";";
+
+  /**
+   * Delimiter to separate key/value pairs in map rows
+   */
+  public static final String KEY_VALUE_DELIMITER = "=";
+
+  private TypeConversion() {
     // static methods only
   }
 
   /**
-   * Converts a string value from an override string to the parameter type.
+   * Converts a string value to an object with the given parameter type.
    * @param value String value
    * @param type Parameter type
    * @return Converted value
    * @throws IllegalArgumentException If type is not supported
    */
   @SuppressWarnings("unchecked")
-  public static <T> T overridePropertyToType(String value, Class<T> type) {
+  public static <T> T stringToObject(String value, Class<T> type) {
     if (value == null) {
       return null;
     }
@@ -88,7 +94,52 @@ public final class TypeUtil {
   }
 
   /**
-   * Converts a OSGi configuration property value to the parameter type.
+   * Converts a typed value to it's string representation.
+   * @param value Typed value
+   * @return String value
+   */
+  public static String objectToString(Object value) {
+    if (value == null) {
+      return null;
+    }
+    if (value instanceof String) {
+      return (String)value;
+    }
+    if (value instanceof String[]) {
+      return StringUtils.join((String[])value, ARRAY_DELIMITER);
+    }
+    else if (value instanceof Integer) {
+      return Integer.toString((Integer)value);
+    }
+    else if (value instanceof Long) {
+      return Long.toString((Long)value);
+    }
+    else if (value instanceof Double) {
+      return Double.toString((Double)value);
+    }
+    else if (value instanceof Boolean) {
+      return Boolean.toString((Boolean)value);
+    }
+    else if (value instanceof Map) {
+      Map<?, ?> map = (Map<?, ?>)value;
+      StringBuilder stringValue = new StringBuilder();
+      Map.Entry<?, ?>[] entries = Iterators.toArray(map.entrySet().iterator(), Map.Entry.class);
+      for (int i = 0; i < entries.length; i++) {
+        Map.Entry<?, ?> entry = entries[i];
+        stringValue.append(ObjectUtils.toString(entry.getKey()))
+        .append(KEY_VALUE_DELIMITER)
+        .append(ObjectUtils.toString(entry.getValue()));
+        if (i < entries.length - 1) {
+          stringValue.append(ARRAY_DELIMITER);
+        }
+      }
+      return stringValue.toString();
+    }
+    throw new IllegalArgumentException("Unsupported type: " + value.getClass().getName());
+  }
+
+  /**
+   * Converts a OSGi configuration property value to an object with the given parameter type.
    * @param value String value (not null)
    * @param type Parameter type
    * @param defaultValue Default value is used if not OSGi configuration value is set
@@ -96,7 +147,7 @@ public final class TypeUtil {
    * @throws IllegalArgumentException If type is not supported
    */
   @SuppressWarnings("unchecked")
-  public static <T> T osgiPropertyToType(Object value, Class<T> type, T defaultValue) {
+  public static <T> T osgiPropertyToObject(Object value, Class<T> type, T defaultValue) {
     // only selected parameter types are supported
     if (type == String.class) {
       return (T)PropertiesUtil.toString(value, (String)defaultValue);

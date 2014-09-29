@@ -24,7 +24,7 @@ import io.wcm.config.api.management.ParameterOverride;
 import io.wcm.config.api.management.ParameterPersistence;
 import io.wcm.config.api.management.ParameterPersistenceData;
 import io.wcm.config.api.management.ParameterResolver;
-import io.wcm.config.core.util.TypeUtil;
+import io.wcm.config.core.util.TypeConversion;
 import io.wcm.config.spi.ParameterProvider;
 import io.wcm.sling.commons.osgi.RankedServices;
 
@@ -142,7 +142,7 @@ public final class ParameterResolverImpl implements ParameterResolver {
       ServiceReference ref = bundleContext.getServiceReference(className);
       if (ref != null) {
         Object value = ref.getProperty(propertyName);
-        return TypeUtil.osgiPropertyToType(value, parameter.getType(), parameter.getDefaultValue());
+        return TypeConversion.osgiPropertyToObject(value, parameter.getType(), parameter.getDefaultValue());
       }
     }
     return parameter.getDefaultValue();
