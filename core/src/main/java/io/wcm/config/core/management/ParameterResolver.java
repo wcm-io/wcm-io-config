@@ -19,8 +19,11 @@
  */
 package io.wcm.config.core.management;
 
+import io.wcm.config.api.Parameter;
+
 import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.sling.api.resource.ResourceResolver;
 
@@ -36,5 +39,11 @@ public interface ParameterResolver {
    * @return Parameter values
    */
   Map<String, Object> getEffectiveValues(ResourceResolver resolver, Collection<String> configurationIds);
+
+  /**
+   * Get all parameter definitions from all parameter providers.
+   * @return Parameter definitions
+   */
+  Set<Parameter<?>> getAllParameters();
 
 }

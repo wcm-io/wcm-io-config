@@ -51,6 +51,8 @@ import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSortedSet;
 import com.google.common.collect.Iterators;
 
@@ -65,11 +67,13 @@ public final class ParameterResolverImpl implements ParameterResolver {
 
   @Reference
   private ParameterPersistence parameterPersistence;
-
   @Reference
   private ParameterOverride parameterOverride;
 
   private BundleContext bundleContext;
+
+  private volatile Set<Parameter<?>> allParameters = ImmutableSet.of();
+  private volatile Map<String, Parameter<?>> allParametersMap = ImmutableMap.of();
 
   /**
    * Parameter providers implemented by installed applications.
@@ -80,22 +84,21 @@ public final class ParameterResolverImpl implements ParameterResolver {
 
   @Override
   public Map<String, Object> getEffectiveValues(ResourceResolver resolver, Collection<String> configurationIds) {
-    Map<String, Parameter<?>> parameters = getAllParameters();
     Map<String, Object> parameterValues = new HashMap<>();
 
     // apply default values
-    applyDefaultValues(parameters, parameterValues);
-    applyOverrideSystemDefault(parameters, parameterValues);
+    applyDefaultValues(parameterValues);
+    applyOverrideSystemDefault(parameterValues);
 
     // apply configured values following inheritance hierarchy
     String[] configurationIdArray = Iterators.toArray(configurationIds.iterator(), String.class);
     SortedSet<String> lockedParameterNames = ImmutableSortedSet.<String>of();
     for (int i = configurationIdArray.length - 1; i >= 0; i--) {
       String configurationId = configurationIdArray[i];
-      lockedParameterNames = applyConfiguredValues(resolver, configurationId, parameters, parameterValues, lockedParameterNames);
+      lockedParameterNames = applyConfiguredValues(resolver, configurationId, parameterValues, lockedParameterNames);
 
       // apply forced override values
-      applyOverrideForce(configurationId, parameters, parameterValues);
+      applyOverrideForce(configurationId, parameterValues);
     }
 
     return parameterValues;
@@ -105,25 +108,17 @@ public final class ParameterResolverImpl implements ParameterResolver {
    * Get all parameter definitions from all parameter providers.
    * @return Parameter definitions (key = name, value = definition)
    */
-  private Map<String, Parameter<?>> getAllParameters() {
-    Set<Parameter<?>> parameters = new HashSet<>();
-    for (ParameterProvider provider : this.parameterProviders) {
-      parameters.addAll(provider.getParameters());
-    }
-    Map<String, Parameter<?>> parameterMap = new TreeMap<>();
-    for (Parameter<?> parameter : parameters) {
-      parameterMap.put(parameter.getName(), parameter);
-    }
-    return parameterMap;
+  @Override
+  public Set<Parameter<?>> getAllParameters() {
+    return allParameters;
   }
 
   /**
    * Apply default values for all parameters.
-   * @param parameters Parameters
    * @param parameterValues Parameter values
    */
-  private void applyDefaultValues(Map<String, Parameter<?>> parameters, Map<String, Object> parameterValues) {
-    for (Parameter<?> parameter : parameters.values()) {
+  private void applyDefaultValues(Map<String, Object> parameterValues) {
+    for (Parameter<?> parameter : allParameters) {
       parameterValues.put(parameter.getName(), getParameterDefaultValue(parameter));
     }
   }
@@ -150,11 +145,10 @@ public final class ParameterResolverImpl implements ParameterResolver {
 
   /**
    * Apply system-wide overrides for default values.
-   * @param parameters Parameters
    * @param parameterValues Parameter values
    */
-  private void applyOverrideSystemDefault(Map<String, Parameter<?>> parameters, Map<String, Object> parameterValues) {
-    for (Parameter<?> parameter : parameters.values()) {
+  private void applyOverrideSystemDefault(Map<String, Object> parameterValues) {
+    for (Parameter<?> parameter : allParameters) {
       Object overrideValue = parameterOverride.getOverrideSystemDefault(parameter);
       if (overrideValue != null) {
         parameterValues.put(parameter.getName(), overrideValue);
@@ -167,20 +161,18 @@ public final class ParameterResolverImpl implements ParameterResolver {
    * higher configuration level).
    * @param resolver Resource resolver
    * @param configurationId Configuration id
-   * @param parameters Parameter definitions
    * @param parameterValues Parameter values
    * @param ancestorLockedParameterNames Set of locked parameter names on the configuration levels above.
    * @return Set of locked parameter names on this configuration level combined with the from the levels above.
    */
   private SortedSet<String> applyConfiguredValues(ResourceResolver resolver, String configurationId,
-      Map<String, Parameter<?>> parameters, Map<String, Object> parameterValues,
-      SortedSet<String> ancestorLockedParameterNames) {
+      Map<String, Object> parameterValues, SortedSet<String> ancestorLockedParameterNames) {
 
     // get data from persistence
     ParameterPersistenceData data = parameterPersistence.getData(resolver, configurationId);
 
     // ensure the types provided by persistence are valid
-    Map<String, Object> configuredValues = ensureValidValueTypes(parameters, data.getValues());
+    Map<String, Object> configuredValues = ensureValidValueTypes(data.getValues());
 
     // put parameter values to map (respect locked parameter names that may be defined on ancestor level)
     if (!ancestorLockedParameterNames.isEmpty()) {
@@ -207,18 +199,16 @@ public final class ParameterResolverImpl implements ParameterResolver {
   /**
    * Make sure value types match with declared parameter types. Values which types do not match, or for which no
    * parameter definition exists are removed. Types are converted from persistence format if required.
-   * @param parameters Parameter definitions
-   * @param parameterValues Parameter values
    * @return Cleaned up parameter values
    */
-  private Map<String, Object> ensureValidValueTypes(Map<String, Parameter<?>> parameters, Map<String, Object> parameterValues) {
+  private Map<String, Object> ensureValidValueTypes(Map<String, Object> parameterValues) {
     Map<String, Object> transformedParameterValues = new HashMap<>();
     for (Map.Entry<String, Object> entry : parameterValues.entrySet()) {
       if (entry.getKey() == null || entry.getValue() == null) {
         continue;
       }
       else {
-        Parameter<?> parameter = parameters.get(entry.getKey());
+        Parameter<?> parameter = allParametersMap.get(entry.getKey());
         if (parameter == null) {
           continue;
         }
@@ -237,11 +227,10 @@ public final class ParameterResolverImpl implements ParameterResolver {
   /**
    * Apply forced overrides for a configurationId.
    * @param configurationId Configuration id
-   * @param parameters Parameters
    * @param parameterValues Parameter values
    */
-  private void applyOverrideForce(String configurationId, Map<String, Parameter<?>> parameters, Map<String, Object> parameterValues) {
-    for (Parameter<?> parameter : parameters.values()) {
+  private void applyOverrideForce(String configurationId, Map<String, Object> parameterValues) {
+    for (Parameter<?> parameter : allParameters) {
       Object overrideValue = parameterOverride.getOverrideForce(configurationId, parameter);
       if (overrideValue != null) {
         parameterValues.put(parameter.getName(), overrideValue);
@@ -290,12 +279,32 @@ public final class ParameterResolverImpl implements ParameterResolver {
   }
 
   void bindParameterProvider(ParameterProvider service, Map<String, Object> props) {
-    parameterProviders.bind(service, props);
+    synchronized (parameterProviders) {
+      parameterProviders.bind(service, props);
+      updateParameterColletions();
+    }
     validateParameterProviders();
   }
 
   void unbindParameterProvider(ParameterProvider service, Map<String, Object> props) {
-    parameterProviders.unbind(service, props);
+    synchronized (parameterProviders) {
+      parameterProviders.unbind(service, props);
+      updateParameterColletions();
+    }
+  }
+
+  private void updateParameterColletions() {
+    SortedSet<Parameter<?>> parameters = new TreeSet<>();
+    for (ParameterProvider provider : this.parameterProviders) {
+      parameters.addAll(provider.getParameters());
+    }
+    this.allParameters = ImmutableSortedSet.copyOf(parameters);
+
+    Map<String, Parameter<?>> parameterMap = new TreeMap<>();
+    for (Parameter<?> parameter : this.allParameters) {
+      parameterMap.put(parameter.getName(), parameter);
+    }
+    this.allParametersMap = ImmutableMap.copyOf(parameterMap);
   }
 
 }

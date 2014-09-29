@@ -28,7 +28,6 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.when;
 import io.wcm.config.api.Parameter;
-import io.wcm.config.api.ParameterBuilder;
 import io.wcm.config.core.management.ParameterOverride;
 import io.wcm.config.core.management.ParameterPersistence;
 import io.wcm.config.core.management.ParameterPersistenceData;
@@ -122,6 +121,12 @@ public class ParameterResolverImplTest {
 
     underTest.bindParameterProvider(parameterProvider1, SERVICE_PROPS_1);
     underTest.bindParameterProvider(parameterProvider2, SERVICE_PROPS_2);
+  }
+
+  @Test
+  public void testGetAllParameters() {
+    Set<Parameter<?>> allParameters = ImmutableSet.of(PARAM11, PARAM12, PARAM13, PARAM_MAP, PARAM21);
+    assertEquals(allParameters, underTest.getAllParameters());
   }
 
   @Test
@@ -235,12 +240,14 @@ public class ParameterResolverImplTest {
 
   @Test
   public void testOsgiTypes() {
+    underTest.unbindParameterProvider(parameterProvider1, SERVICE_PROPS_1);
     when(parameterProvider1.getParameters()).thenReturn(ImmutableSet.<Parameter<?>>builder()
-        .add(ParameterBuilder.create("stringParam", String.class, APP_ID_1).defaultOsgiConfigProperty("my.service:stringParam").build())
-        .add(ParameterBuilder.create("stringParamUnset", String.class, APP_ID_1).defaultOsgiConfigProperty("my.service:stringParamUnset").build())
-        .add(ParameterBuilder.create("stringArrayParam", String[].class, APP_ID_1).defaultOsgiConfigProperty("my.service:stringArrayParam").build())
-        .add(ParameterBuilder.create("integerParam", Integer.class, APP_ID_1).defaultOsgiConfigProperty("my.service:integerParam").build())
+        .add(create("stringParam", String.class, APP_ID_1).defaultOsgiConfigProperty("my.service:stringParam").build())
+        .add(create("stringParamUnset", String.class, APP_ID_1).defaultOsgiConfigProperty("my.service:stringParamUnset").build())
+        .add(create("stringArrayParam", String[].class, APP_ID_1).defaultOsgiConfigProperty("my.service:stringArrayParam").build())
+        .add(create("integerParam", Integer.class, APP_ID_1).defaultOsgiConfigProperty("my.service:integerParam").build())
         .build());
+    underTest.bindParameterProvider(parameterProvider1, SERVICE_PROPS_1);
 
     when(serviceReference.getProperty("stringParam")).thenReturn("stringValue");
     when(serviceReference.getProperty("stringArrayParam")).thenReturn(new String[] {
@@ -259,14 +266,16 @@ public class ParameterResolverImplTest {
 
   @Test
   public void testConfiguredValuesInvalidTypes() {
+    underTest.unbindParameterProvider(parameterProvider1, SERVICE_PROPS_1);
     when(parameterProvider1.getParameters()).thenReturn(ImmutableSet.<Parameter<?>>builder()
-        .add(ParameterBuilder.create("stringParam", String.class, APP_ID_1).build())
-        .add(ParameterBuilder.create("stringParam2", String.class, APP_ID_1).build())
-        .add(ParameterBuilder.create("stringParamDefaultValue", String.class, APP_ID_1).defaultValue("def").build())
-        .add(ParameterBuilder.create("stringArrayParam", String[].class, APP_ID_1).build())
-        .add(ParameterBuilder.create("integerParam", Integer.class, APP_ID_1).build())
-        .add(ParameterBuilder.create("integerParamDefaultValue", Integer.class, APP_ID_1).defaultValue(22).build())
+        .add(create("stringParam", String.class, APP_ID_1).build())
+        .add(create("stringParam2", String.class, APP_ID_1).build())
+        .add(create("stringParamDefaultValue", String.class, APP_ID_1).defaultValue("def").build())
+        .add(create("stringArrayParam", String[].class, APP_ID_1).build())
+        .add(create("integerParam", Integer.class, APP_ID_1).build())
+        .add(create("integerParamDefaultValue", Integer.class, APP_ID_1).defaultValue(22).build())
         .build());
+    underTest.bindParameterProvider(parameterProvider1, SERVICE_PROPS_1);
 
     when(parameterPersistence.getData(resolver, "/config1")).thenReturn(toData(ImmutableMap.<String, Object>builder()
         .put("stringParam", 55)
