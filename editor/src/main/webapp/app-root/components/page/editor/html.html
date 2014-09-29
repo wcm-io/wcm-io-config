@@ -67,7 +67,7 @@
     <script type="text/javascript">
       angular.module("io.wcm.config.services").config(["parametersProvider", function(parametersProvider){
         var path = "${currentPage.path  @ context='uri'}" + "/jcr:content.configProvider.json";
-        parametersProvider.setConfig({url: path})
+        parametersProvider.setConfig({url: path, lockedParameterName: "io_wcm_config:lockedParameterNames"});
       }]);
     </script>
   </body>

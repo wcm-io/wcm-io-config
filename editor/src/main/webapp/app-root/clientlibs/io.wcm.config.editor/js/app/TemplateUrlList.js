@@ -6,9 +6,9 @@
   angular.module('io.wcm.config.templateUrlList', [])
     .constant('templateUrlList', {
       filterDropDownList: 'filterDropDownList.html',
-      parameterTable: 'parameterTable.html',
       parameterValue: 'parameterValue.html',
       pathBrowser: 'pathBrowser.html',
+      textMultifield: 'textMultifield.html',
       popupContainer: 'popupContainer.html',
       popupContent: 'popupContent.html'
     });

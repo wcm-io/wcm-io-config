@@ -8,6 +8,9 @@
          ng-pattern="{{parameter.pattern}}"
          ng-required="{{parameter.required}}"/>
 
+  <multifield ng-switch-when="textMultivalue" parameter="parameter" />
+
+
   <textarea ng-switch-when="textarea" class="coral-Textfield coral-Textfield--multiline" name="parameter"
              ng-model="parameter.value"
              ng-maxlength="{{parameter.maxlength}}"

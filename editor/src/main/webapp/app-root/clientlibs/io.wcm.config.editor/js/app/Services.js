@@ -20,7 +20,7 @@
             var value = parameter[propertyName];
             if (value) {
               var option = {value: value, label: value};
-              if (!utils.containsValue(filter.options, option)) {
+              if (utils.indexOfValueObject(filter.options, option) == -1) {
                 filter.options.push(option);
               }
             }

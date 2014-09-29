@@ -35,7 +35,7 @@ module.exports = function (grunt) {
     watch: {
       html: {
         files: ['partials/*.html'],
-        tasks: ['html2js:smartTable']
+        tasks: ['html2js:templates']
       }
     }
   });

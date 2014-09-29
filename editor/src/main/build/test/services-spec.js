@@ -91,7 +91,6 @@ describe("parameters service", function() {
       });
       parameters.saveParameters(loadedData.parameters);
       httpBackend.flush();
-
     });
 
     it("should post only modified values and locked parameter names", function() {

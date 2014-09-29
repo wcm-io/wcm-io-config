@@ -41,7 +41,7 @@
             widget = new CUI.Select({ element: element[0] });
             widget.on("selected", handleSelectionChange);
             widget.on("itemremoved", handleSelectionChange);
-          };
+          }
 
           scope.$evalAsync(initWidget);
         }
@@ -102,8 +102,6 @@
           type: '@widgetType'
         },
         link: function(scope, element, attr, ctrl) {
-          var widget;
-
           scope.originalType = scope.type;
           scope.originalValue = scope.parameter.inheritedValue;
 
@@ -114,7 +112,6 @@
               return "disabled";
             }
           }
-
           scope.$watch("parameter.inherited", function(newvalue, oldvalue){
             if (newvalue === true) {
               scope.type = getDisabledType();
@@ -123,15 +120,51 @@
               scope.type = scope.originalType;
             }
           });
-//          scope.$watch("parameter.locked", function(newvalue, oldvalue){
-//            if (newvalue === true) {
-//              scope.type = getDisabledType();
-//            } else if (scope.parameter.inherited === true) {
-//              scope.type = getDisabledType();
-//            } else {
-//              scope.type = scope.originalType;
-//            }
-//          });
+        }
+      }
+    }])
+    .directive("multifield", ['templateUrlList', "EditorUtilities", function (templateList, utils) {
+      return {
+        restrict: "E",
+        replace: true,
+        templateUrl: templateList.textMultifield,
+        scope: {
+          parameter: '='
+        },
+        controller: function($scope) {
+          $scope.addNewValue = function(value) {
+            $scope.$evalAsync(function() {
+              var indexOf = utils.indexOfValueObject($scope.values, value);
+              $scope.values.splice(indexOf+1, 0, {value: ""});
+            });
+          };
+          $scope.removeValue = function(value) {
+            var indexOf = utils.indexOfValueObject($scope.values, value);
+            $scope.values.splice(indexOf, 1);
+            if ($scope.values.length == 0) {
+              $scope.values.push({value: ""});
+            }
+          };
+        },
+        link: function (scope, element, attr) {
+          scope.values = [];
+          if (scope.parameter.value) {
+            var stringValues = scope.parameter.value.split(";");
+            if (stringValues.length > 0) {
+              for (var i = 0; i < stringValues.length; i++) {
+                scope.values.push({value: stringValues[i]});
+              }
+            } else {
+              scope.values.push({value: ""});
+            }
+          } else {
+            scope.values.push({value: ""});
+          }
+          scope.$watch('values', function() {
+            var stringValues = _.pluck(scope.values, "value");
+            scope.parameter.value = stringValues.join(";");
+            console.log(scope.parameter.value);
+          }, true);
         }
       }
     }])

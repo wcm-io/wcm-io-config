@@ -50,17 +50,17 @@
         return false;
       };
 
-      var containsValue = function(array, object) {
-        var contains = false;
+      var indexOfValueObject = function(array, object) {
+        var index = -1;
         if (array) {
           for(var i = 0; i < array.length; i++) {
             if (array[i].value == object.value) {
-              contains = true;
+              index = i;
               break;
             }
           }
         }
-        return contains;
+        return index;
       };
 
       var contains = function(array, object) {
@@ -79,8 +79,8 @@
       return {
         nextUid: nextUid,
         loadAutocompleteOptions: loadAutocompleteOptions,
-        containsValue: containsValue,
-        contains: contains
+        contains: contains,
+        indexOfValueObject: indexOfValueObject
       };
     });
 })(angular);

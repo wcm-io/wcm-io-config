@@ -21,3 +21,18 @@ span.wcm-io-editor-pathbrowser {
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
 }
+
+.wcm-io-editor-multifield {
+  position: relative;
+  padding-right: 103px;
+}
+
+.wcm-io-editor-multifield .coral-Textfield {
+  width: 100%;
+}
+
+.wcm-io-editor-multifield .coral-ButtonGroup {
+  position: absolute;
+  top: 0;
+  right: 0;
+}

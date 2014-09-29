@@ -39,6 +39,16 @@ public enum WidgetTypes {
   TEXTFIELD(ImmutableMap.copyOf(Defaults.DEFAULT_TEXTFIELD_CONFIGURATION)),
 
   /**
+   * Text Multifield widget, which allows to specifiy multiple values for a property.
+   * Following properties are available for configuration (all empty per default):
+   * - required = true or false
+   * - maxlength = integer value
+   * - minlength = integer value
+   * - pattern = regular expression for the value validation. E.g. /^[0-9]*$/
+   */
+  TEXT_MULTIFIELD(ImmutableMap.copyOf(Defaults.DEFAULT_MULTIFIELD_CONFIGURATION)),
+
+  /**
    * Text Area widget. Following properties are available for configuration (all empty per default):
    * - requried = true or false
    * - maxlength = integer value
@@ -177,6 +187,11 @@ public enum WidgetTypes {
     private static final Map<String, Object> DEFAULT_TEXTFIELD_CONFIGURATION = new HashMap<>();
     static {
       DEFAULT_TEXTFIELD_CONFIGURATION.put(PN_WIDGET_TYPE, "textfield");
+    }
+
+    private static final Map<String, Object> DEFAULT_MULTIFIELD_CONFIGURATION = new HashMap<>();
+    static {
+      DEFAULT_MULTIFIELD_CONFIGURATION.put(PN_WIDGET_TYPE, "textMultivalue");
     }
 
     private static final Map<String, Object> DEFAULT_TEXTAREA_CONFIGURATION = new HashMap<>();

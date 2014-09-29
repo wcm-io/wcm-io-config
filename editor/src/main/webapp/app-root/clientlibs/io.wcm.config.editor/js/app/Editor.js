@@ -2,19 +2,16 @@
 
   "use strict";
   angular.module('io.wcm.config.editor', ['io.wcm.config.services', 'io.wcm.config.directives'])
-    .controller("mainCtrl", ['$scope', "$filter", "parameters", function($scope, $filter, Parameters) {
-      $scope.currentFilter = {};
-      $scope.displayedCollection = [];
-
+    .run(["$rootScope", "parameters", function($rootScope, Parameters) {
       /**
        * Use the parameters service to load and parse data from backend
        */
       Parameters.loadParameters().then(
         function success(result){
           var parsedData = Parameters.parseData(result.data);
-          $scope.$evalAsync(function() {
-            $scope.filters = parsedData.filters;
-            $scope.parameterCollection = parsedData.parameters;
+          $rootScope.$evalAsync(function() {
+            $rootScope.filters = parsedData.filters;
+            $rootScope.parameterCollection = parsedData.parameters;
           });
         },
         function error(result) {
@@ -22,9 +19,14 @@
         }
       );
 
+    }])
+    .controller("mainCtrl", ['$scope', "$filter", "parameters", function($scope, $filter, Parameters) {
+      $scope.currentFilter = {};
+      $scope.displayedCollection = [];
+
+
       $scope.save = function() {
-
-
+        Parameters.saveParameters($scope.parameterCollection);
       };
 
       /**

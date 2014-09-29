@@ -19,16 +19,57 @@
  */
 package io.wcm.config.editor;
 
+import io.wcm.config.core.management.ParameterPersistence;
+import io.wcm.sling.models.annotations.AemObject;
+
+import javax.inject.Inject;
+
+import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.adapter.Adaptable;
 import org.apache.sling.api.resource.Resource;
+import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.Self;
+import org.apache.sling.models.annotations.injectorspecific.SlingObject;
+
+import com.day.cq.wcm.api.Page;
+import com.day.jcr.vault.util.Text;
 
 /**
- * Provides application specific configuration of the editor
+ * {@link EditorConfig} implementation for the editor pages created under /tools/config
  */
-public interface EditorConfig {
+@Model(adaptables = SlingHttpServletRequest.class)
+public class EditorConfig {
+
+  private final String lockedNamesAttributeName;
+  private final String providerUrl;
+  private final Resource configResource;
 
   /**
-   * @return {@link Resource} which should be used by the configuration finder.
+   * @param currentPage
+   * @param resourceResolver
+   * @param self
    */
-  Resource getResourceForConfigurationFinder();
+  @Inject
+  public EditorConfig(
+      @AemObject Page currentPage,
+      @SlingObject ResourceResolver resourceResolver,
+      @Self Adaptable self) {
+    lockedNamesAttributeName = ParameterPersistence.PN_LOCKED_PARAMETER_NAMES;
+    providerUrl = "";
+    String path = Text.getRelativeParent(currentPage.getPath(), 2);
+    configResource = resourceResolver.getResource(path);
+  }
 
+  public Resource getResourceForConfigurationFinder() {
+    return configResource;
+  }
+
+  public String getLockedNamesAttributeName() {
+    return lockedNamesAttributeName;
+  }
+
+  public String getProviderUrl() {
+    return providerUrl;
+  }
 }

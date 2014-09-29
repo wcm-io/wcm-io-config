@@ -21,10 +21,12 @@ package io.wcm.config.editor.impl;
 
 import io.wcm.config.api.Configuration;
 import io.wcm.config.api.Parameter;
-import io.wcm.config.api.management.ConfigurationFinder;
-import io.wcm.config.api.management.ParameterPersistence;
-import io.wcm.config.api.management.ParameterPersistenceData;
-import io.wcm.config.api.management.ParameterResolver;
+import io.wcm.config.core.management.ApplicationFinder;
+import io.wcm.config.core.management.ConfigurationFinder;
+import io.wcm.config.core.management.ParameterPersistence;
+import io.wcm.config.core.management.ParameterPersistenceData;
+import io.wcm.config.core.management.ParameterResolver;
+import io.wcm.config.core.util.TypeConversion;
 import io.wcm.config.editor.EditorConfig;
 import io.wcm.config.editor.widgets.WidgetTypes;
 import io.wcm.wcm.commons.contenttype.FileExtension;
@@ -68,6 +70,8 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
   @Reference
   private ConfigurationFinder configurationFinder;
   @Reference
+  private ApplicationFinder applicationFinder;
+  @Reference
   private ParameterPersistence persistence;
   @Reference
   private ParameterResolver parameterResolver;
@@ -78,6 +82,9 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
 
   @Override
   protected void doGet(SlingHttpServletRequest request, SlingHttpServletResponse response) throws ServletException, IOException {
+
+    sanityCheck(request, response);
+
     Configuration[] allConfigurations = Iterators.toArray(getConfigurations(request), Configuration.class);
     JSONArray parameters = new JSONArray();
 
@@ -94,16 +101,24 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
     writeResponse(response, parameters);
   }
 
+  private void sanityCheck(SlingHttpServletRequest request, SlingHttpServletResponse response) throws IOException {
+    if (applicationFinder == null || configurationFinder == null || persistence == null || parameterResolver == null) {
+      response.sendError(500, "Configuration services are not available");
+    }
+  }
+
   private void addParameters(JSONArray parameters, Configuration configuration, SlingHttpServletRequest request)
       throws JSONException {
 
-    Map<String, Parameter<?>> allParameters = parameterResolver.getAllParameters();
+    Set<Parameter<?>> allParameters = parameterResolver.getAllParameters();
     ParameterPersistenceData persistedData = persistence.getData(request.getResourceResolver(), configuration.getConfigurationId());
     Map<String, Object> persistedValues = persistedData.getValues();
     Set<String> lockedParameterNames = persistedData.getLockedParameterNames();
 
-    for (String parameterName : allParameters.keySet()) {
-      Parameter parameter = allParameters.get(parameterName);
+    Iterator<Parameter<?>> parameterIterator = allParameters.iterator();
+    while (allParameters.iterator().hasNext()) {
+      Parameter parameter = parameterIterator.next();
+      String parameterName = parameter.getName();
       if (isEditable(parameter)) {
         JSONObject jsonParameter = getOrCreateJSONParameter(parameters, parameterName);
         addWidgetConfiguration(jsonParameter, parameter);
@@ -117,7 +132,7 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
         // set inherited flag
         setInherited(jsonParameter, effectiveValue, persistedValue);
 
-        addValue(jsonParameter, effectiveValue, parameter.getDefaultValue());
+        addValue(jsonParameter, effectiveValue, parameter);
       }
     }
   }
@@ -146,19 +161,26 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
     }
   }
 
-  private void addValue(JSONObject jsonParameter, Object effectiveValue, Object defaultValue) throws JSONException {
+  private void addValue(JSONObject jsonParameter, Object effectiveValue, Parameter parameter) throws JSONException {
     Object previousValue = null;
 
     try {
       previousValue = jsonParameter.get(WidgetTypes.Defaults.PN_PARAMETER_VALUE);
     }
     catch (JSONException ex) {
-      previousValue = defaultValue;
+      previousValue = parameter.getDefaultValue();
     }
 
-    jsonParameter.put(WidgetTypes.Defaults.PN_INHERITED_VALUE, previousValue);
-    jsonParameter.put(WidgetTypes.Defaults.PN_PARAMETER_VALUE, effectiveValue);
+    jsonParameter.put(WidgetTypes.Defaults.PN_INHERITED_VALUE, getJSONValue(previousValue));
+    jsonParameter.put(WidgetTypes.Defaults.PN_PARAMETER_VALUE, getJSONValue(effectiveValue));
 
+  }
+
+  private Object getJSONValue(Object value) {
+    if (value instanceof Boolean) {
+      return value;
+    }
+    return TypeConversion.objectToString(value);
   }
 
   private JSONObject getOrCreateJSONParameter(JSONArray parameters, String parameterName) throws JSONException {
