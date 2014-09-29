@@ -24,8 +24,8 @@ import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.when;
 import io.wcm.config.api.Application;
 import io.wcm.config.api.Configuration;
-import io.wcm.config.api.management.ApplicationFinder;
-import io.wcm.config.api.management.ConfigurationFinder;
+import io.wcm.config.core.management.ApplicationFinder;
+import io.wcm.config.core.management.ConfigurationFinder;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;

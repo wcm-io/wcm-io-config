@@ -22,7 +22,7 @@ package io.wcm.config.core.impl;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.when;
 import io.wcm.config.api.Application;
-import io.wcm.config.api.management.ApplicationFinder;
+import io.wcm.config.core.management.ApplicationFinder;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;

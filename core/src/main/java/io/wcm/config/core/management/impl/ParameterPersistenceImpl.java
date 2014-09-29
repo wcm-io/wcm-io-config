@@ -19,8 +19,8 @@
  */
 package io.wcm.config.core.management.impl;
 
-import io.wcm.config.api.management.ParameterPersistence;
-import io.wcm.config.api.management.ParameterPersistenceData;
+import io.wcm.config.core.management.ParameterPersistence;
+import io.wcm.config.core.management.ParameterPersistenceData;
 import io.wcm.config.spi.ParameterPersistenceProvider;
 import io.wcm.sling.commons.osgi.RankedServices;
 

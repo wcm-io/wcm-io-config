@@ -83,6 +83,7 @@
         <configuration>
           <instructions>
             <Export-Package>
+              io.wcm.config.core.management;version=${project.version},
               io.wcm.config.core.util;version=${project.version}
             </Export-Package>
 

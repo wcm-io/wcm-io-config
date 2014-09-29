@@ -23,8 +23,8 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import io.wcm.config.api.management.ParameterPersistence;
-import io.wcm.config.api.management.ParameterPersistenceData;
+import io.wcm.config.core.management.ParameterPersistence;
+import io.wcm.config.core.management.ParameterPersistenceData;
 import io.wcm.config.spi.ParameterPersistenceProvider;
 
 import java.util.Map;

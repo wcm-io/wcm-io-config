@@ -20,8 +20,8 @@
 package io.wcm.config.core.management.impl;
 
 import io.wcm.config.api.Application;
-import io.wcm.config.api.management.ApplicationFinder;
 import io.wcm.config.core.impl.ApplicationImpl;
+import io.wcm.config.core.management.ApplicationFinder;
 import io.wcm.config.spi.ApplicationProvider;
 import io.wcm.sling.commons.osgi.RankedServices;
 
