@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html
+    data-sly-use.editorConfig="io.wcm.config.editor.EditorConfig"
     data-sly-use.clientLib="/libs/granite/sightly/templates/clientlib.html"
     ng-app="io.wcm.config.editor">
   <head>
@@ -66,8 +67,8 @@
     <meta data-sly-call="${clientLib.js @ categories='io.wcm.config.editor'}" data-sly-unwrap></meta>
     <script type="text/javascript">
       angular.module("io.wcm.config.services").config(["parametersProvider", function(parametersProvider){
-        var path = "${currentPage.path  @ context='uri'}" + "/jcr:content.configProvider.json";
-        parametersProvider.setConfig({url: path, lockedParameterName: "io_wcm_config:lockedParameterNames"});
+        var path = "${editorConfig.providerUrl @ context='uri'}";
+        parametersProvider.setConfig({url: path, lockedParameterName: "${editorConfig.lockedNamesAttributeName @ context='scriptString'}"});
       }]);
     </script>
   </body>

@@ -20,7 +20,9 @@
 package io.wcm.config.editor;
 
 import io.wcm.config.core.management.ParameterPersistence;
+import io.wcm.handler.url.UrlHandler;
 import io.wcm.sling.models.annotations.AemObject;
+import io.wcm.wcm.commons.contenttype.FileExtension;
 
 import javax.inject.Inject;
 
@@ -53,7 +55,10 @@ public class EditorConfig {
       @SlingObject ResourceResolver resourceResolver,
       @Self Adaptable self) {
     lockedNamesAttributeName = ParameterPersistence.PN_LOCKED_PARAMETER_NAMES;
-    providerUrl = "";
+    UrlHandler urlHandler = self.adaptTo(UrlHandler.class);
+
+    providerUrl = urlHandler.url(currentPage.getContentResource().getPath()).selectors("configProvider")
+        .extension(FileExtension.JSON).externalizeResource().build();
   }
 
   public String getLockedNamesAttributeName() {

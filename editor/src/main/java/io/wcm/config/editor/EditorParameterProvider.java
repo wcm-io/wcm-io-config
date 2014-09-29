@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.config.editor.impl;
+package io.wcm.config.editor;
 
 import io.wcm.config.api.Configuration;
 import io.wcm.config.api.Parameter;
@@ -27,7 +27,7 @@ import io.wcm.config.core.management.ParameterPersistence;
 import io.wcm.config.core.management.ParameterPersistenceData;
 import io.wcm.config.core.management.ParameterResolver;
 import io.wcm.config.core.util.TypeConversion;
-import io.wcm.config.editor.widgets.WidgetTypes;
+import io.wcm.config.editor.widgets.EditorNameConstants;
 import io.wcm.wcm.commons.contenttype.FileExtension;
 
 import java.io.IOException;
@@ -106,7 +106,7 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
     }
   }
 
-  private void addParameters(JSONArray parameters, Configuration configuration, SlingHttpServletRequest request)
+  protected void addParameters(JSONArray parameters, Configuration configuration, SlingHttpServletRequest request)
       throws JSONException {
 
     Set<Parameter<?>> allParameters = parameterResolver.getAllParameters();
@@ -152,11 +152,15 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
 
   private void setLocked(JSONObject jsonParameter, String parameterName, Set<String> lockedParameterNames) throws JSONException {
     if (lockedParameterNames.contains(parameterName)) {
-      jsonParameter.put("locked", true);
-      jsonParameter.put("lockedInherited", false);
+      jsonParameter.put(EditorNameConstants.PN_LOCKED, true);
+      jsonParameter.put(EditorNameConstants.PN_LOCKED_INHERITED, false);
     }
-    else if (jsonParameter.has("locked") && jsonParameter.getBoolean("locked")) {
-      jsonParameter.put("lockedInherited", true);
+    else if (jsonParameter.has(EditorNameConstants.PN_LOCKED) && jsonParameter.getBoolean(EditorNameConstants.PN_LOCKED)) {
+      jsonParameter.put(EditorNameConstants.PN_LOCKED_INHERITED, true);
+    }
+    else {
+      jsonParameter.put(EditorNameConstants.PN_LOCKED, false);
+      jsonParameter.put(EditorNameConstants.PN_LOCKED_INHERITED, false);
     }
   }
 
@@ -164,14 +168,14 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
     Object previousValue = null;
 
     try {
-      previousValue = jsonParameter.get(WidgetTypes.Defaults.PN_PARAMETER_VALUE);
+      previousValue = jsonParameter.get(EditorNameConstants.PN_PARAMETER_VALUE);
     }
     catch (JSONException ex) {
       previousValue = parameter.getDefaultValue();
     }
 
-    jsonParameter.put(WidgetTypes.Defaults.PN_INHERITED_VALUE, getJSONValue(previousValue));
-    jsonParameter.put(WidgetTypes.Defaults.PN_PARAMETER_VALUE, getJSONValue(effectiveValue));
+    jsonParameter.put(EditorNameConstants.PN_INHERITED_VALUE, getJSONValue(previousValue));
+    jsonParameter.put(EditorNameConstants.PN_PARAMETER_VALUE, getJSONValue(effectiveValue));
 
   }
 
@@ -184,11 +188,11 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
 
   private JSONObject getOrCreateJSONParameter(JSONArray parameters, String parameterName) throws JSONException {
     JSONObject jsonParameter = new JSONObject();
-    jsonParameter.put(WidgetTypes.Defaults.PN_PARAMETER_NAME, parameterName);
+    jsonParameter.put(EditorNameConstants.PN_PARAMETER_NAME, parameterName);
     boolean found = false;
     for (int i = 0; i < parameters.length(); i++) {
       JSONObject parameter = parameters.getJSONObject(i);
-      if (StringUtils.equals(parameter.getString(WidgetTypes.Defaults.PN_PARAMETER_NAME), parameterName)) {
+      if (StringUtils.equals(parameter.getString(EditorNameConstants.PN_PARAMETER_NAME), parameterName)) {
         jsonParameter = parameter;
         found = true;
         break;
@@ -208,13 +212,13 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
       }
     }
 
-    jsonParameter.put(WidgetTypes.Defaults.PN_APPLICATION_ID, parameter.getApplicationId());
-    jsonParameter.put(WidgetTypes.Defaults.PN_PARAMETER_NAME, parameter.getName());
+    jsonParameter.put(EditorNameConstants.PN_APPLICATION_ID, parameter.getApplicationId());
+    jsonParameter.put(EditorNameConstants.PN_PARAMETER_NAME, parameter.getName());
   }
 
   private boolean isEditable(Parameter parameter) {
     ValueMap parameterProperties = parameter.getProperties();
-    return StringUtils.isNotEmpty(parameterProperties.get(WidgetTypes.Defaults.PN_WIDGET_TYPE, ""));
+    return StringUtils.isNotEmpty(parameterProperties.get(EditorNameConstants.PN_WIDGET_TYPE, ""));
   }
 
   private void writeResponse(SlingHttpServletResponse response, JSONArray parameters) throws IOException, ServletException {
