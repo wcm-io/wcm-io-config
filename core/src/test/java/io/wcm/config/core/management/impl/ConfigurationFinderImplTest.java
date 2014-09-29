@@ -32,7 +32,9 @@ import io.wcm.config.core.management.ParameterResolver;
 import io.wcm.config.spi.ConfigurationFinderStrategy;
 
 import java.util.Collection;
+import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +51,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 import org.osgi.framework.Constants;
+import org.osgi.service.component.ComponentContext;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -57,6 +60,8 @@ import com.google.common.collect.Lists;
 @RunWith(MockitoJUnitRunner.class)
 public class ConfigurationFinderImplTest {
 
+  @Mock
+  private ComponentContext componentContext;
   @Mock
   private Resource resource;
   @Mock
@@ -83,6 +88,13 @@ public class ConfigurationFinderImplTest {
 
   @Before
   public void setUp() {
+    Dictionary<String, Object> config = new Hashtable<>();
+    config.put(ConfigurationFinderImpl.PROPERTY_EXCLUDE_PATH_PATTERNS, new String[] {
+        "^.*/notaccepted$",
+        "^.*/notaccepted/.*$"
+    });
+    when(componentContext.getProperties()).thenReturn(config);
+    underTest.activate(componentContext);
     underTest.bindConfigurationFinderStrategy(finderStrategy1, SERVICE_PROPS_1);
     underTest.bindConfigurationFinderStrategy(finderStrategy2, SERVICE_PROPS_2);
 
@@ -166,6 +178,21 @@ public class ConfigurationFinderImplTest {
     assertEquals(2, confList.size());
     assertEquals("/content/region1/region11/site/language", confList.get(0).getConfigurationId());
     assertEquals("/content/region1", confList.get(1).getConfigurationId());
+  }
+
+  @Test
+  public void testExcludedPathPattenrs() {
+    when(finderStrategy1.findConfigurationIds(resource)).thenReturn(ImmutableList.<String>builder()
+        .add("/content/region1/region11/site")
+        .add("/content/region1/region11/notaccepted")
+        .add("/content/notaccepted/region11/site")
+        .build().iterator());
+    when(finderStrategy2.findConfigurationIds(resource)).thenReturn(ImmutableList.<String>of().iterator());
+
+    Iterator<Configuration> confs = underTest.findAll(resource);
+    List<Configuration> confList = Lists.newArrayList(confs);
+    assertEquals(1, confList.size());
+    assertEquals("/content/region1/region11/site", confList.get(0).getConfigurationId());
   }
 
 }

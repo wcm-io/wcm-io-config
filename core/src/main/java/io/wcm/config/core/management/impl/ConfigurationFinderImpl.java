@@ -37,31 +37,46 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.felix.scr.annotations.Activate;
 import org.apache.felix.scr.annotations.Component;
+import org.apache.felix.scr.annotations.Property;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.apache.felix.scr.annotations.Service;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.commons.osgi.PropertiesUtil;
+import org.osgi.service.component.ComponentContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.ImmutableList;
 
 /**
  * Default implementation of {@link ConfigurationFinder}.
  */
-@Component(immediate = true, metatype = false)
+@Component(immediate = true, metatype = true,
+label = "wcm.io Configuration Finder",
+description = "Configuration management service to detect context-specific configuration for resources.")
 @Service(ConfigurationFinder.class)
 public final class ConfigurationFinderImpl implements ConfigurationFinder {
 
-  /**
-   * Ordering of configuration id by "closed match" - is simply a descending alphanumeric sort.
-   */
-  private static final Comparator<String> CONFIGURATION_ID_CLOSED_MATCH_COMPARATOR = new Comparator<String>() {
-    @Override
-    public int compare(String o1, String o2) {
-      return o2.compareTo(o1);
-    }
+  @Property(label = "Exclude paths",
+      description = "List of regular expression patterns for paths which should never be accepted as valie configuration Ids.",
+      cardinality = Integer.MAX_VALUE,
+      value = {
+      "^.*/tools$",
+      "^.*/tools/config$"
+  })
+  static final String PROPERTY_EXCLUDE_PATH_PATTERNS = "excludePathPatterns";
+  private static final String[] DEFAULT_EXCLUDE_PATH_PATTERNS = new String[] {
+    "^.*/tools$",
+    "^.*/tools/config$"
   };
 
   /**
@@ -75,6 +90,35 @@ public final class ConfigurationFinderImpl implements ConfigurationFinder {
   private ApplicationFinder applicationFinder;
   @Reference
   private ParameterResolver parameterResolver;
+
+  private List<Pattern> excludePathPatterns = ImmutableList.of();
+
+  /**
+   * Ordering of configuration id by "closed match" - is simply a descending alphanumeric sort.
+   */
+  private static final Comparator<String> CONFIGURATION_ID_CLOSED_MATCH_COMPARATOR = new Comparator<String>() {
+    @Override
+    public int compare(String o1, String o2) {
+      return o2.compareTo(o1);
+    }
+  };
+
+  private static final Logger log = LoggerFactory.getLogger(ConfigurationFinderImpl.class);
+
+  @Activate
+  void activate(final ComponentContext ctx) {
+    String[] excludePathPatternStrings = PropertiesUtil.toStringArray(
+        ctx.getProperties().get(PROPERTY_EXCLUDE_PATH_PATTERNS), DEFAULT_EXCLUDE_PATH_PATTERNS);
+    excludePathPatterns = new ArrayList<>();
+    for (String excludePathPatternString : excludePathPatternStrings) {
+      try {
+        excludePathPatterns.add(Pattern.compile(excludePathPatternString));
+      }
+      catch (PatternSyntaxException ex) {
+        log.warn("Ignoring invalid regular expression: " + excludePathPatternString, ex);
+      }
+    }
+  }
 
   @Override
   public Configuration find(Resource resource) {
@@ -115,13 +159,25 @@ public final class ConfigurationFinderImpl implements ConfigurationFinder {
     Set<String> allIds = new TreeSet<>(CONFIGURATION_ID_CLOSED_MATCH_COMPARATOR);
     for (ConfigurationFinderStrategy finderStrategy : finderStrategies) {
       if (matchesApplicationId(applicationId, finderStrategy.getApplicationId())) {
-        Iterator<String> configIds = finderStrategy.findConfigurationIds(resource);
-        while (configIds.hasNext()) {
-          allIds.add(configIds.next());
+        Iterator<String> configurationIds = finderStrategy.findConfigurationIds(resource);
+        while (configurationIds.hasNext()) {
+          String configurationId = configurationIds.next();
+          if (isAccepted(configurationId)) {
+            allIds.add(configurationId);
+          }
         }
       }
     }
     return allIds;
+  }
+
+  private boolean isAccepted(String configurationId) {
+    for (Pattern pattern : excludePathPatterns) {
+      if (pattern.matcher(configurationId).matches()) {
+        return false;
+      }
+    }
+    return true;
   }
 
   private boolean matchesApplicationId(String expected, String actual) {
