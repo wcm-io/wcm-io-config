@@ -17,15 +17,17 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.config.core.impl;
+package io.wcm.config.api;
 
 import static org.junit.Assert.assertEquals;
-import io.wcm.config.api.Application;
+
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.junit.Before;
 import org.junit.Test;
 
-public class ApplicationImplTest {
+public class ApplicationTest {
 
   private static final String APPLICATION_ID = "app1";
   private static final String LABEL = "Application #1";
@@ -34,17 +36,31 @@ public class ApplicationImplTest {
 
   @Before
   public void setUp() throws Exception {
-    underTest = new ApplicationImpl(APPLICATION_ID, LABEL);
+    underTest = new Application(APPLICATION_ID, LABEL);
   }
 
   @Test
   public void testGetApplicationId() throws Exception {
     assertEquals(APPLICATION_ID, underTest.getApplicationId());
+    assertEquals(APPLICATION_ID, underTest.toString());
   }
 
   @Test
   public void testGetLabel() throws Exception {
     assertEquals(LABEL, underTest.getLabel());
+  }
+
+  @Test
+  public void testSort() {
+    Set<Application> apps = new TreeSet<>();
+    apps.add(new Application("app1", "App #1"));
+    apps.add(new Application("app3", "App #3"));
+    apps.add(new Application("app2", "App #2"));
+
+    Application[] appArray = apps.toArray(new Application[apps.size()]);
+    assertEquals("app1", appArray[0].getApplicationId());
+    assertEquals("app2", appArray[1].getApplicationId());
+    assertEquals("app3", appArray[2].getApplicationId());
   }
 
 }

@@ -38,8 +38,8 @@ public class ApplicationImplementationPickerTest {
 
   private static final String APP_ID_1 = "app1";
   private static final String APP_ID_2 = "app2";
-  private static final Application APP_1 = new ApplicationImpl(APP_ID_1, null);
-  private static final Application APP_2 = new ApplicationImpl(APP_ID_2, null);
+  private static final Application APP_1 = new Application(APP_ID_1, null);
+  private static final Application APP_2 = new Application(APP_ID_2, null);
   private static final Class<?>[] IMPL_ARRAY = new Class<?>[] {
     Impl0.class,
     Impl1.class,

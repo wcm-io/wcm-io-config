@@ -25,8 +25,8 @@ import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyCollectionOf;
 import static org.mockito.Mockito.when;
+import io.wcm.config.api.Application;
 import io.wcm.config.api.Configuration;
-import io.wcm.config.core.impl.ApplicationImpl;
 import io.wcm.config.core.management.ApplicationFinder;
 import io.wcm.config.core.management.ParameterResolver;
 import io.wcm.config.spi.ConfigurationFinderStrategy;
@@ -142,7 +142,7 @@ public class ConfigurationFinderImplTest {
 
   @Test
   public void testFindResourceDetectionByApplicationFinder() {
-    when(applicationFinder.find(resource)).thenReturn(new ApplicationImpl(APPLICATION_ID_1, null));
+    when(applicationFinder.find(resource)).thenReturn(new Application(APPLICATION_ID_1, null));
     Configuration conf = underTest.find(resource);
     assertNotNull(conf);
     assertEquals("/content/region1/region11/site", conf.getConfigurationId());
