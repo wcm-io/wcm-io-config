@@ -27,13 +27,13 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import io.wcm.config.api.management.PersistenceException;
 import io.wcm.testing.mock.aem.junit.AemContext;
 import io.wcm.testing.mock.osgi.MockOsgi;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.sling.api.resource.PersistenceException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

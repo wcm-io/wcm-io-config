@@ -20,8 +20,8 @@
 package io.wcm.config.core.management.impl;
 
 import io.wcm.config.api.Parameter;
-import io.wcm.config.api.management.ParameterOverride;
-import io.wcm.config.core.util.TypeUtil;
+import io.wcm.config.core.management.ParameterOverride;
+import io.wcm.config.core.util.TypeConversion;
 import io.wcm.config.spi.ParameterOverrideProvider;
 import io.wcm.sling.commons.osgi.RankedServices;
 
@@ -69,7 +69,7 @@ public final class ParameterOverrideImpl implements ParameterOverride {
       Map<String, String> overrideMap = provider.getOverrideMap();
       String value = overrideMap.get(key.toString());
       if (value != null) {
-        return TypeUtil.overridePropertyToType(value, parameter.getType());
+        return TypeConversion.stringToObject(value, parameter.getType());
       }
     }
     return null;

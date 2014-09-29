@@ -17,8 +17,9 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.config.api.management;
+package io.wcm.config.core.management;
 
+import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.ResourceResolver;
 
 /**

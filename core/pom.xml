@@ -82,6 +82,10 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
+            <Export-Package>
+              io.wcm.config.core.management;version=${project.version},
+              io.wcm.config.core.util;version=${project.version}
+            </Export-Package>
 
             <!-- include application path as intial content -->
             <Sling-Initial-Content>SLING-INF/app-root;overwrite:=true;ignoreImportProviders:=xml;path:=/apps/wcm-io/config/core</Sling-Initial-Content>

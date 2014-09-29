@@ -47,6 +47,7 @@ public class ParameterBuilderTest {
         .build();
 
     assertEquals("param1", param.getName());
+    assertEquals("param1[String]", param.toString());
     assertEquals(String.class, param.getType());
     assertEquals(APP_ID, param.getApplicationId());
     assertEquals("service:prop1", param.getDefaultOsgiConfigProperty());

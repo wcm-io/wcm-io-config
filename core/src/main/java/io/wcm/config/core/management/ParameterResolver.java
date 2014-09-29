@@ -17,12 +17,13 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.config.api.management;
+package io.wcm.config.core.management;
 
 import io.wcm.config.api.Parameter;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.sling.api.resource.ResourceResolver;
 
@@ -40,7 +41,9 @@ public interface ParameterResolver {
   Map<String, Object> getEffectiveValues(ResourceResolver resolver, Collection<String> configurationIds);
 
   /**
-   * @return {@link Map}
+   * Get all parameter definitions from all parameter providers.
+   * @return Parameter definitions
    */
-  Map<String, Parameter<?>> getAllParameters();
+  Set<Parameter<?>> getAllParameters();
+
 }

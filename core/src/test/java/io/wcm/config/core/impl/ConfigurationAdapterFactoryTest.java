@@ -24,8 +24,8 @@ import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.when;
 import io.wcm.config.api.Application;
 import io.wcm.config.api.Configuration;
-import io.wcm.config.api.management.ApplicationFinder;
-import io.wcm.config.api.management.ConfigurationFinder;
+import io.wcm.config.core.management.ApplicationFinder;
+import io.wcm.config.core.management.ConfigurationFinder;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -39,6 +39,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class ConfigurationAdapterFactoryTest {
 
+  private Application application;
   @Mock
   private Resource resource;
   @Mock
@@ -48,8 +49,6 @@ public class ConfigurationAdapterFactoryTest {
   @Mock
   private ConfigurationFinder configurationFinder;
   @Mock
-  private Application application;
-  @Mock
   private ApplicationFinder applicationFinder;
 
   @InjectMocks
@@ -57,6 +56,7 @@ public class ConfigurationAdapterFactoryTest {
 
   @Before
   public void setUp() {
+    application = new Application("app1", null);
     when(request.getResource()).thenReturn(resource);
     when(configurationFinder.find(resource)).thenReturn(configuration);
     when(applicationFinder.find(resource)).thenReturn(application);

@@ -19,7 +19,6 @@
  */
 package io.wcm.config.core.persistence;
 
-import io.wcm.config.api.management.PersistenceException;
 import io.wcm.config.spi.ParameterPersistenceProvider;
 
 import java.util.Dictionary;
@@ -29,6 +28,7 @@ import org.apache.felix.scr.annotations.Activate;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Property;
 import org.apache.felix.scr.annotations.Service;
+import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.api.resource.ResourceUtil;

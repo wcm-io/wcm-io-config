@@ -28,6 +28,7 @@ import io.wcm.config.api.Application;
 import io.wcm.config.spi.ApplicationProvider;
 
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.sling.api.resource.Resource;
 import org.junit.After;
@@ -87,13 +88,22 @@ public class ApplicationFinderImplTest {
   }
 
   @Test
-  public void testFindResource() {
+  public void testFind() {
     Application app = underTest.find(resource);
     assertNotNull(app);
     assertEquals(APPLICATION_ID_1, app.getApplicationId());
     assertEquals(APPLICATION_LABEL_1, app.getLabel());
 
     verify(applicationProvider2, times(1)).matches(resource);
+  }
+
+  @Test
+  public void testGetAll() {
+    Set<Application> allApps = underTest.getAll();
+    Application[] apps = allApps.toArray(new Application[allApps.size()]);
+    assertEquals(2, apps.length);
+    assertEquals(APPLICATION_ID_1, apps[0].getApplicationId());
+    assertEquals(APPLICATION_ID_2, apps[1].getApplicationId());
   }
 
 }

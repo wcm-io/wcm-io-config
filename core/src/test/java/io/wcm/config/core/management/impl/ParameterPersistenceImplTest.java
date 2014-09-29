@@ -23,14 +23,14 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import io.wcm.config.api.management.ParameterPersistence;
-import io.wcm.config.api.management.ParameterPersistenceData;
-import io.wcm.config.api.management.PersistenceException;
+import io.wcm.config.core.management.ParameterPersistence;
+import io.wcm.config.core.management.ParameterPersistenceData;
 import io.wcm.config.spi.ParameterPersistenceProvider;
 
 import java.util.Map;
 import java.util.SortedSet;
 
+import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,6 +43,9 @@ import org.osgi.framework.Constants;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 
+/**
+ * Test {@link ParameterPersistenceImpl} with basic property values, but multiple providers and merging.
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class ParameterPersistenceImplTest {
 
@@ -129,7 +132,6 @@ public class ParameterPersistenceImplTest {
     assertNull(persistenceProvider2.getMap());
   }
 
-
   @Test
   public void testStoreValues_SecondProvider() throws PersistenceException {
     persistenceProvider1.setStoreSuccess(false);
@@ -188,10 +190,25 @@ public class ParameterPersistenceImplTest {
     assertEqualsInclArrayValues(expecMap, persistenceProvider1.getMap());
   }
 
+  @Test
+  public void testStoreWithMapConversion() throws PersistenceException {
+    persistenceProvider1.setStoreSuccess(true);
+
+    Map<String,Object> valuesToStore = ImmutableMap.<String,Object>builder()
+        .put("mapValue", PersistenceTypeConversionTest.SAMPLE_MAP)
+        .build();
+    underTest.storeData(resolver, CONFIG_ID, new ParameterPersistenceData(valuesToStore, ImmutableSortedSet.<String>of()));
+
+    Map<String, Object> storedValues = ImmutableMap.<String, Object>builder()
+        .put("mapValue", PersistenceTypeConversionTest.SAMPLE_MAP_PERSISTENCE)
+        .build();
+    assertEqualsInclArrayValues(storedValues, persistenceProvider1.getMap());
+  }
+
   /**
    * Asserts two maps and if value is an string array compares the arrays for equality as well.
    */
-  private static void assertEqualsInclArrayValues(Map<String, Object> map1, Map<String, Object> map2) {
+  static void assertEqualsInclArrayValues(Map<String, Object> map1, Map<String, Object> map2) {
     assertEquals("map size", map1.size(), map2.size());
     for (Map.Entry<String, Object> entry : map1.entrySet()) {
       if (entry.getValue() instanceof String[]) {
@@ -203,7 +220,7 @@ public class ParameterPersistenceImplTest {
     }
   }
 
-  private static class DummyPersistenceProvider implements ParameterPersistenceProvider {
+  static class DummyPersistenceProvider implements ParameterPersistenceProvider {
 
     private Map<String, Object> map;
     private boolean storeSuccess;

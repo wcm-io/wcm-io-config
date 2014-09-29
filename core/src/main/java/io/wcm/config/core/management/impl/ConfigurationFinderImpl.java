@@ -21,10 +21,10 @@ package io.wcm.config.core.management.impl;
 
 import io.wcm.config.api.Application;
 import io.wcm.config.api.Configuration;
-import io.wcm.config.api.management.ApplicationFinder;
-import io.wcm.config.api.management.ConfigurationFinder;
-import io.wcm.config.api.management.ParameterResolver;
 import io.wcm.config.core.impl.ConfigurationImpl;
+import io.wcm.config.core.management.ApplicationFinder;
+import io.wcm.config.core.management.ConfigurationFinder;
+import io.wcm.config.core.management.ParameterResolver;
 import io.wcm.config.spi.ConfigurationFinderStrategy;
 import io.wcm.sling.commons.osgi.RankedServices;
 

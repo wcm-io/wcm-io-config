@@ -20,12 +20,14 @@
 package io.wcm.config.core.management.impl;
 
 import io.wcm.config.api.Application;
-import io.wcm.config.api.management.ApplicationFinder;
-import io.wcm.config.core.impl.ApplicationImpl;
+import io.wcm.config.core.management.ApplicationFinder;
 import io.wcm.config.spi.ApplicationProvider;
 import io.wcm.sling.commons.osgi.RankedServices;
 
 import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Reference;
@@ -49,10 +51,19 @@ public final class ApplicationFinderImpl implements ApplicationFinder {
   public Application find(Resource resource) {
     for (ApplicationProvider provider : applicationProviders) {
       if (provider.matches(resource)) {
-        return new ApplicationImpl(provider.getApplicationId(), provider.getLabel());
+        return new Application(provider.getApplicationId(), provider.getLabel());
       }
     }
     return null;
+  }
+
+  @Override
+  public Set<Application> getAll() {
+    SortedSet<Application> allApps = new TreeSet<>();
+    for (ApplicationProvider provider : applicationProviders) {
+      allApps.add(new Application(provider.getApplicationId(), provider.getLabel()));
+    }
+    return allApps;
   }
 
   void bindApplicationProvider(ApplicationProvider service, Map<String, Object> props) {

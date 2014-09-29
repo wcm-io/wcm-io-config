@@ -22,16 +22,55 @@ package io.wcm.config.api;
 /**
  * Application meta data.
  */
-public interface Application {
+public final class Application implements Comparable<Application> {
+
+  private final String applicationId;
+  private final String label;
+
+  /**
+   * @param applicationId Application id
+   * @param label Label
+   */
+  public Application(String applicationId, String label) {
+    this.applicationId = applicationId;
+    this.label = label;
+  }
 
   /**
    * @return Application Id. The application is is usually the application path at /apps/ or /libs/.
    */
-  String getApplicationId();
+  public String getApplicationId() {
+    return this.applicationId;
+  }
 
   /**
    * @return Display name for application.
    */
-  String getLabel();
+  public String getLabel() {
+    return this.label;
+  }
+
+  @Override
+  public int hashCode() {
+    return this.applicationId.hashCode();
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (!(obj instanceof Application)) {
+      return false;
+    }
+    return this.applicationId.equals(((Application)obj).getApplicationId());
+  }
+
+  @Override
+  public int compareTo(Application o) {
+    return this.applicationId.compareTo(o.getApplicationId());
+  }
+
+  @Override
+  public String toString() {
+    return this.applicationId;
+  }
 
 }

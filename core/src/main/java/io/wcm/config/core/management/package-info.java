@@ -20,4 +20,4 @@
 /**
  * API for applications and editors managing configuration.
  */
-package io.wcm.config.api.management;
+package io.wcm.config.core.management;
