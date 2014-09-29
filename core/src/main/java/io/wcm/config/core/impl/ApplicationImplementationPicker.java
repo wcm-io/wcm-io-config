@@ -21,7 +21,6 @@ package io.wcm.config.core.impl;
 
 import io.wcm.config.api.Application;
 import io.wcm.config.api.management.ApplicationFinder;
-import io.wcm.config.core.util.AdaptableUtil;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.felix.scr.annotations.Component;

@@ -21,7 +21,6 @@ package io.wcm.config.core.management.impl;
 
 import io.wcm.config.api.management.ParameterPersistence;
 import io.wcm.config.api.management.ParameterPersistenceData;
-import io.wcm.config.api.management.PersistenceException;
 import io.wcm.config.spi.ParameterPersistenceProvider;
 import io.wcm.sling.commons.osgi.RankedServices;
 
@@ -36,6 +35,7 @@ import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.apache.felix.scr.annotations.Service;
+import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.ResourceResolver;
 
 import com.google.common.collect.ImmutableSortedSet;

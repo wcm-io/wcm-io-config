@@ -19,10 +19,9 @@
  */
 package io.wcm.config.spi;
 
-import io.wcm.config.api.management.PersistenceException;
-
 import java.util.Map;
 
+import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.ResourceResolver;
 
 /**

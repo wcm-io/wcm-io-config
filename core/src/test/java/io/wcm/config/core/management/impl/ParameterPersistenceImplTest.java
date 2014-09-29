@@ -25,12 +25,12 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import io.wcm.config.api.management.ParameterPersistence;
 import io.wcm.config.api.management.ParameterPersistenceData;
-import io.wcm.config.api.management.PersistenceException;
 import io.wcm.config.spi.ParameterPersistenceProvider;
 
 import java.util.Map;
 import java.util.SortedSet;
 
+import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.junit.Before;
 import org.junit.Test;

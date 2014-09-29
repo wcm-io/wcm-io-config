@@ -19,6 +19,7 @@
  */
 package io.wcm.config.api.management;
 
+import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.ResourceResolver;
 
 /**
