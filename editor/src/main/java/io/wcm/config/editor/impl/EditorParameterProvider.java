@@ -96,6 +96,7 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
       }
       catch (JSONException ex) {
         log.error("Could not parse parameters for the configuration {}", configuration.getConfigurationId(), ex);
+        response.sendError(500);
       }
     }
 

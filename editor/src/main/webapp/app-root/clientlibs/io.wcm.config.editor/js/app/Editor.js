@@ -3,6 +3,8 @@
   "use strict";
   angular.module('io.wcm.config.editor', ['io.wcm.config.services', 'io.wcm.config.directives'])
     .run(["$rootScope", "parameters", function($rootScope, Parameters) {
+      $rootScope.confirmModal = new CUI.Modal({ element:'#confirmModal', visible: false });
+      $rootScope.errorModal = new CUI.Modal({ element:'#errorModal', type: "error", visible: false });
       /**
        * Use the parameters service to load and parse data from backend
        */
@@ -14,8 +16,8 @@
             $rootScope.parameterCollection = parsedData.parameters;
           });
         },
-        function error(result) {
-          // TODO
+        function error() {
+          $rootScope.errorModal.show();
         }
       );
 
@@ -24,9 +26,15 @@
       $scope.currentFilter = {};
       $scope.displayedCollection = [];
 
-
       $scope.save = function() {
-        Parameters.saveParameters($scope.parameterCollection);
+        Parameters.saveParameters($scope.parameterCollection).then(
+          function success()  {
+            $scope.confirmModal.show();
+          },
+          function error() {
+            $scope.errorModal.show();
+          }
+        );
       };
 
       /**

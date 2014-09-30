@@ -99,7 +99,7 @@
             return serialzedData;
           }
 
-          $http({
+          return $http({
             method: "post",
             url: config.url,
             transformRequest: transformRequestAsFormPost,

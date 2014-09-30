@@ -43,10 +43,11 @@ import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.sling.SlingServlet;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.SlingHttpServletResponse;
-import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.servlets.HttpConstants;
 import org.apache.sling.api.servlets.SlingAllMethodsServlet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableSortedSet;
 
@@ -61,6 +62,8 @@ import com.google.common.collect.ImmutableSortedSet;
     selectors = "configProvider",
     methods = HttpConstants.METHOD_POST)
 public class EditorParameterPersistence extends SlingAllMethodsServlet {
+
+  private static final Logger log = LoggerFactory.getLogger(EditorParameterPersistence.class);
 
   @Reference
   private ConfigurationFinder configurationFinder;
@@ -77,13 +80,15 @@ public class EditorParameterPersistence extends SlingAllMethodsServlet {
 
     String configurationId = getCurrentConfigurationId(request);
     if (StringUtils.isEmpty(configurationId)) {
+      log.error("Could not find configuration id for resource {0}", request.getResource().getPath());
       response.sendError(500, "Could not find configuration id for resource " + request.getResource().getPath());
     }
 
     try {
       persistence.storeData(request.getResourceResolver(), configurationId, getPersistenceData(request), false);
     }
-    catch (PersistenceException ex) {
+    catch (Throwable ex) {
+      log.error("Could not persist data for configuration id {0}", configurationId, ex);
       response.sendError(500);
     }
   }
