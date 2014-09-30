@@ -88,7 +88,7 @@ public class EditorParameterPersistence extends SlingAllMethodsServlet {
     }
   }
 
-  private ParameterPersistenceData getPersistenceData(SlingHttpServletRequest request) {
+  protected ParameterPersistenceData getPersistenceData(SlingHttpServletRequest request) {
     Map<String, Parameter<?>> parameters = getParametersMap(parameterResolver.getAllParameters());
     Enumeration<String> requestParameterNames = request.getParameterNames();
     Map<String, Object> values = new HashMap<>();

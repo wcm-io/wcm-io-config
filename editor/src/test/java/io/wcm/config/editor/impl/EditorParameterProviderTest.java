@@ -25,6 +25,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
+import io.wcm.config.api.Application;
 import io.wcm.config.api.Configuration;
 import io.wcm.config.api.Parameter;
 import io.wcm.config.api.ParameterBuilder;
@@ -84,13 +85,26 @@ public class EditorParameterProviderTest {
   @Mock
   private ParameterResolver parameterResolver;
   private static final String APP_ID = "/app/test";
-  private static final Parameter<String> NON_EDITABLE_PARAMETER = ParameterBuilder.create("string-param", String.class, APP_ID)
+  private static final Parameter<String> NON_EDITABLE_PARAMETER = ParameterBuilder.create("some-param", String.class, APP_ID)
       .defaultValue("defaultValue").build();
+  private static final Parameter<Map> PARAMETER_MAP = ParameterBuilder.create("map-param", Map.class, APP_ID)
+      .properties(WidgetTypes.TEXTAREA.getDefaultWidgetConfiguration()).build();
+  private static final Parameter<String[]> PARAMETER_MULTIVALUE = ParameterBuilder.create("multivalue-param", String[].class, APP_ID)
+      .properties(WidgetTypes.TEXTAREA.getDefaultWidgetConfiguration()).build();
+  private static final Parameter<Boolean> PARAMETER_BOOLEAN = ParameterBuilder.create("boolean-param", Boolean.class, APP_ID)
+      .properties(WidgetTypes.TEXTAREA.getDefaultWidgetConfiguration()).build();
+  private static final Parameter<Integer> PARAMETER_INTEGER = ParameterBuilder.create("integer-param", Integer.class, APP_ID)
+      .properties(WidgetTypes.TEXTAREA.getDefaultWidgetConfiguration()).build();
+  private static final Parameter<Long> PARAMETER_LONG = ParameterBuilder.create("long-param", Long.class, APP_ID)
+      .properties(WidgetTypes.TEXTAREA.getDefaultWidgetConfiguration()).build();
+  private static final Parameter<Double> PARAMETER_DOUBLE = ParameterBuilder.create("double-param", Double.class, APP_ID)
+      .properties(WidgetTypes.TEXTAREA.getDefaultWidgetConfiguration()).build();
   private static final Parameter<String> EDITABLE_PARAMETER_ONE = ParameterBuilder.create("string-param-1", String.class, APP_ID)
       .properties(WidgetTypes.TEXTAREA.getDefaultWidgetConfiguration()).defaultValue("defaultValue").build();
-  private static final Parameter<String> EDITABLE_PARAMETER_TWO = ParameterBuilder.create("string-param-2", String.class, APP_ID)
+  private static final Parameter<String> EDITABLE_PARAMETER_TWO = ParameterBuilder.create("string-param-2", String.class, "/app/without/app/provider")
       .properties(WidgetTypes.TEXTAREA.getDefaultWidgetConfiguration()).defaultValue("defaultValue2").build();
-  private static final Set<Parameter<?>> PARAMETERS = ImmutableSet.<Parameter<?>>of(EDITABLE_PARAMETER_ONE, EDITABLE_PARAMETER_TWO, NON_EDITABLE_PARAMETER);
+  private static final Set<Parameter<?>> PARAMETERS = ImmutableSet.<Parameter<?>>of(EDITABLE_PARAMETER_ONE, EDITABLE_PARAMETER_TWO, NON_EDITABLE_PARAMETER,
+      PARAMETER_MAP, PARAMETER_MULTIVALUE, PARAMETER_BOOLEAN, PARAMETER_DOUBLE, PARAMETER_INTEGER, PARAMETER_LONG);
 
   @Mock
   private Configuration configurationFirstLevel;
@@ -115,6 +129,7 @@ public class EditorParameterProviderTest {
   private JSONObject firstParameter;
   private JSONObject secondParameter;
 
+  private JSONArray parameters;
 
   @Before
   public void setUp() throws IOException {
@@ -126,6 +141,14 @@ public class EditorParameterProviderTest {
     when(configurationSecondLevel.getConfigurationId()).thenReturn("/content/site/region");
     when(configurationSecondLevel.get(EDITABLE_PARAMETER_ONE.getName())).thenReturn(EDITABLE_PARAMETER_ONE.getDefaultValue());
     when(configurationSecondLevel.get(EDITABLE_PARAMETER_TWO.getName())).thenReturn("newValue");
+    when(configurationSecondLevel.get(PARAMETER_MAP.getName())).thenReturn(ImmutableMap.<String, String>of("key1", "value1", "key2", "value2"));
+    when(configurationSecondLevel.get(PARAMETER_MULTIVALUE.getName())).thenReturn(new String[] {
+        "value1", "value2"
+    });
+    when(configurationSecondLevel.get(PARAMETER_INTEGER.getName())).thenReturn(1);
+    when(configurationSecondLevel.get(PARAMETER_LONG.getName())).thenReturn(5L);
+    when(configurationSecondLevel.get(PARAMETER_BOOLEAN.getName())).thenReturn(true);
+    when(configurationSecondLevel.get((PARAMETER_DOUBLE.getName()))).thenReturn(3.3434);
     when(persistence.getData(any(ResourceResolver.class), eq("/content/site"))).then(new Answer<ParameterPersistenceData>() {
 
       @Override
@@ -156,7 +179,7 @@ public class EditorParameterProviderTest {
         String jsonString = (String)invocation.getArguments()[0];
         try {
           JSONObject result = new JSONObject(jsonString);
-          JSONArray parameters = result.getJSONArray("parameters");
+          parameters = result.getJSONArray("parameters");
           firstParameter = parameters.getJSONObject(0);
           secondParameter = parameters.getJSONObject(1);
         }
@@ -170,15 +193,17 @@ public class EditorParameterProviderTest {
     when(response.getWriter()).thenReturn(printWriter);
 
     when(request.getResource()).thenReturn(regionResource);
+
+    when(applicationFinder.getAll()).thenReturn(ImmutableSet.<Application>of(new Application(APP_ID, "Test App")));
   }
 
   @Test
   public void testReturnOnlyEditableParameters() throws JSONException {
-    JSONArray parameters = new JSONArray();
+    parameters = new JSONArray();
     when(persistence.getData(any(ResourceResolver.class), anyString())).thenReturn(
         new ParameterPersistenceData(ImmutableMap.<String, Object>of(), ImmutableSortedSet.<String>of()));
-    underTest.addParameters(parameters, configurationFirstLevel, request);
-    assertEquals(2, parameters.length());
+    underTest.addParameters(parameters, configurationFirstLevel, request, ImmutableMap.<String, Application>of());
+    assertEquals(8, parameters.length());
   }
 
   @Test
@@ -198,7 +223,7 @@ public class EditorParameterProviderTest {
   }
 
   @Test
-  public void testValuesProperty() throws ServletException, IOException, JSONException {
+  public void testValueInheritance() throws ServletException, IOException, JSONException {
     underTest.doGet(request, response);
     assertEquals(firstParameter.get(EditorNameConstants.PN_PARAMETER_VALUE), "defaultValue");
     assertEquals(firstParameter.get(EditorNameConstants.PN_INHERITED_VALUE), "defaultValue");
@@ -213,4 +238,27 @@ public class EditorParameterProviderTest {
     assertEquals(secondParameter.get(EditorNameConstants.PN_INHERITED_VALUE), "defaultValue2");
   }
 
+  @Test
+  public void testApplicationLabel() throws ServletException, IOException, JSONException {
+    underTest.doGet(request, response);
+    assertEquals(firstParameter.get(EditorNameConstants.PN_APPLICATION_ID), "Test App");
+    assertEquals(secondParameter.get(EditorNameConstants.PN_APPLICATION_ID), "/app/without/app/provider");
+  }
+
+  @Test
+  public void testValueTypeConversion() throws JSONException, ServletException, IOException {
+    underTest.doGet(request, response);
+    JSONObject map = parameters.getJSONObject(2);
+    assertEquals(map.get(EditorNameConstants.PN_PARAMETER_VALUE), "key1=value1;key2=value2");
+    JSONObject multivalue = parameters.getJSONObject(3);
+    assertEquals(multivalue.get(EditorNameConstants.PN_PARAMETER_VALUE), "value1;value2");
+    JSONObject booleanParam = parameters.getJSONObject(4);
+    assertEquals(booleanParam.get(EditorNameConstants.PN_PARAMETER_VALUE), true);
+    JSONObject doubleParam = parameters.getJSONObject(5);
+    assertEquals(doubleParam.get(EditorNameConstants.PN_PARAMETER_VALUE), "3.3434");
+    JSONObject integerParam = parameters.getJSONObject(6);
+    assertEquals(integerParam.get(EditorNameConstants.PN_PARAMETER_VALUE), "1");
+    JSONObject longParam = parameters.getJSONObject(7);
+    assertEquals(longParam.get(EditorNameConstants.PN_PARAMETER_VALUE), "5");
+  }
 }

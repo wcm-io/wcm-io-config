@@ -19,6 +19,7 @@
  */
 package io.wcm.config.editor.impl;
 
+import io.wcm.config.api.Application;
 import io.wcm.config.api.Configuration;
 import io.wcm.config.api.Parameter;
 import io.wcm.config.core.management.ApplicationFinder;
@@ -31,6 +32,7 @@ import io.wcm.config.editor.EditorNameConstants;
 import io.wcm.wcm.commons.contenttype.FileExtension;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -84,12 +86,13 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
     sanityCheck(request, response);
 
     Configuration[] allConfigurations = Iterators.toArray(getConfigurations(request), Configuration.class);
+    Map<String, Application> applicationsMap = getApplicationsMap();
     JSONArray parameters = new JSONArray();
 
     for (int i = allConfigurations.length - 1; i >= 0; i--) {
       Configuration configuration = allConfigurations[i];
       try {
-        addParameters(parameters, configuration, request);
+        addParameters(parameters, configuration, request, applicationsMap);
       }
       catch (JSONException ex) {
         log.error("Could not parse parameters for the configuration {}", configuration.getConfigurationId(), ex);
@@ -99,13 +102,27 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
     writeResponse(response, parameters);
   }
 
+  private Map<String, Application> getApplicationsMap() {
+    Map<String, Application> result = new HashMap<>();
+    Set<Application> applications = applicationFinder.getAll();
+    if (applications != null) {
+      Iterator<Application> iterator = applications.iterator();
+      while (iterator.hasNext()) {
+        Application application = iterator.next();
+        result.put(application.getApplicationId(), application);
+      }
+
+    }
+    return result;
+  }
+
   private void sanityCheck(SlingHttpServletRequest request, SlingHttpServletResponse response) throws IOException {
     if (applicationFinder == null || configurationFinder == null || persistence == null || parameterResolver == null) {
       response.sendError(500, "Configuration services are not available");
     }
   }
 
-  protected void addParameters(JSONArray parameters, Configuration configuration, SlingHttpServletRequest request)
+  protected void addParameters(JSONArray parameters, Configuration configuration, SlingHttpServletRequest request, Map<String, Application> applicationsMap)
       throws JSONException {
 
     Set<Parameter<?>> allParameters = parameterResolver.getAllParameters();
@@ -119,7 +136,7 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
       String parameterName = parameter.getName();
       if (isEditable(parameter)) {
         JSONObject jsonParameter = getOrCreateJSONParameter(parameters, parameterName);
-        addWidgetConfiguration(jsonParameter, parameter);
+        addWidgetConfiguration(jsonParameter, parameter, applicationsMap);
 
         Object effectiveValue = configuration.get(parameterName);
         Object persistedValue = persistedValues.get(parameterName);
@@ -203,15 +220,16 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
     return jsonParameter;
   }
 
-  private void addWidgetConfiguration(JSONObject jsonParameter, Parameter parameter) throws JSONException {
+  private void addWidgetConfiguration(JSONObject jsonParameter, Parameter parameter, Map<String, Application> applicationsMap) throws JSONException {
     ValueMap parameterProperties = parameter.getProperties();
     if (parameterProperties != null) {
       for (String propertyName : parameterProperties.keySet()) {
         jsonParameter.put(propertyName, parameterProperties.get(propertyName));
       }
     }
-
-    jsonParameter.put(EditorNameConstants.PN_APPLICATION_ID, parameter.getApplicationId());
+    Application application = applicationsMap.get(parameter.getApplicationId());
+    String appName = application != null ? application.getLabel() : parameter.getApplicationId();
+    jsonParameter.put(EditorNameConstants.PN_APPLICATION_ID, appName);
     jsonParameter.put(EditorNameConstants.PN_PARAMETER_NAME, parameter.getName());
   }
 
