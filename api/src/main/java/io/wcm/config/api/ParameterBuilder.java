@@ -19,7 +19,7 @@
  */
 package io.wcm.config.api;
 
-import io.wcm.sling.commons.wrappers.ImmutableValueMapDecorator;
+import io.wcm.sling.commons.resource.ImmutableValueMapDecorator;
 
 import java.util.HashMap;
 import java.util.HashSet;
