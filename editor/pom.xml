@@ -56,14 +56,18 @@
       <version>0.1.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
-    
+    <dependency>
+      <groupId>io.wcm</groupId>
+      <artifactId>io.wcm.config.core</artifactId>
+      <version>0.1.0-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
     <dependency>
       <groupId>io.wcm</groupId>
       <artifactId>io.wcm.wcm.commons</artifactId>
       <version>0.1.0-SNAPSHOT</version>
       <scope>compile</scope>
-    </dependency>
-
+    </dependency>    
   </dependencies>
 
   <build>
@@ -92,13 +96,11 @@
               SLING-INF/app-root;overwrite:=true;ignoreImportProviders:=xml;path:=/apps/wcm-io/config/editor
             </Sling-Initial-Content>
             <Export-Package>
-              io.wcm.config.editor.*;version=${project.version}
+              io.wcm.config.editor;version=${project.version}
             </Export-Package>
-            <!--
             <Sling-Model-Packages>
               io.wcm.config.editor
             </Sling-Model-Packages>
-            -->
           </instructions>
         </configuration>
       </plugin>

@@ -6,5 +6,35 @@
     "jcr:primaryType": "nt:folder",
     "sling:message": "Configuration Editor",
     "jcr:mixinTypes": ["sling:Message"]
+  },
+  "io.wcm.config.editor.column.name": {
+    "jcr:primaryType": "nt:folder",
+    "sling:message": "Parameter",
+    "jcr:mixinTypes": ["sling:Message"]
+  },
+  "io.wcm.config.editor.column.value": {
+    "jcr:primaryType": "nt:folder",
+    "sling:message": "Value",
+    "jcr:mixinTypes": ["sling:Message"]
+  },
+  "io.wcm.config.editor.column.inherited": {
+    "jcr:primaryType": "nt:folder",
+    "sling:message": "Inherited",
+    "jcr:mixinTypes": ["sling:Message"]
+  },
+  "io.wcm.config.editor.column.lock": {
+    "jcr:primaryType": "nt:folder",
+    "sling:message": "Locked",
+    "jcr:mixinTypes": ["sling:Message"]
+  },
+  "io.wcm.config.editor.column.description": {
+    "jcr:primaryType": "nt:folder",
+    "sling:message": "Description",
+    "jcr:mixinTypes": ["sling:Message"]
+  },
+  "io.wcm.config.editor.column.group": {
+    "jcr:primaryType": "nt:folder",
+    "sling:message": "Group",
+    "jcr:mixinTypes": ["sling:Message"]
   }
 }
