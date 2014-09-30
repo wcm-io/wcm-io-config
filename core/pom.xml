@@ -86,14 +86,7 @@
               io.wcm.config.core.management;version=${project.version},
               io.wcm.config.core.util;version=${project.version}
             </Export-Package>
-
-            <!-- include application path as intial content -->
-            <Sling-Initial-Content>SLING-INF/app-root;overwrite:=true;ignoreImportProviders:=xml;path:=/apps/wcm-io/config/core</Sling-Initial-Content>
-
-            <!-- Define custom node types and node type namespaces -->
-            <Sling-Nodetypes>SLING-INF/app-root/nodetypes/io.wcm.config.cnd</Sling-Nodetypes>
-            <Sling-Namespaces>io_wcm_config=http://wcm.io/config</Sling-Namespaces>
-
+            <Sling-Namespaces>wcmio=http://wcm.io/ns</Sling-Namespaces>
           </instructions>
         </configuration>
       </plugin>

@@ -1,6 +1,0 @@
-/**
- * io.wcm.config Nodetype definitions
- */
- 
-// define namespace
-<io_wcm_config = 'http://wcm.io/config'>
