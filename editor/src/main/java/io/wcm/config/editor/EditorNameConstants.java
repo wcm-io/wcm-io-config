@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.config.editor.widgets;
+package io.wcm.config.editor;
 
 import java.util.HashMap;
 import java.util.Map;

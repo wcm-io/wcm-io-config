@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.config.editor;
+package io.wcm.config.editor.impl;
 
 import io.wcm.config.api.Configuration;
 import io.wcm.config.api.Parameter;
@@ -27,7 +27,7 @@ import io.wcm.config.core.management.ParameterPersistence;
 import io.wcm.config.core.management.ParameterPersistenceData;
 import io.wcm.config.core.management.ParameterResolver;
 import io.wcm.config.core.util.TypeConversion;
-import io.wcm.config.editor.widgets.EditorNameConstants;
+import io.wcm.config.editor.EditorNameConstants;
 import io.wcm.wcm.commons.contenttype.FileExtension;
 
 import java.io.IOException;
@@ -81,7 +81,6 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
 
   @Override
   protected void doGet(SlingHttpServletRequest request, SlingHttpServletResponse response) throws ServletException, IOException {
-
     sanityCheck(request, response);
 
     Configuration[] allConfigurations = Iterators.toArray(getConfigurations(request), Configuration.class);

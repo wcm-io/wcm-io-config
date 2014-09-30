@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.config.editor;
+package io.wcm.config.editor.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
@@ -33,8 +33,8 @@ import io.wcm.config.core.management.ConfigurationFinder;
 import io.wcm.config.core.management.ParameterPersistence;
 import io.wcm.config.core.management.ParameterPersistenceData;
 import io.wcm.config.core.management.ParameterResolver;
-import io.wcm.config.editor.widgets.EditorNameConstants;
-import io.wcm.config.editor.widgets.WidgetTypes;
+import io.wcm.config.editor.EditorNameConstants;
+import io.wcm.config.editor.WidgetTypes;
 
 import java.io.IOException;
 import java.io.PrintWriter;

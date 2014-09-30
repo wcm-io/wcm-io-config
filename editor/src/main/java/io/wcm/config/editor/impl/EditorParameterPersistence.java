@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.config.editor;
+package io.wcm.config.editor.impl;
 
 import io.wcm.config.api.Configuration;
 import io.wcm.config.api.Parameter;
