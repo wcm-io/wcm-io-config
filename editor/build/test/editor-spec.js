@@ -2,6 +2,12 @@ describe("Editor", function() {
   var scope, createController, httpBackend;
 
   beforeEach(function() {
+    window.CUI = {};
+    CUI["Modal"] = function(){
+      return {
+        show: function() {}
+      }
+    };
     module("io.wcm.config.editor", "io.wcm.config.utilities", "testApp");
 
     angular.module("testApp", function() { }).config(function(parametersProvider){
