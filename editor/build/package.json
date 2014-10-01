@@ -12,6 +12,7 @@
   "license": "Apache",
   "devDependencies": {
     "grunt": "~0.4.1",
+    "grunt-cli": "~0.1.13",
     "grunt-contrib-concat": "~0.3.0",
     "grunt-contrib-clean": "~0.4.1",
     "grunt-html2js": "~0.1.3",

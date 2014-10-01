@@ -26,6 +26,7 @@ module.exports = function (grunt) {
       },
       maven: {
         singleRun: true,
+        autoWatch: false,
         browsers: ["PhantomJS"],
         junitReporter: {
           outputFile: "./target/surefire-reports/karma-results.xml"
@@ -48,6 +49,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.registerTask('build', function() {
     grunt.task.run('html2js:templates');
+    grunt.task.run('karma:maven');
   });
 
   grunt.registerTask("test", ["karma:unit"]);
