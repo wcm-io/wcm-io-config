@@ -125,7 +125,7 @@ public class CombinedTest {
 
   @Test
   public void testWriteReadConfig() throws PersistenceException {
-    ParameterPersistence persistence = context.slingScriptHelper().getService(ParameterPersistence.class);
+    ParameterPersistence persistence = context.getService(ParameterPersistence.class);
     persistence.storeData(context.resourceResolver(), CONFIG_ID,
         new ParameterPersistenceData(ImmutableMap.<String, Object>of(PROP_3.getName(), "value3-new"), ImmutableSortedSet.<String>of()),
         true);
