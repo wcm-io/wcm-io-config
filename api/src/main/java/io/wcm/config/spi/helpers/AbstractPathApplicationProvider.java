@@ -38,15 +38,29 @@ public abstract class AbstractPathApplicationProvider implements ApplicationProv
   /**
    * @param applicationId Application id
    * @param label Application display name
+   * @param pathPatterns List of regular expression to match all paths/subetrees this application belongs to.
+   */
+  public AbstractPathApplicationProvider(String applicationId, String label, Pattern... pathPatterns) {
+    this.applicationId = applicationId;
+    this.label = label;
+    this.pathPatterns = pathPatterns;
+  }
+
+  /**
+   * @param applicationId Application id
+   * @param label Application display name
    * @param paths List of paths/subtrees this application belongs to
    */
   public AbstractPathApplicationProvider(String applicationId, String label, String... paths) {
-    this.applicationId = applicationId;
-    this.label = label;
-    this.pathPatterns = new Pattern[paths.length];
+    this(applicationId, label, convertToPathPatterns(paths));
+  }
+
+  private static Pattern[] convertToPathPatterns(String[] paths) {
+    Pattern[] pathPatterns = new Pattern[paths.length];
     for (int i = 0; i < paths.length; i++) {
-      this.pathPatterns[i] = Pattern.compile("^" + Pattern.quote(paths[i]) + "(/.*)?$");
+      pathPatterns[i] = Pattern.compile("^" + Pattern.quote(paths[i]) + "(/.*)?$");
     }
+    return pathPatterns;
   }
 
   @Override
