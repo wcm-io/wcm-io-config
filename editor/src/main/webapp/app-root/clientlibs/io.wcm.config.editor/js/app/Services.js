@@ -115,7 +115,7 @@
               serialzedData = buffer.join( "&" );
               serialzedData = serialzedData + "&" + config.lockedParameterName + "=" + lockedParameters.join(",")
             }
-            // append the slign specific _charset_:utf-8
+            // append the Sling specific _charset_:utf-8
 
             serialzedData = serialzedData + "&_charset_=utf-8";
             return serialzedData;
