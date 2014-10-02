@@ -26,6 +26,7 @@ import static org.junit.Assert.assertTrue;
 import io.wcm.config.core.management.ParameterPersistence;
 import io.wcm.config.core.management.ParameterPersistenceData;
 import io.wcm.config.spi.ParameterPersistenceProvider;
+import io.wcm.sling.commons.resource.ImmutableValueMap;
 
 import java.util.Map;
 import java.util.SortedSet;
@@ -40,7 +41,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.osgi.framework.Constants;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 
 /**
@@ -51,18 +51,18 @@ public class ParameterPersistenceImplTest {
 
   private static final String CONFIG_ID = "/config1";
 
-  private static final Map<String, Object> SAMPLE_VALUES = ImmutableMap.<String, Object>builder()
+  private static final Map<String, Object> SAMPLE_VALUES = ImmutableValueMap.builder()
       .put("prop1", "value1")
       .put("prop2", 55)
       .build();
   private static final SortedSet<String> SAMPLE_LOCKED_PARAMETER_NAMES = ImmutableSortedSet.of("prop1", "prop5");
-  private static final Map<String, Object> SAMPLE_VALUES_INTERNAL = ImmutableMap.<String, Object>builder()
+  private static final Map<String, Object> SAMPLE_VALUES_INTERNAL = ImmutableValueMap.builder()
       .put("prop1", "value1")
       .put("prop2", 55)
       .put(ParameterPersistence.PN_LOCKED_PARAMETER_NAMES, SAMPLE_LOCKED_PARAMETER_NAMES.toArray(new String[SAMPLE_LOCKED_PARAMETER_NAMES.size()]))
       .build();
 
-  private static final Map<String, Object> SAMPLE_VALUES_2 = ImmutableMap.<String, Object>builder()
+  private static final Map<String, Object> SAMPLE_VALUES_2 = ImmutableValueMap.builder()
       .put("prop3", "value3")
       .put("prop2", 66)
       .build();
@@ -72,12 +72,12 @@ public class ParameterPersistenceImplTest {
 
   private DummyPersistenceProvider persistenceProvider1;
   private static final Map<String, Object> SERVICE_PROPS_1 =
-      ImmutableMap.<String, Object>of(Constants.SERVICE_ID, 1L,
+      ImmutableValueMap.of(Constants.SERVICE_ID, 1L,
           Constants.SERVICE_RANKING, 10);
 
   private DummyPersistenceProvider persistenceProvider2;
   private static final Map<String, Object> SERVICE_PROPS_2 =
-      ImmutableMap.<String, Object>of(Constants.SERVICE_ID, 2L,
+      ImmutableValueMap.of(Constants.SERVICE_ID, 2L,
           Constants.SERVICE_RANKING, 20);
 
   @InjectMocks
@@ -161,7 +161,7 @@ public class ParameterPersistenceImplTest {
 
     underTest.storeData(resolver, CONFIG_ID, new ParameterPersistenceData(SAMPLE_VALUES_2, ImmutableSortedSet.<String>of()), true);
 
-    Map<String,Object> expecMap = ImmutableMap.<String,Object>builder()
+    Map<String,Object> expecMap = ImmutableValueMap.builder()
         .put("prop1", "value1")
         .put("prop3", "value3")
         .put("prop2", 66)
@@ -179,7 +179,7 @@ public class ParameterPersistenceImplTest {
 
     underTest.storeData(resolver, CONFIG_ID, new ParameterPersistenceData(SAMPLE_VALUES_2, ImmutableSortedSet.of("prop3")), true);
 
-    Map<String, Object> expecMap = ImmutableMap.<String, Object>builder()
+    Map<String, Object> expecMap = ImmutableValueMap.builder()
         .put("prop1", "value1")
         .put("prop3", "value3")
         .put("prop2", 66)
@@ -194,12 +194,12 @@ public class ParameterPersistenceImplTest {
   public void testStoreWithMapConversion() throws PersistenceException {
     persistenceProvider1.setStoreSuccess(true);
 
-    Map<String,Object> valuesToStore = ImmutableMap.<String,Object>builder()
+    Map<String, Object> valuesToStore = ImmutableValueMap.builder()
         .put("mapValue", PersistenceTypeConversionTest.SAMPLE_MAP)
         .build();
     underTest.storeData(resolver, CONFIG_ID, new ParameterPersistenceData(valuesToStore, ImmutableSortedSet.<String>of()));
 
-    Map<String, Object> storedValues = ImmutableMap.<String, Object>builder()
+    Map<String, Object> storedValues = ImmutableValueMap.builder()
         .put("mapValue", PersistenceTypeConversionTest.SAMPLE_MAP_PERSISTENCE)
         .build();
     assertEqualsInclArrayValues(storedValues, persistenceProvider1.getMap());

@@ -27,6 +27,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import io.wcm.sling.commons.resource.ImmutableValueMap;
 import io.wcm.testing.mock.aem.junit.AemContext;
 import io.wcm.testing.mock.osgi.MockOsgi;
 
@@ -62,7 +63,7 @@ public class ToolsConfigPagePersistenceProviderTest {
     context.pageManager().create(contentPage.getPath(), "site1", CONFIG_PAGE_TEMPLATE, "site1", true);
 
     underTest = new ToolsConfigPagePersistenceProvider();
-    MockOsgi.activate(underTest, ImmutableMap.<String, Object>builder()
+    MockOsgi.activate(underTest, ImmutableValueMap.builder()
         .put(ToolsConfigPagePersistenceProvider.PROPERTY_ENABLED, true)
         .put(ToolsConfigPagePersistenceProvider.PROPERTY_CONFIG_PAGE_TEMPLATE, CONFIG_PAGE_TEMPLATE)
         .put(ToolsConfigPagePersistenceProvider.PROPERTY_TOOLS_PAGE_TEMPLATE, TOOLS_PAGE_TEMPLATE)
@@ -125,7 +126,7 @@ public class ToolsConfigPagePersistenceProviderTest {
   @Test
   public void testDisabled() throws Exception {
     underTest = new ToolsConfigPagePersistenceProvider();
-    MockOsgi.activate(underTest, ImmutableMap.<String, Object>builder()
+    MockOsgi.activate(underTest, ImmutableValueMap.builder()
         .put(ToolsConfigPagePersistenceProvider.PROPERTY_ENABLED, false)
         .build());
 

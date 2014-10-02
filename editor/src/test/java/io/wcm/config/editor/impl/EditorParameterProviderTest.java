@@ -36,6 +36,7 @@ import io.wcm.config.core.management.ParameterPersistenceData;
 import io.wcm.config.core.management.ParameterResolver;
 import io.wcm.config.editor.EditorNameConstants;
 import io.wcm.config.editor.WidgetTypes;
+import io.wcm.sling.commons.resource.ImmutableValueMap;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -201,7 +202,7 @@ public class EditorParameterProviderTest {
   public void testReturnOnlyEditableParameters() throws JSONException {
     parameters = new JSONArray();
     when(persistence.getData(any(ResourceResolver.class), anyString())).thenReturn(
-        new ParameterPersistenceData(ImmutableMap.<String, Object>of(), ImmutableSortedSet.<String>of()));
+        new ParameterPersistenceData(ImmutableValueMap.of(), ImmutableSortedSet.<String>of()));
     underTest.addParameters(parameters, configurationFirstLevel, request, ImmutableMap.<String, Application>of());
     assertEquals(8, parameters.length());
   }

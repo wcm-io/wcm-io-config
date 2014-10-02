@@ -36,6 +36,7 @@ import io.wcm.config.core.override.SystemPropertyOverrideProvider;
 import io.wcm.config.core.persistence.ToolsConfigPagePersistenceProvider;
 import io.wcm.config.spi.ConfigurationFinderStrategy;
 import io.wcm.config.spi.ParameterProvider;
+import io.wcm.sling.commons.resource.ImmutableValueMap;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
 import java.util.ArrayList;
@@ -53,7 +54,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import com.day.jcr.vault.util.Text;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSortedSet;
 
@@ -79,19 +79,19 @@ public class CombinedTest {
 
     // app-specific services
     context.registerService(SampleOsgiConfiguration.class, new SampleOsgiConfiguration(),
-        ImmutableMap.<String, Object>of("prop4", "value4-osgi"));
+        ImmutableValueMap.of("prop4", "value4-osgi"));
     context.registerService(ConfigurationFinderStrategy.class, new SampleConfigurationFinderStrategy());
     context.registerService(ParameterProvider.class, new SampleParameterProvider());
 
     // persistence providers
     context.registerInjectActivateService(new ToolsConfigPagePersistenceProvider(),
-        ImmutableMap.<String, Object>of("enabled", true));
+        ImmutableValueMap.of("enabled", true));
 
     // override providers
     context.registerInjectActivateService(new RequestHeaderOverrideProvider(),
-        ImmutableMap.<String, Object>of("enabled", true));
+        ImmutableValueMap.of("enabled", true));
     context.registerInjectActivateService(new SystemPropertyOverrideProvider(),
-        ImmutableMap.<String, Object>of("enabled", true));
+        ImmutableValueMap.of("enabled", true));
 
     // management services
     context.registerInjectActivateService(new ApplicationFinderImpl());
@@ -127,7 +127,7 @@ public class CombinedTest {
   public void testWriteReadConfig() throws PersistenceException {
     ParameterPersistence persistence = context.getService(ParameterPersistence.class);
     persistence.storeData(context.resourceResolver(), CONFIG_ID,
-        new ParameterPersistenceData(ImmutableMap.<String, Object>of(PROP_3.getName(), "value3-new"), ImmutableSortedSet.<String>of()),
+        new ParameterPersistenceData(ImmutableValueMap.of(PROP_3.getName(), "value3-new"), ImmutableSortedSet.<String>of()),
         true);
 
     Resource resource = context.request().getResource();

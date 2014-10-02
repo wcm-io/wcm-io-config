@@ -21,18 +21,18 @@ package io.wcm.config.core.management;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import io.wcm.sling.commons.resource.ImmutableValueMap;
 
 import java.util.Map;
 import java.util.SortedSet;
 
 import org.junit.Test;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 
 public class ParameterPersistenceDataTest {
 
-  private static final Map<String, Object> SAMPLE_MAP = ImmutableMap.<String, Object>builder()
+  private static final Map<String, Object> SAMPLE_MAP = ImmutableValueMap.builder()
       .put("param1", "value1")
       .put("param2", 55)
       .build();

@@ -25,14 +25,13 @@ import static org.junit.Assert.assertTrue;
 import io.wcm.config.api.Configuration;
 import io.wcm.config.api.Parameter;
 import io.wcm.config.api.ParameterBuilder;
+import io.wcm.sling.commons.resource.ImmutableValueMap;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import com.google.common.collect.ImmutableMap;
 
 public class ConfigurationImplTest {
 
@@ -99,7 +98,7 @@ public class ConfigurationImplTest {
 
   @Test(expected = UnsupportedOperationException.class)
   public void testMapPutAll() {
-    underTest.putAll(ImmutableMap.<String, Object>builder()
+    underTest.putAll(ImmutableValueMap.builder()
         .put("prop4", 25)
         .put("prop5", 33)
         .build());

@@ -26,6 +26,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import io.wcm.config.api.Application;
 import io.wcm.config.spi.ApplicationProvider;
+import io.wcm.sling.commons.resource.ImmutableValueMap;
 
 import java.util.Map;
 import java.util.Set;
@@ -40,8 +41,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.osgi.framework.Constants;
 
-import com.google.common.collect.ImmutableMap;
-
 @RunWith(MockitoJUnitRunner.class)
 public class ApplicationFinderImplTest {
 
@@ -51,7 +50,7 @@ public class ApplicationFinderImplTest {
   @Mock
   private ApplicationProvider applicationProvider1;
   private static final Map<String, Object> SERVICE_PROPS_1 =
-      ImmutableMap.<String, Object>of(Constants.SERVICE_ID, 1L,
+      ImmutableValueMap.of(Constants.SERVICE_ID, 1L,
           Constants.SERVICE_RANKING, 10);
   private static final String APPLICATION_ID_1 = "app1";
   private static final String APPLICATION_LABEL_1 = "Application #1";
@@ -59,7 +58,7 @@ public class ApplicationFinderImplTest {
   @Mock
   private ApplicationProvider applicationProvider2;
   private static final Map<String, Object> SERVICE_PROPS_2 =
-      ImmutableMap.<String, Object>of(Constants.SERVICE_ID, 2L,
+      ImmutableValueMap.of(Constants.SERVICE_ID, 2L,
           Constants.SERVICE_RANKING, 5);
   private static final String APPLICATION_ID_2 = "app2";
   private static final String APPLICATION_LABEL_2 = "Application #2";

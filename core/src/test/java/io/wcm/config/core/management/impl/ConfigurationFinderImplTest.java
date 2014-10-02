@@ -30,6 +30,7 @@ import io.wcm.config.api.Configuration;
 import io.wcm.config.core.management.ApplicationFinder;
 import io.wcm.config.core.management.ParameterResolver;
 import io.wcm.config.spi.ConfigurationFinderStrategy;
+import io.wcm.sling.commons.resource.ImmutableValueMap;
 
 import java.util.Collection;
 import java.util.Dictionary;
@@ -54,7 +55,6 @@ import org.osgi.framework.Constants;
 import org.osgi.service.component.ComponentContext;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -72,14 +72,14 @@ public class ConfigurationFinderImplTest {
   @Mock
   private ConfigurationFinderStrategy finderStrategy1;
   private static final Map<String, Object> SERVICE_PROPS_1 =
-      ImmutableMap.<String, Object>of(Constants.SERVICE_ID, 1L,
+      ImmutableValueMap.of(Constants.SERVICE_ID, 1L,
           Constants.SERVICE_RANKING, 10);
   private static final String APPLICATION_ID_1 = "app1";
 
   @Mock
   private ConfigurationFinderStrategy finderStrategy2;
   private static final Map<String, Object> SERVICE_PROPS_2 =
-      ImmutableMap.<String, Object>of(Constants.SERVICE_ID, 2L,
+      ImmutableValueMap.of(Constants.SERVICE_ID, 2L,
           Constants.SERVICE_RANKING, 5);
   private static final String APPLICATION_ID_2 = "app2";
 
