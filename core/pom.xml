@@ -120,7 +120,7 @@
     </plugins>
     <pluginManagement>
       <plugins>
-      
+
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
@@ -128,7 +128,7 @@
             <excludePackageNames>*.impl:io.wcm.config.core.util</excludePackageNames>
           </configuration>
         </plugin>
-      
+
       </plugins>
     </pluginManagement>
   </build>
