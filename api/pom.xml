@@ -35,7 +35,7 @@
   <packaging>bundle</packaging>
 
   <name>Configuration API</name>
-  <description>API for configuration infrastructure.</description>
+  <description>API and SPI for configuration infrastructure.</description>
 
   <scm>
     <connection>scm:git:git@github.com:wcm-io/wcm-io.git</connection>
