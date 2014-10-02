@@ -19,7 +19,7 @@
  */
 package io.wcm.config.api;
 
-import io.wcm.sling.commons.resource.ImmutableValueMapDecorator;
+import io.wcm.sling.commons.resource.ImmutableValueMap;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -211,7 +211,7 @@ public final class ParameterBuilder<T> {
         this.applicationId,
         this.defaultOsgiConfigProperty,
         this.defaultValue,
-        new ImmutableValueMapDecorator(this.properties));
+        ImmutableValueMap.copyOf(this.properties));
   }
 
 }

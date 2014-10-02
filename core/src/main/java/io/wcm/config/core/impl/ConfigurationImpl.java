@@ -21,7 +21,7 @@ package io.wcm.config.core.impl;
 
 import io.wcm.config.api.Configuration;
 import io.wcm.config.api.Parameter;
-import io.wcm.sling.commons.resource.ImmutableValueMapDecorator;
+import io.wcm.sling.commons.resource.ImmutableValueMap;
 
 import java.util.Collection;
 import java.util.Map;
@@ -43,7 +43,7 @@ public final class ConfigurationImpl implements Configuration {
    */
   public ConfigurationImpl(String configurationId, Map<String, Object> properties) {
     this.configurationId = configurationId;
-    this.properties = new ImmutableValueMapDecorator(properties);
+    this.properties = ImmutableValueMap.copyOf(properties);
   }
 
   @Override
