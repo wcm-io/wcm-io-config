@@ -131,11 +131,11 @@
         </executions>
       </plugin>
 
-      <!-- Nodejs Maven Plugin to run the templates compilation and tests
+      <!-- Nodejs Maven Plugin to run the templates compilation and tests -->
       <plugin>
         <groupId>io.wcm.maven.plugins</groupId>
         <artifactId>nodejs-maven-plugin</artifactId>
-        <version>0.1.0-SNAPSHOT</version>
+        <version>1.0.0</version>
         <executions>
           <execution>
             <phase>compile</phase>
@@ -147,7 +147,6 @@
             <npmInstallTask>
               <workingDirectory>${project.basedir}/build</workingDirectory>
             </npmInstallTask>
-
             <nodeJsTask>
               <workingDirectory>${project.basedir}/build</workingDirectory>
               <moduleName>grunt-cli</moduleName>
@@ -155,12 +154,10 @@
               <arguments>
                 <argument>build</argument>
               </arguments>
-
             </nodeJsTask>
           </tasks>
         </configuration>
-
-      </plugin> -->
+      </plugin>
 
     </plugins>
   </build>
