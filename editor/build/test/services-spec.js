@@ -93,12 +93,12 @@ describe("parameters service", function() {
       httpBackend.flush();
     });
 
-    it("should post only modified values and locked parameter names", function() {
+    it("should post only modified values, locked parameter names and charset", function() {
 
       httpBackend.whenPOST('http://localhost/test.json').respond(function(method, url, data, headers){
         var nameValuePairs = data.split("&");
         expect(nameValuePairs).not.toBeUndefined();
-        expect(nameValuePairs.length).toBe(4, "wrong number of parameters");
+        expect(nameValuePairs.length).toBe(5, "wrong number of parameters");
 
         expect(
           utils.contains(nameValuePairs, encodeURIComponent("Checkbox Parameter") + "=" + encodeURIComponent("true"))).toBeTruthy("parameter is missing");
@@ -108,6 +108,8 @@ describe("parameters service", function() {
           utils.contains(nameValuePairs, encodeURIComponent("Textarea Parameter Only for Digits") + "=" + "123")).toBeTruthy("parameter is missing");
         expect(
           utils.contains(nameValuePairs, encodeURIComponent("lockedParameterNames") + "=" + encodeURIComponent("String Parameter"))).toBeTruthy("parameter is missing");
+        expect(
+          utils.contains(nameValuePairs, "_charset_=utf-8")).toBeTruthy("parameter is missing");
         return [200, {}, {}];
       });
       parameters.saveParameters(loadedData.parameters);

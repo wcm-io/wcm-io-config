@@ -29,6 +29,7 @@ import io.wcm.config.core.management.ParameterPersistenceData;
 import io.wcm.config.core.management.ParameterResolver;
 import io.wcm.config.core.util.TypeConversion;
 import io.wcm.config.editor.EditorNameConstants;
+import io.wcm.wcm.commons.contenttype.ContentType;
 import io.wcm.wcm.commons.contenttype.FileExtension;
 
 import java.io.IOException;
@@ -243,6 +244,7 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
     JSONObject result = new JSONObject();
     try {
       result.put("parameters", parameters);
+      response.setContentType(ContentType.JSON);
       response.getWriter().write(result.toString());
     }
     catch (JSONException ex) {
