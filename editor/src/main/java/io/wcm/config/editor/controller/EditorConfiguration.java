@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.config.editor;
+package io.wcm.config.editor.controller;
 
 import io.wcm.config.core.management.ParameterPersistence;
 import io.wcm.sling.models.annotations.AemObject;
@@ -58,4 +58,5 @@ public class EditorConfiguration {
   public String getProviderUrl() {
     return providerUrl;
   }
+
 }
