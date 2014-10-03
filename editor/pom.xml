@@ -34,8 +34,8 @@
   <version>0.2.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
-  <name>Configuration Editor GUI</name>
-  <description>Editor GUI for configuration infrastructure.</description>
+  <name>Configuration Editor</name>
+  <description>Configuration Editor Template for AEM.</description>
 
   <scm>
     <connection>scm:git:git@github.com:wcm-io/wcm-io.git</connection>
