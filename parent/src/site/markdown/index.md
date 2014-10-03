@@ -9,7 +9,7 @@ This is all about context-specific configuration, that means configuration that 
 
 This wcm.io subproject implements APIs and SPIs to provide a flexible configuration infrastructure for reading and managing context-specific configuration. The implementation is pluggable which ensures it can be adapted to the application needs. It's based on OSGi services and Sling Models als context-aware dependency injection framework.
 
-The problems and usecases solved by this implementation are described in the wcm.io Wiki [Multi Tenancy and Configuration Requirements][wiki-config-requirements] page (although not everything described there is implemented currently). The detailed documentation and usage descriptions is found in the documentation links below.
+The problems and usecases solved by this implementation are described in the wcm.io Wiki [Multi Tenancy and Configuration Requirements][wiki-config-requirements] page (although not everything described there is implemented currently). For detailed documentation and usage descriptions see below.
 
 
 ### Overview
