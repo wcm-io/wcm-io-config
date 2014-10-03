@@ -34,7 +34,7 @@ public enum WidgetTypes {
    * - minlength = integer value
    * - pattern = regular expression for the value validation. E.g. /^[0-9]*$/
    */
-  TEXTFIELD(EditorNameConstants.DEFAULT_TEXTFIELD_CONFIGURATION),
+  TEXTFIELD(DefaultWidgetConfiguration.TEXTFIELD),
 
   /**
    * Text Multifield widget, which allows to specifiy multiple values for a property.
@@ -44,7 +44,7 @@ public enum WidgetTypes {
    * - minlength = integer value
    * - pattern = regular expression for the value validation. E.g. /^[0-9]*$/
    */
-  TEXT_MULTIFIELD(EditorNameConstants.DEFAULT_MULTIFIELD_CONFIGURATION),
+  TEXT_MULTIFIELD(DefaultWidgetConfiguration.MULTIFIELD),
 
   /**
    * Text Area widget. Following properties are available for configuration (all empty per default):
@@ -53,7 +53,7 @@ public enum WidgetTypes {
    * - minlength = integer value
    * - pattern = regular expression for the value validation. E.g. /^[0-9]*$/
    */
-  TEXTAREA(EditorNameConstants.DEFAULT_TEXTAREA_CONFIGURATION),
+  TEXTAREA(DefaultWidgetConfiguration.TEXTAREA),
 
   /**
    * Path Browser widget with autocomplete function.Following properties are available for configuration (all empty per
@@ -61,14 +61,14 @@ public enum WidgetTypes {
    * - required = true or false
    * - rootPath = root path from where pages can be selected. Default: /content
    */
-  PATHBROWSER(EditorNameConstants.DEFAULT_PATHBROWSER_CONFIGURATION),
+  PATHBROWSER(DefaultWidgetConfiguration.PATHBROWSER),
 
   /**
    * Checkbox widget.Following properties are available for configuration (all empty per
    * default):
    * - required = true or false
    */
-  CHECKBOX(EditorNameConstants.DEFAULT_CHECKBOX_CONFIGURATION);
+  CHECKBOX(DefaultWidgetConfiguration.CHECKBOX);
 
 
   private final Map<String, Object> params;

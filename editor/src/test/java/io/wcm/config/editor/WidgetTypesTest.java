@@ -35,20 +35,21 @@ public class WidgetTypesTest {
   @Test
   public void testDefaultParametersImmutability() {
     Map<String, Object> defaultParams = WidgetTypes.PATHBROWSER.getDefaultWidgetConfiguration();
-    assertEquals(defaultParams.get(EditorNameConstants.PN_ROOT_PATH), "/content/");
-    defaultParams.put(EditorNameConstants.PN_ROOT_PATH, "/content/test");
+    assertEquals(defaultParams.get(EditorProperties.ROOT_PATH), "/content/");
+    defaultParams.put(EditorProperties.ROOT_PATH, "/content/test");
 
-    assertEquals(defaultParams.get(EditorNameConstants.PN_ROOT_PATH), "/content/test");
-    assertEquals(WidgetTypes.PATHBROWSER.getDefaultWidgetConfiguration().get(EditorNameConstants.PN_ROOT_PATH), "/content/");
+    assertEquals(defaultParams.get(EditorProperties.ROOT_PATH), "/content/test");
+    assertEquals(WidgetTypes.PATHBROWSER.getDefaultWidgetConfiguration().get(EditorProperties.ROOT_PATH), "/content/");
   }
 
   @Test
   public void testDefaultOverrides() {
     Map<String, Object> overrides = new HashMap<>();
-    overrides.put(EditorNameConstants.PN_ROOT_PATH, "/content/test");
+    overrides.put(EditorProperties.ROOT_PATH, "/content/test");
 
     Map<String, Object> params = WidgetTypes.PATHBROWSER.getWidgetConfiguration(overrides);
-    assertEquals(params.get(EditorNameConstants.PN_ROOT_PATH), "/content/test");
-    assertEquals(WidgetTypes.PATHBROWSER.getDefaultWidgetConfiguration().get(EditorNameConstants.PN_ROOT_PATH), "/content/");
+    assertEquals(params.get(EditorProperties.ROOT_PATH), "/content/test");
+    assertEquals(WidgetTypes.PATHBROWSER.getDefaultWidgetConfiguration().get(EditorProperties.ROOT_PATH), "/content/");
   }
+
 }
