@@ -22,8 +22,6 @@ package io.wcm.config.editor;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.common.collect.ImmutableMap;
-
 /**
  * Provides available widget types and their default configurations
  */
@@ -36,7 +34,7 @@ public enum WidgetTypes {
    * - minlength = integer value
    * - pattern = regular expression for the value validation. E.g. /^[0-9]*$/
    */
-  TEXTFIELD(ImmutableMap.copyOf(EditorNameConstants.DEFAULT_TEXTFIELD_CONFIGURATION)),
+  TEXTFIELD(EditorNameConstants.DEFAULT_TEXTFIELD_CONFIGURATION),
 
   /**
    * Text Multifield widget, which allows to specifiy multiple values for a property.
@@ -46,7 +44,7 @@ public enum WidgetTypes {
    * - minlength = integer value
    * - pattern = regular expression for the value validation. E.g. /^[0-9]*$/
    */
-  TEXT_MULTIFIELD(ImmutableMap.copyOf(EditorNameConstants.DEFAULT_MULTIFIELD_CONFIGURATION)),
+  TEXT_MULTIFIELD(EditorNameConstants.DEFAULT_MULTIFIELD_CONFIGURATION),
 
   /**
    * Text Area widget. Following properties are available for configuration (all empty per default):
@@ -55,7 +53,7 @@ public enum WidgetTypes {
    * - minlength = integer value
    * - pattern = regular expression for the value validation. E.g. /^[0-9]*$/
    */
-  TEXTAREA(ImmutableMap.copyOf(EditorNameConstants.DEFAULT_TEXTAREA_CONFIGURATION)),
+  TEXTAREA(EditorNameConstants.DEFAULT_TEXTAREA_CONFIGURATION),
 
   /**
    * Path Browser widget with autocomplete function.Following properties are available for configuration (all empty per
@@ -63,14 +61,14 @@ public enum WidgetTypes {
    * - required = true or false
    * - rootPath = root path from where pages can be selected. Default: /content
    */
-  PATHBROWSER(ImmutableMap.copyOf(EditorNameConstants.DEFAULT_PATHBROWSER_CONFIGURATION)),
+  PATHBROWSER(EditorNameConstants.DEFAULT_PATHBROWSER_CONFIGURATION),
 
   /**
    * Checkbox widget.Following properties are available for configuration (all empty per
    * default):
    * - required = true or false
    */
-  CHECKBOX(ImmutableMap.copyOf(EditorNameConstants.DEFAULT_CHECKBOX_CONFIGURATION));
+  CHECKBOX(EditorNameConstants.DEFAULT_CHECKBOX_CONFIGURATION);
 
 
   private final Map<String, Object> params;
@@ -98,4 +96,5 @@ public enum WidgetTypes {
   public Map<String, Object> getDefaultWidgetConfiguration() {
     return new HashMap<String, Object>(this.params);
   }
+
 }

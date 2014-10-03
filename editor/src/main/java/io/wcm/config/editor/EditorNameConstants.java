@@ -19,7 +19,8 @@
  */
 package io.wcm.config.editor;
 
-import java.util.HashMap;
+import io.wcm.sling.commons.resource.ImmutableValueMap;
+
 import java.util.Map;
 
 /**
@@ -111,30 +112,26 @@ public final class EditorNameConstants {
    */
   public static final String PN_LOCKED_INHERITED = "lockedInherited";
 
-  static final Map<String, Object> DEFAULT_TEXTFIELD_CONFIGURATION = new HashMap<>();
-  static {
-    DEFAULT_TEXTFIELD_CONFIGURATION.put(PN_WIDGET_TYPE, "textfield");
-  }
+  static final Map<String, Object> DEFAULT_TEXTFIELD_CONFIGURATION = ImmutableValueMap.builder()
+      .put(PN_WIDGET_TYPE, "textfield")
+      .build();
 
-  static final Map<String, Object> DEFAULT_MULTIFIELD_CONFIGURATION = new HashMap<>();
-  static {
-    DEFAULT_MULTIFIELD_CONFIGURATION.put(PN_WIDGET_TYPE, "textMultivalue");
-  }
+  static final Map<String, Object> DEFAULT_MULTIFIELD_CONFIGURATION = ImmutableValueMap.builder()
+      .put(PN_WIDGET_TYPE, "textMultivalue")
+      .build();
 
-  static final Map<String, Object> DEFAULT_TEXTAREA_CONFIGURATION = new HashMap<>();
-  static {
-    DEFAULT_TEXTAREA_CONFIGURATION.put(PN_WIDGET_TYPE, "textarea");
-    DEFAULT_TEXTAREA_CONFIGURATION.put(PN_ROWS, "10");
-  }
+  static final Map<String, Object> DEFAULT_TEXTAREA_CONFIGURATION = ImmutableValueMap.builder()
+      .put(PN_WIDGET_TYPE, "textarea")
+      .put(PN_ROWS, "10")
+      .build();
 
-  static final Map<String, Object> DEFAULT_CHECKBOX_CONFIGURATION = new HashMap<>();
-  static {
-    DEFAULT_CHECKBOX_CONFIGURATION.put(PN_WIDGET_TYPE, "checkbox");
-  }
+  static final Map<String, Object> DEFAULT_CHECKBOX_CONFIGURATION = ImmutableValueMap.builder()
+      .put(PN_WIDGET_TYPE, "checkbox")
+      .build();
 
-  static final Map<String, Object> DEFAULT_PATHBROWSER_CONFIGURATION = new HashMap<>();
-  static {
-    DEFAULT_PATHBROWSER_CONFIGURATION.put(PN_WIDGET_TYPE, "pathbrowser");
-    DEFAULT_PATHBROWSER_CONFIGURATION.put(PN_ROOT_PATH, "/content/");
-  }
+  static final Map<String, Object> DEFAULT_PATHBROWSER_CONFIGURATION = ImmutableValueMap.builder()
+      .put(PN_WIDGET_TYPE, "pathbrowser")
+      .put(PN_ROOT_PATH, "/content/")
+      .build();
+
 }
