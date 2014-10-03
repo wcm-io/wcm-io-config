@@ -37,6 +37,7 @@ import java.util.Set;
 import java.util.SortedSet;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.felix.scr.annotations.Reference;
@@ -81,7 +82,7 @@ public class EditorParameterPersistence extends SlingAllMethodsServlet {
     String configurationId = getCurrentConfigurationId(request);
     if (StringUtils.isEmpty(configurationId)) {
       log.error("Could not find configuration id for resource {0}", request.getResource().getPath());
-      response.sendError(500, "Could not find configuration id for resource " + request.getResource().getPath());
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not find configuration id for resource " + request.getResource().getPath());
     }
 
     try {
@@ -89,7 +90,7 @@ public class EditorParameterPersistence extends SlingAllMethodsServlet {
     }
     catch (Throwable ex) {
       log.error("Could not persist data for configuration id {0}", configurationId, ex);
-      response.sendError(500);
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST);
     }
   }
 
@@ -124,8 +125,7 @@ public class EditorParameterPersistence extends SlingAllMethodsServlet {
     return result;
   }
 
-  private SortedSet<String> getLockedParameterNames(
-      String[] lockedParameterValues) {
+  private SortedSet<String> getLockedParameterNames(String[] lockedParameterValues) {
     if (lockedParameterValues != null && lockedParameterValues.length > 0) {
       String[] namesArray = lockedParameterValues[0].split(TypeConversion.ARRAY_DELIMITER);
       return ImmutableSortedSet.copyOf(namesArray);
@@ -143,7 +143,7 @@ public class EditorParameterPersistence extends SlingAllMethodsServlet {
 
   private void sanityCheck(SlingHttpServletRequest request, SlingHttpServletResponse response) throws IOException {
     if (configurationFinder == null || persistence == null) {
-      response.sendError(500, "Configuration services are not available");
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Configuration services are not available");
     }
   }
 
