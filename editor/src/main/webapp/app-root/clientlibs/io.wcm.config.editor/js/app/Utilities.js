@@ -22,7 +22,8 @@
 
   "use strict";
   /**
-   * Utilities module
+   * Utilities module.
+   * TODO: write unit tests
    */
   angular.module('io.wcm.config.utilities', [])
 
@@ -54,6 +55,12 @@
         return uid.join('');
       };
 
+      /**
+       * Helper method for the CUI:PathBrowser widget
+       * @param path
+       * @param callback
+       * @returns {boolean}
+       */
       var loadAutocompleteOptions = function (path, callback) {
         jQuery.get(path + '.pages.json', {
             predicate: 'hierarchyNotFile'
@@ -69,11 +76,17 @@
         return false;
       };
 
+      /**
+       *
+       * @param array containing objects with "value" property
+       * @param object containing "value" property
+       * @returns index of an object in array with the same value property as "object", -1 if no such object was found
+       */
       var indexOfValueObject = function(array, object) {
         var index = -1;
         if (array) {
           for(var i = 0; i < array.length; i++) {
-            if (array[i].value == object.value) {
+            if (array[i].value === object.value) {
               index = i;
               break;
             }
@@ -82,11 +95,17 @@
         return index;
       };
 
+      /**
+       *
+       * @param array
+       * @param object
+       * @returns index of an object in array, -1 if the object does not exist in array
+       */
       var contains = function(array, object) {
         var contains = false;
         if (array) {
           for(var i = 0; i < array.length; i++) {
-            if (array[i] == object) {
+            if (array[i] === object) {
               contains = true;
               break;
             }
