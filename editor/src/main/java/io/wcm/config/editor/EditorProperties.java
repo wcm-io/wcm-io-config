@@ -31,7 +31,7 @@ public final class EditorProperties {
   /**
    * Set the display label of the property.
    */
-  public static final String LABEL = "name";
+  public static final String LABEL = "label";
 
   /**
    * Set the widget type.
@@ -56,7 +56,7 @@ public final class EditorProperties {
   /**
    * Set the maximum length value for the text field.
    */
-  public static final String MAXLENGTH = "minlength";
+  public static final String MAXLENGTH = "maxlength";
 
   /**
    * Set the number of rows on the text area.
