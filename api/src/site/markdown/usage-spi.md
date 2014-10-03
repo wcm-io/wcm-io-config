@@ -124,6 +124,28 @@ Example for providing overrides per system environment parameter:
 ```
 
 
+### Preconditions and limitations
+
+The current implementation has some preconditions and limitations:
+
+- Parameter names: The parameter names have to be globally unique across all applications/parameter providers.
+  Although it would be technically possible to tread them in different 'namespaces' per application, this would
+  break the simplicity of the ValueMap API when accessing the configuration directly via it's string name. So
+  currently only a warning is logged if different parameter provider supply parameter definitions with the same name.
+
+- Flat parameter list: For each configuration context only a flat list of parameters is supported. It can be
+  filtered in the configuration editor by parameter groups and applications. 
+
+- Configuration Id: Only resource paths pointing to the real content affected by the configuration scope are supported.
+  Although technically for most parts the SPI would support arbitrary configuration ids whose meaning is hidden
+  in the implementation details of the configuration finder strategy implementation this does not work when
+  merging configuration ids from different configuration finder strategies provided by different applications. To
+  support the inheritance accross configuration scopes the configuration management has to understand the format
+  of the configuration Ids, thus the limitation to real paths.    
+
+
+
+
 [parameter-builder]: apidocs/io/wcm/config/api/ParameterBuilder.html
 [parameter-provider]: apidocs/io/wcm/config/spi/ParameterProvider.html
 [abstract-parameter-provider]: apidocs/io/wcm/config/spi/helpers/AbstractParameterProvider.html
