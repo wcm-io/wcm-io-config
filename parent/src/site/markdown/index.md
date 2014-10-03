@@ -17,6 +17,7 @@ The problems and usecases solved by this implementation are described in the wcm
 * [API](api/): API and SPI for context-specific configuration.
 * [Implementation](core/): Context-specific configuration management implementation.
 * [Configuration Editor](editor/): Configuration Editor Template for AEM.
+* [Sample Application](http://wcm.io/samples/config-sample-app/): Sample application to demonstrate configuration API and configuration editor GUI.
 
 
 [wiki-config-requirements]: https://wcm-io.atlassian.net/wiki/x/HIAH
