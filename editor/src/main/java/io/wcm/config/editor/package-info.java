@@ -18,6 +18,6 @@
  * #L%
  */
 /**
- * API for applications and editors managing configuration (read/write).
+ * API for customizing parameter definitions for the configuration editor.
  */
-package io.wcm.config.core.management;
+package io.wcm.config.editor;

@@ -18,6 +18,6 @@
  * #L%
  */
 /**
- * API for applications and editors managing configuration (read/write).
+ * Helper classes for configuration management.
  */
-package io.wcm.config.core.management;
+package io.wcm.config.core.util;
