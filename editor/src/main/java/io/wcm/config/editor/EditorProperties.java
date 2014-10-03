@@ -29,29 +29,14 @@ public final class EditorProperties {
   }
 
   /**
+   * Name of the property to set the display label of the property
+   */
+  public static final String PARAMETER_LABEL = "name";
+
+  /**
    * Name of the property to set the widget type
    */
   public static final String WIDGET_TYPE = "widgetType";
-
-  /**
-   * Name of the property to set the the application id of the parameter
-   */
-  public static final String PARAMETER_NAME = "name";
-
-  /**
-   * Name of the property to set the the application id of the parameter
-   */
-  public static final String PARAMETER_VALUE = "value";
-
-  /**
-   * Name of the property to set the the application id of the parameter
-   */
-  public static final String INHERITED_VALUE = "inheritedValue";
-
-  /**
-   * Name of the property to set the the application id of the parameter
-   */
-  public static final String APPLICATION_ID = "application";
 
   /**
    * Name of the property to set the the group of the parameter
@@ -92,20 +77,4 @@ public final class EditorProperties {
    * Name of the property to set root path for the browser
    */
   public static final String ROOT_PATH = "rootPath";
-
-  /**
-   * Name of the property to set the flag whether the parameter value is inherited
-   */
-  public static final String INHERITED = "inherited";
-
-  /**
-   * Name of the property to set the flag whether the parameter value is locked
-   */
-  public static final String LOCKED = "locked";
-
-  /**
-   * Name of the property to set the flag whether the parameter value was locked and cannot be unlocked
-   */
-  public static final String LOCKED_INHERITED = "lockedInherited";
-
 }

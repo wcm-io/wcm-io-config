@@ -170,15 +170,15 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
 
   private void setLocked(JSONObject jsonParameter, String parameterName, Set<String> lockedParameterNames) throws JSONException {
     if (lockedParameterNames.contains(parameterName)) {
-      jsonParameter.put(EditorProperties.LOCKED, true);
-      jsonParameter.put(EditorProperties.LOCKED_INHERITED, false);
+      jsonParameter.put(EditorNameConstants.LOCKED, true);
+      jsonParameter.put(EditorNameConstants.LOCKED_INHERITED, false);
     }
-    else if (jsonParameter.has(EditorProperties.LOCKED) && jsonParameter.getBoolean(EditorProperties.LOCKED)) {
-      jsonParameter.put(EditorProperties.LOCKED_INHERITED, true);
+    else if (jsonParameter.has(EditorNameConstants.LOCKED) && jsonParameter.getBoolean(EditorNameConstants.LOCKED)) {
+      jsonParameter.put(EditorNameConstants.LOCKED_INHERITED, true);
     }
     else {
-      jsonParameter.put(EditorProperties.LOCKED, false);
-      jsonParameter.put(EditorProperties.LOCKED_INHERITED, false);
+      jsonParameter.put(EditorNameConstants.LOCKED, false);
+      jsonParameter.put(EditorNameConstants.LOCKED_INHERITED, false);
     }
   }
 
@@ -186,14 +186,14 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
     Object previousValue = null;
 
     try {
-      previousValue = jsonParameter.get(EditorProperties.PARAMETER_VALUE);
+      previousValue = jsonParameter.get(EditorNameConstants.PARAMETER_VALUE);
     }
     catch (JSONException ex) {
       previousValue = parameter.getDefaultValue();
     }
 
-    jsonParameter.put(EditorProperties.INHERITED_VALUE, getJSONValue(previousValue));
-    jsonParameter.put(EditorProperties.PARAMETER_VALUE, getJSONValue(effectiveValue));
+    jsonParameter.put(EditorNameConstants.INHERITED_VALUE, getJSONValue(previousValue));
+    jsonParameter.put(EditorNameConstants.PARAMETER_VALUE, getJSONValue(effectiveValue));
 
   }
 
@@ -206,11 +206,11 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
 
   private JSONObject getOrCreateJSONParameter(JSONArray parameters, String parameterName) throws JSONException {
     JSONObject jsonParameter = new JSONObject();
-    jsonParameter.put(EditorProperties.PARAMETER_NAME, parameterName);
+    jsonParameter.put(EditorNameConstants.PARAMETER_NAME, parameterName);
     boolean found = false;
     for (int i = 0; i < parameters.length(); i++) {
       JSONObject parameter = parameters.getJSONObject(i);
-      if (StringUtils.equals(parameter.getString(EditorProperties.PARAMETER_NAME), parameterName)) {
+      if (StringUtils.equals(parameter.getString(EditorNameConstants.PARAMETER_NAME), parameterName)) {
         jsonParameter = parameter;
         found = true;
         break;
@@ -231,8 +231,8 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
     }
     Application application = applicationsMap.get(parameter.getApplicationId());
     String appName = application != null ? application.getLabel() : parameter.getApplicationId();
-    jsonParameter.put(EditorProperties.APPLICATION_ID, appName);
-    jsonParameter.put(EditorProperties.PARAMETER_NAME, parameter.getName());
+    jsonParameter.put(EditorNameConstants.APPLICATION_ID, appName);
+    jsonParameter.put(EditorNameConstants.PARAMETER_NAME, parameter.getName());
   }
 
   private boolean isEditable(Parameter parameter) {

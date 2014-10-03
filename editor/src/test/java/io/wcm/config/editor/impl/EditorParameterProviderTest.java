@@ -34,7 +34,6 @@ import io.wcm.config.core.management.ConfigurationFinder;
 import io.wcm.config.core.management.ParameterPersistence;
 import io.wcm.config.core.management.ParameterPersistenceData;
 import io.wcm.config.core.management.ParameterResolver;
-import io.wcm.config.editor.EditorProperties;
 import io.wcm.config.editor.WidgetTypes;
 import io.wcm.sling.commons.resource.ImmutableValueMap;
 
@@ -210,56 +209,56 @@ public class EditorParameterProviderTest {
   @Test
   public void testInheritedProperty() throws ServletException, IOException, JSONException {
     underTest.doGet(request, response);
-    assertEquals(firstParameter.get(EditorProperties.INHERITED), true);
-    assertEquals(secondParameter.get(EditorProperties.INHERITED), false);
+    assertEquals(firstParameter.get(EditorNameConstants.INHERITED), true);
+    assertEquals(secondParameter.get(EditorNameConstants.INHERITED), false);
   }
 
   @Test
   public void testLockedProperty() throws ServletException, IOException, JSONException {
     underTest.doGet(request, response);
-    assertEquals(firstParameter.get(EditorProperties.LOCKED), true);
-    assertEquals(firstParameter.get(EditorProperties.LOCKED_INHERITED), true);
-    assertEquals(secondParameter.get(EditorProperties.LOCKED), false);
-    assertEquals(secondParameter.get(EditorProperties.LOCKED_INHERITED), false);
+    assertEquals(firstParameter.get(EditorNameConstants.LOCKED), true);
+    assertEquals(firstParameter.get(EditorNameConstants.LOCKED_INHERITED), true);
+    assertEquals(secondParameter.get(EditorNameConstants.LOCKED), false);
+    assertEquals(secondParameter.get(EditorNameConstants.LOCKED_INHERITED), false);
   }
 
   @Test
   public void testValueInheritance() throws ServletException, IOException, JSONException {
     underTest.doGet(request, response);
-    assertEquals(firstParameter.get(EditorProperties.PARAMETER_VALUE), "defaultValue");
-    assertEquals(firstParameter.get(EditorProperties.INHERITED_VALUE), "defaultValue");
-    assertEquals(secondParameter.get(EditorProperties.PARAMETER_VALUE), "newValue");
-    assertEquals(secondParameter.get(EditorProperties.INHERITED_VALUE), "defaultValue2");
+    assertEquals(firstParameter.get(EditorNameConstants.PARAMETER_VALUE), "defaultValue");
+    assertEquals(firstParameter.get(EditorNameConstants.INHERITED_VALUE), "defaultValue");
+    assertEquals(secondParameter.get(EditorNameConstants.PARAMETER_VALUE), "newValue");
+    assertEquals(secondParameter.get(EditorNameConstants.INHERITED_VALUE), "defaultValue2");
 
     when(request.getResource()).thenReturn(siteResource);
     underTest.doGet(request, response);
-    assertEquals(firstParameter.get(EditorProperties.PARAMETER_VALUE), "defaultValue");
-    assertEquals(firstParameter.get(EditorProperties.INHERITED_VALUE), "defaultValue");
-    assertEquals(secondParameter.get(EditorProperties.PARAMETER_VALUE), "defaultValue2");
-    assertEquals(secondParameter.get(EditorProperties.INHERITED_VALUE), "defaultValue2");
+    assertEquals(firstParameter.get(EditorNameConstants.PARAMETER_VALUE), "defaultValue");
+    assertEquals(firstParameter.get(EditorNameConstants.INHERITED_VALUE), "defaultValue");
+    assertEquals(secondParameter.get(EditorNameConstants.PARAMETER_VALUE), "defaultValue2");
+    assertEquals(secondParameter.get(EditorNameConstants.INHERITED_VALUE), "defaultValue2");
   }
 
   @Test
   public void testApplicationLabel() throws ServletException, IOException, JSONException {
     underTest.doGet(request, response);
-    assertEquals(firstParameter.get(EditorProperties.APPLICATION_ID), "Test App");
-    assertEquals(secondParameter.get(EditorProperties.APPLICATION_ID), "/app/without/app/provider");
+    assertEquals(firstParameter.get(EditorNameConstants.APPLICATION_ID), "Test App");
+    assertEquals(secondParameter.get(EditorNameConstants.APPLICATION_ID), "/app/without/app/provider");
   }
 
   @Test
   public void testValueTypeConversion() throws JSONException, ServletException, IOException {
     underTest.doGet(request, response);
     JSONObject map = parameters.getJSONObject(2);
-    assertEquals(map.get(EditorProperties.PARAMETER_VALUE), "key1=value1;key2=value2");
+    assertEquals(map.get(EditorNameConstants.PARAMETER_VALUE), "key1=value1;key2=value2");
     JSONObject multivalue = parameters.getJSONObject(3);
-    assertEquals(multivalue.get(EditorProperties.PARAMETER_VALUE), "value1;value2");
+    assertEquals(multivalue.get(EditorNameConstants.PARAMETER_VALUE), "value1;value2");
     JSONObject booleanParam = parameters.getJSONObject(4);
-    assertEquals(booleanParam.get(EditorProperties.PARAMETER_VALUE), true);
+    assertEquals(booleanParam.get(EditorNameConstants.PARAMETER_VALUE), true);
     JSONObject doubleParam = parameters.getJSONObject(5);
-    assertEquals(doubleParam.get(EditorProperties.PARAMETER_VALUE), "3.3434");
+    assertEquals(doubleParam.get(EditorNameConstants.PARAMETER_VALUE), "3.3434");
     JSONObject integerParam = parameters.getJSONObject(6);
-    assertEquals(integerParam.get(EditorProperties.PARAMETER_VALUE), "1");
+    assertEquals(integerParam.get(EditorNameConstants.PARAMETER_VALUE), "1");
     JSONObject longParam = parameters.getJSONObject(7);
-    assertEquals(longParam.get(EditorProperties.PARAMETER_VALUE), "5");
+    assertEquals(longParam.get(EditorNameConstants.PARAMETER_VALUE), "5");
   }
 }
