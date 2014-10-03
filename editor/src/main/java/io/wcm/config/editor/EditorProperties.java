@@ -29,52 +29,53 @@ public final class EditorProperties {
   }
 
   /**
-   * Name of the property to set the display label of the property
+   * Set the display label of the property.
    */
-  public static final String PARAMETER_LABEL = "name";
+  public static final String LABEL = "name";
 
   /**
-   * Name of the property to set the widget type
+   * Set the widget type.
    */
   public static final String WIDGET_TYPE = "widgetType";
 
   /**
-   * Name of the property to set the the group of the parameter
+   * Set the the group of the parameter.
    */
   public static final String GROUP = "group";
 
   /**
-   * Name of the property to set the the description of the parameter
+   * Set the the description of the parameter.
    */
   public static final String DESCRIPTION = "description";
 
   /**
-   * Name of the property to set the minimum length value for the text field
+   * Set the minimum length value for the text field.
    */
   public static final String MINLENGTH = "minlength";
 
   /**
-   * Name of the property to set the maximum length value for the text field
+   * Set the maximum length value for the text field.
    */
   public static final String MAXLENGTH = "minlength";
 
   /**
-   * Name of the property to set the number of rows on the text area
+   * Set the number of rows on the text area.
    */
   public static final String ROWS = "rows";
 
   /**
-   * Name of the property to set the "required" flag
+   * Set the "required" flag.
    */
   public static final String REQUIRED = "required";
 
   /**
-   * Name of the property to set the validation pattern
+   * Set the validation pattern.
    */
   public static final String PATTERN = "pattern";
 
   /**
-   * Name of the property to set root path for the browser
+   * Set root path for the browser.
    */
   public static final String ROOT_PATH = "rootPath";
+
 }
