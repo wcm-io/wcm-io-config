@@ -27,9 +27,6 @@ In this case the type can be omitted as it is already part of the parameter defi
 A default value can be supplied optionally.
 
 
-[configuration-interface]: apidocs/io/wcm/config/api/Configuration.html
-
-
 ### Sling models
 
 Example for accessing configuration from a Sling model class:
@@ -59,3 +56,6 @@ Example for accessing configuration from a Sightly template:
 
 The configuration data is provided inside the Sightly templates by a BindingsValuesProvider.
 Such a solution can be used for JSP or other scripting languages as well.
+
+
+[configuration-interface]: apidocs/io/wcm/config/api/Configuration.html
