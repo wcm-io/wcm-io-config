@@ -35,7 +35,7 @@
   <packaging>bundle</packaging>
 
   <name>Configuration Implementation</name>
-  <description>Core Implementation of configuration infrastructure.</description>
+  <description>Context-specific configuration management implementation.</description>
 
   <scm>
     <connection>scm:git:git@github.com:wcm-io/wcm-io.git</connection>

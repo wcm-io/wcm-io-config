@@ -1,6 +1,6 @@
 ## About Configuration API
 
-API and SPI for configuration infrastructure.
+API and SPI for context-specific configuration.
 
 ### Maven Dependency
 

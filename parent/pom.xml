@@ -35,7 +35,7 @@
   <packaging>pom</packaging>
 
   <name>Configuration</name>
-  <description>Configuration infrastructure for AEM applications.</description>
+  <description>Context-specific configuration for AEM applications.</description>
 
   <scm>
     <connection>scm:git:git@github.com:wcm-io/wcm-io.git</connection>

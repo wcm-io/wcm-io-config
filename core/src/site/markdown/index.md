@@ -1,6 +1,6 @@
 ## About Configuration Implementation
 
-Core Implementation of configuration infrastructure.
+Context-specific configuration management implementation.
 
 ### Maven Dependency
 
