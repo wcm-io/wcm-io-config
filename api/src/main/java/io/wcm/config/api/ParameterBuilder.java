@@ -22,10 +22,11 @@ package io.wcm.config.api;
 import io.wcm.sling.commons.resource.ImmutableValueMap;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
+
+import com.google.common.collect.ImmutableSet;
 
 /**
  * Fluent API for building configuration parameter definitions.
@@ -38,16 +39,15 @@ public final class ParameterBuilder<T> {
   private static final Pattern OSGI_CONFIG_PROPERTY_PATTERN =
       Pattern.compile("^[a-zA-Z0-9\\-\\_\\.\\$]+\\:[a-zA-Z0-9\\-\\_\\.]+$");
 
-  private static final Set<Class<?>> SUPPORTED_TYPES = new HashSet<>();
-  static {
-    SUPPORTED_TYPES.add(String.class);
-    SUPPORTED_TYPES.add(String[].class);
-    SUPPORTED_TYPES.add(Integer.class);
-    SUPPORTED_TYPES.add(Long.class);
-    SUPPORTED_TYPES.add(Double.class);
-    SUPPORTED_TYPES.add(Boolean.class);
-    SUPPORTED_TYPES.add(Map.class);
-  }
+  private static final Set<Class<?>> SUPPORTED_TYPES = ImmutableSet.<Class<?>>builder()
+      .add(String.class)
+      .add(String[].class)
+      .add(Integer.class)
+      .add(Long.class)
+      .add(Double.class)
+      .add(Boolean.class)
+      .add(Map.class)
+      .build();
 
   private String name;
   private Class<T> type;
