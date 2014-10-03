@@ -25,7 +25,7 @@ import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyCollectionOf;
 import static org.mockito.Mockito.when;
-import io.wcm.config.api.Application;
+import io.wcm.config.core.management.Application;
 import io.wcm.config.api.Configuration;
 import io.wcm.config.core.management.ApplicationFinder;
 import io.wcm.config.core.management.ParameterResolver;

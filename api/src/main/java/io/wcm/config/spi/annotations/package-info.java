@@ -20,4 +20,4 @@
 /**
  * Annotations for annotating Sling Models implementations.
  */
-package io.wcm.config.api.annotations;
+package io.wcm.config.spi.annotations;

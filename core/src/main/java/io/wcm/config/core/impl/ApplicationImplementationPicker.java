@@ -19,7 +19,7 @@
  */
 package io.wcm.config.core.impl;
 
-import io.wcm.config.api.Application;
+import io.wcm.config.core.management.Application;
 import io.wcm.config.core.management.ApplicationFinder;
 
 import org.apache.commons.lang3.StringUtils;
@@ -60,8 +60,8 @@ public class ApplicationImplementationPicker implements ImplementationPicker {
     String applicationId = getApplicationId(adaptable);
     if (applicationId != null) {
       for (Class<?> clazz : implementationsTypes) {
-        io.wcm.config.api.annotations.Application applicationAnnotation =
-            clazz.getAnnotation(io.wcm.config.api.annotations.Application.class);
+        io.wcm.config.spi.annotations.Application applicationAnnotation =
+            clazz.getAnnotation(io.wcm.config.spi.annotations.Application.class);
         if (applicationAnnotation != null
             && StringUtils.equals(applicationId, applicationAnnotation.value())) {
           return clazz;
@@ -84,7 +84,7 @@ public class ApplicationImplementationPicker implements ImplementationPicker {
 
   private Class<?> pickFirstWithoutApplication(Class<?>[] implementationsTypes) {
     for (Class<?> clazz : implementationsTypes) {
-      if (!clazz.isAnnotationPresent(io.wcm.config.api.annotations.Application.class)) {
+      if (!clazz.isAnnotationPresent(io.wcm.config.spi.annotations.Application.class)) {
         return clazz;
       }
     }

@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.config.api;
+package io.wcm.config.core.management;
 
 import static org.junit.Assert.assertEquals;
 

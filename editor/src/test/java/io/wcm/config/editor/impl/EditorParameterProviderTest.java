@@ -25,7 +25,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
-import io.wcm.config.api.Application;
+import io.wcm.config.core.management.Application;
 import io.wcm.config.api.Configuration;
 import io.wcm.config.api.Parameter;
 import io.wcm.config.api.ParameterBuilder;

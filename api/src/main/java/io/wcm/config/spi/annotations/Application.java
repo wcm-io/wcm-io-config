@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.config.api.annotations;
+package io.wcm.config.spi.annotations;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

@@ -19,7 +19,7 @@
  */
 package io.wcm.config.core.management.impl;
 
-import io.wcm.config.api.Application;
+import io.wcm.config.core.management.Application;
 import io.wcm.config.api.Configuration;
 import io.wcm.config.core.impl.ConfigurationImpl;
 import io.wcm.config.core.management.ApplicationFinder;

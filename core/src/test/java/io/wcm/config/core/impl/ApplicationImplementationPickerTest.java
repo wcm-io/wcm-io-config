@@ -21,7 +21,7 @@ package io.wcm.config.core.impl;
 
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.when;
-import io.wcm.config.api.Application;
+import io.wcm.config.core.management.Application;
 import io.wcm.config.core.management.ApplicationFinder;
 
 import org.apache.sling.api.resource.Resource;
@@ -89,7 +89,7 @@ public class ApplicationImplementationPickerTest {
   }
 
   @Model(adaptables = Resource.class, adapters = Comparable.class)
-  @io.wcm.config.api.annotations.Application(APP_ID_1)
+  @io.wcm.config.spi.annotations.Application(APP_ID_1)
   private static class Impl1 implements Comparable {
     @Override
     public int compareTo(Object o) {
@@ -98,7 +98,7 @@ public class ApplicationImplementationPickerTest {
   }
 
   @Model(adaptables = Resource.class, adapters = Comparable.class)
-  @io.wcm.config.api.annotations.Application(APP_ID_2)
+  @io.wcm.config.spi.annotations.Application(APP_ID_2)
   private static class Impl2 implements Comparable {
     @Override
     public int compareTo(Object o) {

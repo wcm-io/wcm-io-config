@@ -19,7 +19,7 @@
  */
 package io.wcm.config.core.management.impl;
 
-import io.wcm.config.api.Application;
+import io.wcm.config.core.management.Application;
 import io.wcm.config.core.management.ApplicationFinder;
 import io.wcm.config.spi.ApplicationProvider;
 import io.wcm.sling.commons.osgi.RankedServices;
@@ -48,7 +48,7 @@ public final class ApplicationFinderImpl implements ApplicationFinder {
   private final RankedServices<ApplicationProvider> applicationProviders = new RankedServices<>();
 
   @Override
-  public Application find(Resource resource) {
+  public io.wcm.config.core.management.Application find(Resource resource) {
     for (ApplicationProvider provider : applicationProviders) {
       if (provider.matches(resource)) {
         return new Application(provider.getApplicationId(), provider.getLabel());

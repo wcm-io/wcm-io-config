@@ -19,8 +19,6 @@
  */
 package io.wcm.config.core.management;
 
-import io.wcm.config.api.Application;
-
 import java.util.Set;
 
 import org.apache.sling.api.resource.Resource;

@@ -24,7 +24,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import io.wcm.config.api.Application;
+import io.wcm.config.core.management.Application;
 import io.wcm.config.spi.ApplicationProvider;
 import io.wcm.sling.commons.resource.ImmutableValueMap;
 
