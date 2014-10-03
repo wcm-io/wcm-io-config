@@ -150,8 +150,16 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
         setInherited(jsonParameter, effectiveValue, persistedValue);
 
         addValue(jsonParameter, effectiveValue, parameter);
+        addLabel(jsonParameter, parameter);
       }
     }
+  }
+
+  private void addLabel(JSONObject jsonParameter, Parameter parameter) throws JSONException {
+    ValueMap properties = parameter.getProperties();
+    jsonParameter.put(EditorProperties.LABEL, StringUtils.defaultString(
+        properties.get(EditorProperties.LABEL, String.class),
+        parameter.getName()));
   }
 
   private void setInherited(JSONObject jsonParameter, Object effectiveValue, Object persistedValue) throws JSONException {

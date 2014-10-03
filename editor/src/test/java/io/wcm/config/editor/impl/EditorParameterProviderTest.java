@@ -34,6 +34,7 @@ import io.wcm.config.core.management.ConfigurationFinder;
 import io.wcm.config.core.management.ParameterPersistence;
 import io.wcm.config.core.management.ParameterPersistenceData;
 import io.wcm.config.core.management.ParameterResolver;
+import io.wcm.config.editor.EditorProperties;
 import io.wcm.config.editor.WidgetTypes;
 import io.wcm.sling.commons.resource.ImmutableValueMap;
 
@@ -100,7 +101,7 @@ public class EditorParameterProviderTest {
   private static final Parameter<Double> PARAMETER_DOUBLE = ParameterBuilder.create("double-param", Double.class, APP_ID)
       .properties(WidgetTypes.TEXTAREA.getDefaultWidgetConfiguration()).build();
   private static final Parameter<String> EDITABLE_PARAMETER_ONE = ParameterBuilder.create("string-param-1", String.class, APP_ID)
-      .properties(WidgetTypes.TEXTAREA.getDefaultWidgetConfiguration()).defaultValue("defaultValue").build();
+      .properties(WidgetTypes.TEXTAREA.getDefaultWidgetConfiguration()).property(EditorProperties.LABEL, "Label").defaultValue("defaultValue").build();
   private static final Parameter<String> EDITABLE_PARAMETER_TWO = ParameterBuilder.create("string-param-2", String.class, "/app/without/app/provider")
       .properties(WidgetTypes.TEXTAREA.getDefaultWidgetConfiguration()).defaultValue("defaultValue2").build();
   private static final Set<Parameter<?>> PARAMETERS = ImmutableSet.<Parameter<?>>of(EDITABLE_PARAMETER_ONE, EDITABLE_PARAMETER_TWO, NON_EDITABLE_PARAMETER,
@@ -243,6 +244,13 @@ public class EditorParameterProviderTest {
     underTest.doGet(request, response);
     assertEquals(firstParameter.get(EditorNameConstants.APPLICATION_ID), "Test App");
     assertEquals(secondParameter.get(EditorNameConstants.APPLICATION_ID), "/app/without/app/provider");
+  }
+
+  @Test
+  public void testParameterLabel() throws ServletException, IOException, JSONException {
+    underTest.doGet(request, response);
+    assertEquals(firstParameter.get(EditorProperties.LABEL), "Label");
+    assertEquals(secondParameter.get(EditorProperties.LABEL), "string-param-2");
   }
 
   @Test

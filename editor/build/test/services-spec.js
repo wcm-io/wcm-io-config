@@ -101,13 +101,13 @@ describe("parameters service", function() {
         expect(nameValuePairs.length).toBe(5, "wrong number of parameters");
 
         expect(
-          utils.contains(nameValuePairs, encodeURIComponent("Checkbox Parameter") + "=" + encodeURIComponent("true"))).toBeTruthy("parameter is missing");
+          utils.contains(nameValuePairs, encodeURIComponent("checkbox-param") + "=" + encodeURIComponent("true"))).toBeTruthy("parameter is missing");
         expect(
-          utils.contains(nameValuePairs, encodeURIComponent("Pathbrowser Parameter") + "=" + "")).toBeTruthy("parameter is missing");
+          utils.contains(nameValuePairs, encodeURIComponent("path-param") + "=" + "")).toBeTruthy("parameter is missing");
         expect(
-          utils.contains(nameValuePairs, encodeURIComponent("Textarea Parameter Only for Digits") + "=" + "123")).toBeTruthy("parameter is missing");
+          utils.contains(nameValuePairs, encodeURIComponent("digits") + "=" + "123")).toBeTruthy("parameter is missing");
         expect(
-          utils.contains(nameValuePairs, encodeURIComponent("lockedParameterNames") + "=" + encodeURIComponent("String Parameter"))).toBeTruthy("parameter is missing");
+          utils.contains(nameValuePairs, encodeURIComponent("lockedParameterNames") + "=" + encodeURIComponent("string-param"))).toBeTruthy("parameter is missing");
         expect(
           utils.contains(nameValuePairs, "_charset_=utf-8")).toBeTruthy("parameter is missing");
         return [200, {}, {}];

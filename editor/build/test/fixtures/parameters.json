@@ -1,7 +1,8 @@
 {
   "parameters": [
     {
-      "name": "Locked String Parameter",
+      "label": "Locked String Parameter",
+      "name": "locked-string-parameter",
       "value": "Test",
       "group": "Dealer Locator",
       "application": "/apps/sample",
@@ -12,7 +13,8 @@
       "lockedInherited": true
     },
     {
-      "name": "String Parameter",
+      "label": "String Parameter",
+      "name":"string-param",
       "value": "Test",
       "group": "Dealer Locator",
       "application": "/apps/sample",
@@ -23,7 +25,8 @@
       "widgetType": "textfield"
     },
     {
-      "name": "Textarea Parameter Only for Digits",
+      "label": "Textarea Parameter Only for Digits",
+      "name": "digits",
       "value": "123",
       "group": "Link Handling",
       "application": "/apps/wcm-io/linkhandler",
@@ -37,7 +40,8 @@
       "required": true
     },
     {
-      "name": "Pathbrowser Parameter",
+      "label": "Pathbrowser Parameter",
+      "name": "path-param",
       "value": "",
       "group": "Link Handling",
       "application": "/apps/wcm-io/linkhandler",
@@ -48,7 +52,8 @@
       "rootPath": "/content"
     },
     {
-      "name": "Checkbox Parameter",
+      "label": "Checkbox Parameter",
+      "name": "checkbox-param",
       "value": true,
       "group": "Link Handling",
       "application": "/apps/wcm-io/linkhandler",
