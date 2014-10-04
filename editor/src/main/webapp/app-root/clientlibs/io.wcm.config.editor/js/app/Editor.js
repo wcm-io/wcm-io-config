@@ -71,11 +71,11 @@
             var filterValues = $scope.currentFilter[propertyName];
 
             if (filterValues && filterValues.length > 0) {
-              var isVisisible = function(parameter, index) {
+              var isVisible = function(parameter, index) {
                 var value = parameter[propertyName];
                 return filterValues.indexOf(value) !== -1;
               };
-              filteredParameters = $filter("filter")(filteredParameters, isVisisible);
+              filteredParameters = $filter("filter")(filteredParameters, isVisible);
             }
           }
         }
