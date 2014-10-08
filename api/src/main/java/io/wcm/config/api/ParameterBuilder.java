@@ -19,6 +19,7 @@
  */
 package io.wcm.config.api;
 
+import io.wcm.config.spi.ApplicationProvider;
 import io.wcm.sling.commons.resource.ImmutableValueMap;
 
 import java.util.HashMap;
@@ -35,7 +36,6 @@ import com.google.common.collect.ImmutableSet;
 public final class ParameterBuilder<T> {
 
   private static final Pattern PARAMETER_NAME_PATTERN = Pattern.compile("^[a-zA-Z0-9\\-\\_\\.]+$");
-  private static final Pattern APPLICATION_ID_PATTERN = Pattern.compile("^(/[a-zA-Z0-9\\-\\_]+)+$");
   private static final Pattern OSGI_CONFIG_PROPERTY_PATTERN =
       Pattern.compile("^[a-zA-Z0-9\\-\\_\\.\\$]+\\:[a-zA-Z0-9\\-\\_\\.]+$");
 
@@ -133,8 +133,8 @@ public final class ParameterBuilder<T> {
    * @return this
    */
   public ParameterBuilder<T> applicationId(String value) {
-    if (value == null || !APPLICATION_ID_PATTERN.matcher(value).matches()) {
-      throw new IllegalArgumentException("Invalid applicaitonId: " + value);
+    if (value == null || !ApplicationProvider.APPLICATION_ID_PATTERN.matcher(value).matches()) {
+      throw new IllegalArgumentException("Invalid applicaiton id: " + value);
     }
     this.applicationId = value;
     return this;
@@ -203,7 +203,7 @@ public final class ParameterBuilder<T> {
       throw new IllegalArgumentException("Type is missing.");
     }
     if (this.applicationId == null) {
-      throw new IllegalArgumentException("Application Id is missing.");
+      throw new IllegalArgumentException("Application id is missing.");
     }
     return new Parameter<T>(
         this.name,

@@ -19,6 +19,8 @@
  */
 package io.wcm.config.spi;
 
+import java.util.regex.Pattern;
+
 import org.apache.sling.api.resource.Resource;
 
 /**
@@ -28,6 +30,11 @@ import org.apache.sling.api.resource.Resource;
  * their own controller or handler implementations chosen by the ApplicationImplementationPicker for Sling Models.
  */
 public interface ApplicationProvider {
+
+  /**
+   * Pattern that defines the allowed syntax for application ids.
+   */
+  Pattern APPLICATION_ID_PATTERN = Pattern.compile("^(/[a-zA-Z0-9\\-\\_]+)+$");
 
   /**
    * @return Application Id. The application is is usually the application path at /apps/ or /libs/.

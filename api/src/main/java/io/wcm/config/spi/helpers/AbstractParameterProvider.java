@@ -56,7 +56,7 @@ public abstract class AbstractParameterProvider implements ParameterProvider {
   }
 
   /**
-   * Get all parameters defines as public static fields in the given type.
+   * Get all parameters defined as public static fields in the given type.
    * @param type Type
    * @return Set of parameters
    */
