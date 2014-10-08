@@ -137,7 +137,6 @@
       <plugin>
         <groupId>io.wcm.maven.plugins</groupId>
         <artifactId>nodejs-maven-plugin</artifactId>
-        <version>1.0.0</version>
         <executions>
           <execution>
             <phase>compile</phase>
@@ -176,50 +175,6 @@
       </plugins>
     </pluginManagement>
   </build>
-
-  <profiles>
-  
-    <!-- TODO: remove this when updated to io.wcm.maven.aem-global-parent 1.0.2 or higher -->
-    <profile>
-      <id>only-eclipse</id>
-      <activation>
-        <property>
-          <name>m2e.version</name>
-        </property>
-      </activation>
-      <build>
-        <pluginManagement>
-          <plugins>
-            <plugin>
-              <groupId>org.eclipse.m2e</groupId>
-              <artifactId>lifecycle-mapping</artifactId>
-              <version>1.0.0</version>
-              <configuration>
-                <lifecycleMappingMetadata>
-                  <pluginExecutions>
-                    <pluginExecution>
-                      <pluginExecutionFilter>
-                        <groupId>io.wcm.maven.plugins</groupId>
-                        <artifactId>nodejs-maven-plugin</artifactId>
-                        <versionRange>[1.0.0,)</versionRange>
-                        <goals>
-                          <goal>run</goal>
-                        </goals>
-                      </pluginExecutionFilter>
-                      <action>
-                        <ignore></ignore>
-                      </action>
-                    </pluginExecution>
-                  </pluginExecutions>
-                </lifecycleMappingMetadata>
-              </configuration>
-            </plugin>
-          </plugins>
-        </pluginManagement>
-      </build>
-    </profile>
-
-  </profiles>
 
   <distributionManagement>
     <site>
