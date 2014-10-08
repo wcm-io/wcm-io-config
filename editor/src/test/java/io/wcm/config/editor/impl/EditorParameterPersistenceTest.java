@@ -18,31 +18,44 @@
  * #L%
  */
 package io.wcm.config.editor.impl;
+
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import io.wcm.config.api.Configuration;
 import io.wcm.config.api.Parameter;
 import io.wcm.config.api.ParameterBuilder;
 import io.wcm.config.core.management.ConfigurationFinder;
+import io.wcm.config.core.management.ParameterPersistence;
 import io.wcm.config.core.management.ParameterPersistenceData;
 import io.wcm.config.core.management.ParameterResolver;
 import io.wcm.config.editor.WidgetTypes;
+import io.wcm.sling.commons.resource.ImmutableValueMap;
+import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.wcm.commons.util.RunMode;
 
-import java.util.Enumeration;
 import java.util.Map;
 import java.util.Set;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.servlets.HttpConstants;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.day.cq.wcm.api.Page;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterators;
 
 /**
  * Tests for the {@link EditorParameterPersistence}
@@ -72,92 +85,141 @@ public class EditorParameterPersistenceTest {
   private static final Set<Parameter<?>> PARAMETERS = ImmutableSet.<Parameter<?>>of(PARAMETER_BOOLEAN, PARAMETER_DOUBLE, PARAMETER_INTEGER, PARAMETER_LONG,
       PARAMETER_MAP, PARAMETER_MULTIVALUE, PARAMETER_STRING, NON_EDITABLE_PARAMETER);
 
+  private static final ImmutableValueMap.Builder BUILDER = new ImmutableValueMap.Builder();
+  static {
+    BUILDER.put("map-param", "key1=value1;key2=value2");
+    BUILDER.put("multivalue-param", "value1;value2");
+    BUILDER.put("string-param", "value");
+    BUILDER.put("integer-param", "1");
+    BUILDER.put("long-param", "5");
+    BUILDER.put("double-param", "3.454");
+    BUILDER.put("boolean-param", "true");
+  }
+  private static final Map<String, Object> REQUEST_PARAMETERS = BUILDER.build();
+
+
   @Mock
   private ConfigurationFinder configurationFinder;
   @Mock
+  private Configuration configuration;
+
+  @Mock
   private ResourceResolver resourceResolver;
+  @Mock
+  private ParameterPersistence persistence;
   @Mock
   private SlingHttpServletRequest request;
   @Mock
   private Resource resource;
 
-  @InjectMocks
-  private EditorParameterPersistence underTest;
+  @Rule
+  public AemContext context = new AemContext();
 
   @Before
   public void setUp() {
-    when(request.getResourceResolver()).thenReturn(resourceResolver);
+    context.runMode(RunMode.AUTHOR);
+    context.request().setParameterMap(REQUEST_PARAMETERS);
+    Page page = context.create().page("/content/test/tools/config");
+    context.currentPage(page);
+    context.request().setMethod(HttpConstants.METHOD_POST);
+    context.registerService(ConfigurationFinder.class, configurationFinder);
+    context.registerService(ParameterResolver.class, parameterResolver);
+    context.registerService(ParameterPersistence.class, persistence);
     when(parameterResolver.getAllParameters()).thenReturn(PARAMETERS);
+    when(configurationFinder.find(Matchers.any(Resource.class))).thenReturn(configuration);
+    when(configuration.getConfigurationId()).thenReturn("/content/test");
+  }
 
-    Enumeration<String> requestParameterNames = Iterators.asEnumeration(ImmutableSet.<String>of("map-param", "multivalue-param", "string-param",
-        "boolean-param", "integer-param", "long-param", "double-param")
-        .iterator());
-    when(request.getParameterNames()).thenReturn(requestParameterNames);
-    when(request.getParameterValues("map-param")).thenReturn(new String[] {
-        "key1=value1;key2=value2"
-    });
-    when(request.getParameterValues("multivalue-param")).thenReturn(new String[] {
-        "value1;value2"
-    });
-    when(request.getParameterValues("string-param")).thenReturn(new String[] {
-        "value"
-    });
-    when(request.getParameterValues("integer-param")).thenReturn(new String[] {
-        "1"
-    });
-    when(request.getParameterValues("long-param")).thenReturn(new String[] {
-        "5"
-    });
-    when(request.getParameterValues("double-param")).thenReturn(new String[] {
-        "3.454"
-    });
-    when(request.getParameterValues("boolean-param")).thenReturn(new String[] {
-        "true"
-    });
+  @Test
+  public void testResponseNoConfigurationFound() throws Exception {
+    when(configurationFinder.find(Matchers.any(Resource.class))).thenReturn(null);
+
+    EditorParameterPersistence underTest = new EditorParameterPersistence();
+    context.registerInjectActivateService(underTest);
+    underTest.service(context.request(), context.response());
+    assertEquals(HttpServletResponse.SC_BAD_REQUEST, context.response().getStatus());
+  }
+
+  @Test
+  public void testResponseConfigurationFound() throws Exception {
+    EditorParameterPersistence underTest = new EditorParameterPersistence();
+    context.registerInjectActivateService(underTest);
+    underTest.service(context.request(), context.response());
+    assertEquals(HttpServletResponse.SC_OK, context.response().getStatus());
   }
 
   @SuppressWarnings("unchecked")
   @Test
-  public void testMapValue() {
-    ParameterPersistenceData data = underTest.getPersistenceData(request);
-    Map<String, Object> mapParam = (Map<String, Object>)data.getValues().get("map-param");
+  public void testMapValue() throws Exception {
+    EditorParameterPersistence underTest = new EditorParameterPersistence();
+    context.registerInjectActivateService(underTest);
+    ArgumentCaptor<ParameterPersistenceData> argument = ArgumentCaptor.forClass(ParameterPersistenceData.class);
+    underTest.service(context.request(), context.response());
+    verify(persistence).storeData(any(ResourceResolver.class), eq("/content/test"), argument.capture(), eq(false));
+
+    Map<String, Object> mapParam = (Map<String, Object>)argument.getValue().getValues().get("map-param");
     assertEquals(mapParam.get("key1"), "value1");
     assertEquals(mapParam.get("key2"), "value2");
   }
 
   @Test
-  public void testMultiValue() {
-    ParameterPersistenceData data = underTest.getPersistenceData(request);
-    String[] multiParam = (String[])data.getValues().get("multivalue-param");
+  public void testMultiValue() throws Exception {
+    EditorParameterPersistence underTest = new EditorParameterPersistence();
+    context.registerInjectActivateService(underTest);
+    ArgumentCaptor<ParameterPersistenceData> argument = ArgumentCaptor.forClass(ParameterPersistenceData.class);
+    underTest.service(context.request(), context.response());
+    verify(persistence).storeData(any(ResourceResolver.class), eq("/content/test"), argument.capture(), eq(false));
+
+    String[] multiParam = (String[])argument.getValue().getValues().get("multivalue-param");
     assertEquals(multiParam[0], "value1");
     assertEquals(multiParam[1], "value2");
   }
 
   @Test
-  public void testBooleanValue() {
-    ParameterPersistenceData data = underTest.getPersistenceData(request);
-    Boolean value = (Boolean)data.getValues().get("boolean-param");
+  public void testBooleanValue() throws Exception {
+    EditorParameterPersistence underTest = new EditorParameterPersistence();
+    context.registerInjectActivateService(underTest);
+    ArgumentCaptor<ParameterPersistenceData> argument = ArgumentCaptor.forClass(ParameterPersistenceData.class);
+    underTest.service(context.request(), context.response());
+    verify(persistence).storeData(any(ResourceResolver.class), eq("/content/test"), argument.capture(), eq(false));
+
+    Boolean value = (Boolean)argument.getValue().getValues().get("boolean-param");
     assertEquals(value, true);
   }
 
   @Test
-  public void testIntegerValue() {
-    ParameterPersistenceData data = underTest.getPersistenceData(request);
-    Integer value = (Integer)data.getValues().get("integer-param");
+  public void testIntegerValue() throws Exception {
+    EditorParameterPersistence underTest = new EditorParameterPersistence();
+    context.registerInjectActivateService(underTest);
+    ArgumentCaptor<ParameterPersistenceData> argument = ArgumentCaptor.forClass(ParameterPersistenceData.class);
+    underTest.service(context.request(), context.response());
+    verify(persistence).storeData(any(ResourceResolver.class), eq("/content/test"), argument.capture(), eq(false));
+
+    Integer value = (Integer)argument.getValue().getValues().get("integer-param");
     assertEquals(value, Integer.valueOf(1));
   }
 
   @Test
-  public void testLongValue() {
-    ParameterPersistenceData data = underTest.getPersistenceData(request);
-    Long value = (Long)data.getValues().get("long-param");
+  public void testLongValue() throws Exception {
+    EditorParameterPersistence underTest = new EditorParameterPersistence();
+    context.registerInjectActivateService(underTest);
+    ArgumentCaptor<ParameterPersistenceData> argument = ArgumentCaptor.forClass(ParameterPersistenceData.class);
+    underTest.service(context.request(), context.response());
+    verify(persistence).storeData(any(ResourceResolver.class), eq("/content/test"), argument.capture(), eq(false));
+
+    Long value = (Long)argument.getValue().getValues().get("long-param");
     assertEquals(value, Long.valueOf(5L));
   }
 
   @Test
-  public void testDoubleValue() {
-    ParameterPersistenceData data = underTest.getPersistenceData(request);
-    Double value = (Double)data.getValues().get("double-param");
+  public void testDoubleValue() throws Exception {
+    EditorParameterPersistence underTest = new EditorParameterPersistence();
+    context.registerInjectActivateService(underTest);
+    ArgumentCaptor<ParameterPersistenceData> argument = ArgumentCaptor.forClass(ParameterPersistenceData.class);
+    underTest.service(context.request(), context.response());
+    verify(persistence).storeData(any(ResourceResolver.class), eq("/content/test"), argument.capture(), eq(false));
+
+    Double value = (Double)argument.getValue().getValues().get("double-param");
     assertEquals(value, Double.valueOf(3.454));
   }
 }

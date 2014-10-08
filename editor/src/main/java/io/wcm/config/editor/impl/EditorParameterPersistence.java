@@ -81,15 +81,16 @@ public class EditorParameterPersistence extends SlingAllMethodsServlet {
 
     String configurationId = getCurrentConfigurationId(request);
     if (StringUtils.isEmpty(configurationId)) {
-      log.error("Could not find configuration id for resource {0}", request.getResource().getPath());
+      log.error("Could not find configuration id for resource {}", request.getResource().getPath());
       response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not find configuration id for resource " + request.getResource().getPath());
+      return;
     }
 
     try {
       persistence.storeData(request.getResourceResolver(), configurationId, getPersistenceData(request), false);
     }
     catch (Throwable ex) {
-      log.error("Could not persist data for configuration id {0}", configurationId, ex);
+      log.error("Could not persist data for configuration id {}", configurationId, ex);
       response.sendError(HttpServletResponse.SC_BAD_REQUEST);
     }
   }
