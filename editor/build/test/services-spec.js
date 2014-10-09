@@ -5,7 +5,10 @@ describe("parameters service", function() {
     module("io.wcm.config.services", "io.wcm.config.utilities", "testApp");
 
     angular.module("testApp", function() { }).config(function(parametersProvider){
-      parametersProvider.setConfig({url:"http://localhost/test.json",
+      var i18n = {};
+      i18n.applicationFilter = "Filter Application";
+      i18n.groupFilter = "Filter Group";
+      parametersProvider.setConfig({i18n: i18n, url:"http://localhost/test.json",
         lockedParameterName: "lockedParameterNames"});
     });
   });
@@ -41,6 +44,7 @@ describe("parameters service", function() {
         expect(results.filters).not.toBeUndefined();
         expect(results.filters[0]).not.toBeUndefined();
         expect(results.filters[0].options.length).toBe(2);
+        expect(results.filters[0].name).toBe("Filter Group");
       });
       httpBackend.flush();
 
@@ -54,6 +58,7 @@ describe("parameters service", function() {
         expect(results.filters).not.toBeUndefined();
         expect(results.filters[1]).not.toBeUndefined();
         expect(results.filters[1].options.length).toBe(2);
+        expect(results.filters[1].name).toBe("Filter Application");
       });
       httpBackend.flush();
     });

@@ -18,10 +18,9 @@
 
       <form id="configuration" name="configForm">
         <filter-drop-down-list ng-repeat="filter in filters" model="filter" current-filter="currentFilter"></filter-drop-down-list>
-        <button ng-disabled="!configForm.$valid" class="coral-Button coral-Button--primary" ng-click="save()" >Save</button>
+        <button ng-disabled="!configForm.$valid" class="coral-Button coral-Button--primary" ng-click="save()" >${'io.wcm.config.editor.save' @ i18n}</button>
 
-        <p>Configuration for: <code>${currentPage.path}</code></p>
-
+        <p>${'io.wcm.config.editor.config.path' @ i18n} <code>${currentPage.path}</code></p>
         <table class="coral-Table coral-Table--hover" ng-cloak>
           <thead>
           <tr class="coral-Table-row">
@@ -70,37 +69,40 @@
         <div class="coral-Modal-header">
           <i class="coral-Modal-typeIcon coral-Icon coral-Icon--sizeS"></i>
           <h2 class="coral-Modal-title coral-Heading coral-Heading--2">${'io.wcm.config.editor.title' @ i18n}</h2>
-          <button type="button" class="coral-MinimalButton coral-Modal-closeButton" title="Close" data-dismiss="modal">
+          <button type="button" class="coral-MinimalButton coral-Modal-closeButton" title="${'io.wcm.config.editor.modal.close' @ i18n}" data-dismiss="modal">
             <i class="coral-Icon coral-Icon--sizeXS coral-Icon--close coral-MinimalButton-icon "></i>
           </button>
         </div>
         <div class="coral-Modal-body">
-          <p>Configuration was successfully saved</p>
+          <p>${'io.wcm.config.editor.modal.success' @ i18n}</p>
         </div>
         <div class="coral-Modal-footer">
-          <button type="button" class="coral-Button" data-dismiss="modal">Close</button>
+          <button type="button" class="coral-Button" data-dismiss="modal">${'io.wcm.config.editor.modal.close' @ i18n}</button>
         </div>
       </div>
       <div id="errorModal" class="coral-Modal">
         <div class="coral-Modal-header">
           <i class="coral-Modal-typeIcon coral-Icon coral-Icon--sizeS"></i>
           <h2 class="coral-Modal-title coral-Heading coral-Heading--2">${'io.wcm.config.editor.title' @ i18n}</h2>
-          <button type="button" class="coral-MinimalButton coral-Modal-closeButton" title="Close" data-dismiss="modal">
+          <button type="button" class="coral-MinimalButton coral-Modal-closeButton" title="${'io.wcm.config.editor.modal.close' @ i18n}" data-dismiss="modal">
             <i class="coral-Icon coral-Icon--sizeXS coral-Icon--close coral-MinimalButton-icon "></i>
           </button>
         </div>
         <div class="coral-Modal-body">
-          <p>An internal error occurred. Please try again.</p>
+          <p>${'io.wcm.config.editor.modal.error' @ i18n}</p>
         </div>
         <div class="coral-Modal-footer">
-          <button type="button" class="coral-Button" data-dismiss="modal">Close</button>
+          <button type="button" class="coral-Button" data-dismiss="modal">${'io.wcm.config.editor.modal.close' @ i18n}</button>
         </div>
       </div>
       <meta data-sly-call="${clientLib.js @ categories='io.wcm.config.editor'}" data-sly-unwrap></meta>
       <script type="text/javascript">
         angular.module("io.wcm.config.services").config(["parametersProvider", function(parametersProvider){
           var path = "${editorConfig.providerUrl @ context='uri'}";
-          parametersProvider.setConfig({url: path, lockedParameterName: "${editorConfig.lockedNamesAttributeName @ context='scriptString'}"});
+          var i18n = {};
+          i18n.applicationFilter = "${'io.wcm.config.editor.filter.application' @ i18n, context='text'}";
+          i18n.groupFilter = "${'io.wcm.config.editor.filter.group' @ i18n, context='text'}";
+          parametersProvider.setConfig({i18n: i18n, url: path, lockedParameterName: "${editorConfig.lockedNamesAttributeName @ context='scriptString'}"});
         }]);
       </script>
     </div>

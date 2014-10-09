@@ -11,7 +11,10 @@ describe("Editor", function() {
     module("io.wcm.config.editor", "io.wcm.config.utilities", "testApp");
 
     angular.module("testApp", function() { }).config(function(parametersProvider){
-      parametersProvider.setConfig({url:"http://localhost/test.json",
+      var i18n = {};
+      i18n.applicationFilter = "Filter Application";
+      i18n.groupFilter = "Filter Group";
+      parametersProvider.setConfig({i18n:i18n, url:"http://localhost/test.json",
         lockedParameterName: "lockedParameterNames"});
     });
 

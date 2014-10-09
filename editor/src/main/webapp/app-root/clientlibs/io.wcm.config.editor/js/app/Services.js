@@ -52,10 +52,10 @@
          */
         function extractFilters(parameters) {
           var applicationFilter = {
-            name: "Filter Application", filterParameter:"application", options:[]
+            name: config.i18n.applicationFilter, filterParameter:"application", options:[]
           };
           var groupFilter = {
-            name: "Filter Group", filterParameter:"group", options:[]
+            name: config.i18n.groupFilter, filterParameter:"group", options:[]
           };
           extractFilter(groupFilter, "group", parameters);
           extractFilter(applicationFilter, "application", parameters);
