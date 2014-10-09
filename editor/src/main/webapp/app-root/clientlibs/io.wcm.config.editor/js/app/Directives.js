@@ -182,7 +182,6 @@
           scope.$watch('values', function() {
             var stringValues = _.pluck(scope.values, "value");
             scope.parameter.value = stringValues.join(";");
-            console.log(scope.parameter.value);
           }, true);
         }
       }

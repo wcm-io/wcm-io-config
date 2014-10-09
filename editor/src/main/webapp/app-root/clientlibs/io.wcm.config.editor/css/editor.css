@@ -56,3 +56,12 @@ span.wcm-io-editor-pathbrowser {
   top: 0;
   right: 0;
 }
+
+.wcm-io-editor.endor-Brand {
+  display: inline-block;
+  background-color: transparent;
+}
+
+span.wcm-io-editor.endor-Brand {
+  cursor: default;
+}
