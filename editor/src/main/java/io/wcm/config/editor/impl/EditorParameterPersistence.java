@@ -77,8 +77,6 @@ public class EditorParameterPersistence extends SlingAllMethodsServlet {
 
   @Override
   protected void doPost(SlingHttpServletRequest request, SlingHttpServletResponse response) throws ServletException, IOException {
-    sanityCheck(request, response);
-
     String configurationId = getCurrentConfigurationId(request);
     if (StringUtils.isEmpty(configurationId)) {
       log.error("Could not find configuration id for resource {}", request.getResource().getPath());
@@ -140,12 +138,6 @@ public class EditorParameterPersistence extends SlingAllMethodsServlet {
       value = TypeConversion.stringToObject(values[0], parameter.getType());
     }
     return value;
-  }
-
-  private void sanityCheck(SlingHttpServletRequest request, SlingHttpServletResponse response) throws IOException {
-    if (configurationFinder == null || persistence == null) {
-      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Configuration services are not available");
-    }
   }
 
   private String getCurrentConfigurationId(SlingHttpServletRequest request) {

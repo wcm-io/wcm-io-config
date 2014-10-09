@@ -19,9 +19,9 @@
  */
 package io.wcm.config.editor.impl;
 
-import io.wcm.config.core.management.Application;
 import io.wcm.config.api.Configuration;
 import io.wcm.config.api.Parameter;
+import io.wcm.config.core.management.Application;
 import io.wcm.config.core.management.ApplicationFinder;
 import io.wcm.config.core.management.ConfigurationFinder;
 import io.wcm.config.core.management.ParameterPersistence;
@@ -84,8 +84,6 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
 
   @Override
   protected void doGet(SlingHttpServletRequest request, SlingHttpServletResponse response) throws ServletException, IOException {
-    sanityCheck(request, response);
-
     Configuration[] allConfigurations = Iterators.toArray(getConfigurations(request), Configuration.class);
     Map<String, Application> applicationsMap = getApplicationsMap();
     JSONArray parameters = new JSONArray();
@@ -116,12 +114,6 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
 
     }
     return result;
-  }
-
-  private void sanityCheck(SlingHttpServletRequest request, SlingHttpServletResponse response) throws IOException {
-    if (applicationFinder == null || configurationFinder == null || persistence == null || parameterResolver == null) {
-      response.sendError(500, "Configuration services are not available");
-    }
   }
 
   protected void addParameters(JSONArray parameters, Configuration configuration, SlingHttpServletRequest request, Map<String, Application> applicationsMap)

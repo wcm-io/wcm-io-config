@@ -36,6 +36,7 @@ import io.wcm.sling.commons.resource.ImmutableValueMap;
 import io.wcm.testing.mock.aem.junit.AemContext;
 import io.wcm.wcm.commons.util.RunMode;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -55,6 +56,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.day.cq.wcm.api.Page;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
 /**
@@ -94,9 +96,9 @@ public class EditorParameterPersistenceTest {
     BUILDER.put("long-param", "5");
     BUILDER.put("double-param", "3.454");
     BUILDER.put("boolean-param", "true");
+    BUILDER.put(ParameterPersistence.PN_LOCKED_PARAMETER_NAMES, "string-param;boolean-param");
   }
   private static final Map<String, Object> REQUEST_PARAMETERS = BUILDER.build();
-
 
   @Mock
   private ConfigurationFinder configurationFinder;
@@ -222,4 +224,33 @@ public class EditorParameterPersistenceTest {
     Double value = (Double)argument.getValue().getValues().get("double-param");
     assertEquals(value, Double.valueOf(3.454));
   }
+
+  @Test
+  public void testLockedParameterValue() throws Exception {
+    EditorParameterPersistence underTest = new EditorParameterPersistence();
+    context.registerInjectActivateService(underTest);
+    ArgumentCaptor<ParameterPersistenceData> argument = ArgumentCaptor.forClass(ParameterPersistenceData.class);
+    underTest.service(context.request(), context.response());
+    verify(persistence).storeData(any(ResourceResolver.class), eq("/content/test"), argument.capture(), eq(false));
+
+    Set<String> value = argument.getValue().getLockedParameterNames();
+    assertEquals(value.size(), 2);
+    Iterator<String> iterator = value.iterator();
+    assertEquals(iterator.next(), "boolean-param");
+    assertEquals(iterator.next(), "string-param");
+  }
+
+  @Test
+  public void testLockedParameterValueEmpty() throws Exception {
+    context.request().setParameterMap(ImmutableMap.<String, Object>of());
+    EditorParameterPersistence underTest = new EditorParameterPersistence();
+    context.registerInjectActivateService(underTest);
+    ArgumentCaptor<ParameterPersistenceData> argument = ArgumentCaptor.forClass(ParameterPersistenceData.class);
+    underTest.service(context.request(), context.response());
+    verify(persistence).storeData(any(ResourceResolver.class), eq("/content/test"), argument.capture(), eq(false));
+
+    Set<String> value = argument.getValue().getLockedParameterNames();
+    assertEquals(value.size(), 0);
+  }
+
 }
