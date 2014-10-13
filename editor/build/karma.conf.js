@@ -14,7 +14,7 @@ module.exports = function(config) {
       'libs/jquery-1.11.0.js',
       'libs/underscore.js',
       '../src/main/webapp/app-root/clientlibs/io.wcm.config.editor/js/app/**/*.js',
-      'test/**/*.js',
+      'test/*.js',
       {pattern: 'test/fixtures/*.json', watched: true, served: true, included: false}
     ],
 

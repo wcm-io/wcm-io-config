@@ -122,7 +122,7 @@
         },
         link: function(scope, element, attr, ctrl) {
           scope.originalType = scope.type;
-          scope.originalValue = scope.parameter.inheritedValue;
+          scope.newValue = scope.parameter.value;
 
           function getDisabledType() {
             if (scope.originalType === "checkbox") {
@@ -134,9 +134,11 @@
           scope.$watch("parameter.inherited", function(newvalue, oldvalue){
             if (newvalue === true) {
               scope.type = getDisabledType();
-              scope.parameter.value = scope.originalValue;
+              scope.newValue = scope.parameter.value;
+              scope.parameter.value = scope.parameter.inheritedValue;
             } else {
               scope.type = scope.originalType;
+              scope.parameter.value = scope.newValue;
             }
           });
         }
