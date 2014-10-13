@@ -29,7 +29,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import io.wcm.sling.commons.resource.ImmutableValueMap;
 import io.wcm.testing.mock.aem.junit.AemContext;
-import io.wcm.testing.mock.osgi.MockOsgi;
+import org.apache.sling.testing.mock.osgi.MockOsgi;
 
 import java.util.HashMap;
 import java.util.Map;
