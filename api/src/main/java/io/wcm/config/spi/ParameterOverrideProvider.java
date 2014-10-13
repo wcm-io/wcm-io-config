@@ -21,9 +21,12 @@ package io.wcm.config.spi;
 
 import java.util.Map;
 
+import aQute.bnd.annotation.ConsumerType;
+
 /**
  * Provides configuration override values (default or forced).
  */
+@ConsumerType
 public interface ParameterOverrideProvider {
 
   /**

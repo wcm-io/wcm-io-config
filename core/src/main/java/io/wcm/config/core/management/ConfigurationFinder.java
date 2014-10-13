@@ -25,9 +25,12 @@ import java.util.Iterator;
 
 import org.apache.sling.api.resource.Resource;
 
+import aQute.bnd.annotation.ProviderType;
+
 /**
  * Find matching configurations for a resource.
  */
+@ProviderType
 public interface ConfigurationFinder {
 
   /**

@@ -20,4 +20,5 @@
 /**
  * Default implementations of {@link io.wcm.config.spi.ParameterOverrideProvider}.
  */
+@aQute.bnd.annotation.Version("0.2.0")
 package io.wcm.config.core.override;

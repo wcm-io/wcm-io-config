@@ -83,8 +83,8 @@
         <configuration>
           <instructions>
             <Export-Package>
-              io.wcm.config.core.management;version=${project.version},
-              io.wcm.config.core.util;version=${project.version}
+              io.wcm.config.core.management,
+              io.wcm.config.core.util
             </Export-Package>
             <Sling-Namespaces>wcmio=http://wcm.io/ns</Sling-Namespaces>
           </instructions>

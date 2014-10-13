@@ -23,12 +23,15 @@ import java.util.regex.Pattern;
 
 import org.apache.sling.api.resource.Resource;
 
+import aQute.bnd.annotation.ConsumerType;
+
 /**
  * Provides information about a registered application, and how to detect if a certain resource belongs to this
  * application or not.
  * This interface has to be implemented by applications that provide their own templates and components, and need
  * their own controller or handler implementations chosen by the ApplicationImplementationPicker for Sling Models.
  */
+@ConsumerType
 public interface ApplicationProvider {
 
   /**

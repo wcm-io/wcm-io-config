@@ -27,12 +27,15 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.google.common.collect.ImmutableSet;
 
 /**
  * Fluent API for building configuration parameter definitions.
  * @param <T> Parameter value type
  */
+@ProviderType
 public final class ParameterBuilder<T> {
 
   private static final Pattern PARAMETER_NAME_PATTERN = Pattern.compile("^[a-zA-Z0-9\\-\\_\\.]+$");

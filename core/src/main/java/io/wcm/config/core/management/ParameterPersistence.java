@@ -22,9 +22,12 @@ package io.wcm.config.core.management;
 import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.ResourceResolver;
 
+import aQute.bnd.annotation.ProviderType;
+
 /**
  * Manages reading and storing parameter values for a single configuration (without inheritance).
  */
+@ProviderType
 public interface ParameterPersistence {
 
   /**

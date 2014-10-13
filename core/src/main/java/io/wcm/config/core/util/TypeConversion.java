@@ -28,11 +28,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.sling.commons.osgi.PropertiesUtil;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.google.common.collect.Iterators;
 
 /**
  * Helps converting types from object to parameter type.
  */
+@ProviderType
 public final class TypeConversion {
 
   /**

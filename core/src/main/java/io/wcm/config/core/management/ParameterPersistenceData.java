@@ -22,12 +22,15 @@ package io.wcm.config.core.management;
 import java.util.Map;
 import java.util.SortedSet;
 
+import aQute.bnd.annotation.ProviderType;
+
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;
 
 /**
  * Configuration parameter data that is read/stored by {@link ParameterPersistence} implementations.
  */
+@ProviderType
 public final class ParameterPersistenceData {
 
   /**

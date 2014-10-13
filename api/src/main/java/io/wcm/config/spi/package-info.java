@@ -20,4 +20,5 @@
 /**
  * SPI for applications hooking into the configuration infrastructure for parameterizing and customizing.
  */
+@aQute.bnd.annotation.Version("0.2.0")
 package io.wcm.config.spi;

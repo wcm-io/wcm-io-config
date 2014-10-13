@@ -23,9 +23,12 @@ import java.util.Set;
 
 import org.apache.sling.api.resource.Resource;
 
+import aQute.bnd.annotation.ProviderType;
+
 /**
  * Find associated application for a resource.
  */
+@ProviderType
 public interface ApplicationFinder {
 
   /**

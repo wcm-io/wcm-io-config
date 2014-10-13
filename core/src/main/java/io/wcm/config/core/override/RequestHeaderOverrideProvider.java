@@ -44,6 +44,8 @@ import org.apache.sling.commons.osgi.PropertiesUtil;
 import org.osgi.framework.Constants;
 import org.osgi.service.component.ComponentContext;
 
+import aQute.bnd.annotation.ProviderType;
+
 /**
  * Provide parameter override map from current request header.
  */
@@ -53,6 +55,7 @@ description = "Allows to define configuration property default values or overrid
 @Service({
   ParameterOverrideProvider.class, Filter.class
 })
+@ProviderType
 public final class RequestHeaderOverrideProvider implements ParameterOverrideProvider, Filter {
 
   /**

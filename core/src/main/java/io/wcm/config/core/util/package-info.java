@@ -20,4 +20,5 @@
 /**
  * Helper classes for configuration management.
  */
+@aQute.bnd.annotation.Version("0.2.0")
 package io.wcm.config.core.util;

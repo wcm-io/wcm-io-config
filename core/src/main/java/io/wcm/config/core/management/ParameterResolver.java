@@ -27,9 +27,12 @@ import java.util.Set;
 
 import org.apache.sling.api.resource.ResourceResolver;
 
+import aQute.bnd.annotation.ProviderType;
+
 /**
  * Resolve parameter values respecting configuration hierarchy and overriding.
  */
+@ProviderType
 public interface ParameterResolver {
 
   /**

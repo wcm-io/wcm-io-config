@@ -21,10 +21,13 @@ package io.wcm.config.api;
 
 import org.apache.sling.api.resource.ValueMap;
 
+import aQute.bnd.annotation.ProviderType;
+
 /**
  * Defines a configuration parameter.
  * @param <T> Parameter value type
  */
+@ProviderType
 public final class Parameter<T> implements Comparable<Parameter> {
 
   private final String name;

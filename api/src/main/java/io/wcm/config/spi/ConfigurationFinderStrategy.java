@@ -23,9 +23,12 @@ import java.util.Iterator;
 
 import org.apache.sling.api.resource.Resource;
 
+import aQute.bnd.annotation.ConsumerType;
+
 /**
  * Allows application to define a strategy to find configurations for content paths.
  */
+@ConsumerType
 public interface ConfigurationFinderStrategy {
 
   /**

@@ -20,4 +20,5 @@
 /**
  * Convenience partial abstract SPI implementations.
  */
+@aQute.bnd.annotation.Version("0.2.0")
 package io.wcm.config.spi.helpers;

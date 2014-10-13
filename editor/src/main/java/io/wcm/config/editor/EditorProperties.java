@@ -19,9 +19,12 @@
  */
 package io.wcm.config.editor;
 
+import aQute.bnd.annotation.ProviderType;
+
 /**
  * Properties to define the edit capabilities of configuration parameters.
  */
+@ProviderType
 public final class EditorProperties {
 
   private EditorProperties() {

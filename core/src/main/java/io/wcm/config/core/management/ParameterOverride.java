@@ -20,10 +20,12 @@
 package io.wcm.config.core.management;
 
 import io.wcm.config.api.Parameter;
+import aQute.bnd.annotation.ProviderType;
 
 /**
  * Override configuration parameter. The implementation can decide at which level the override should take place.
  */
+@ProviderType
 public interface ParameterOverride {
 
   /**

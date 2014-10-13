@@ -24,9 +24,12 @@ import java.util.Map;
 import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.ResourceResolver;
 
+import aQute.bnd.annotation.ConsumerType;
+
 /**
  * Provides parameter persistence implementations.
  */
+@ConsumerType
 public interface ParameterPersistenceProvider {
 
   /**

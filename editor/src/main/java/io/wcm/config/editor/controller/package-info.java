@@ -20,4 +20,5 @@
 /**
  * Controllers used by the configuration editor scripts internally.
  */
+@aQute.bnd.annotation.Version("0.2.0")
 package io.wcm.config.editor.controller;

@@ -28,12 +28,15 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.sling.api.resource.Resource;
 
+import aQute.bnd.annotation.ConsumerType;
+
 import com.day.jcr.vault.util.Text;
 
 /**
  * Abstract implementation of {@link ConfigurationFinderStrategy} that supports one or multiple fixed levels
  * in content hierarchy where configurations are supported.
  */
+@ConsumerType
 public abstract class AbstractAbsoluteParentConfigurationFinderStrategy implements ConfigurationFinderStrategy {
 
   private final String applicationId;

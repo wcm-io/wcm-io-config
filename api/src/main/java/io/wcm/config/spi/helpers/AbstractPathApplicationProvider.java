@@ -25,10 +25,13 @@ import java.util.regex.Pattern;
 
 import org.apache.sling.api.resource.Resource;
 
+import aQute.bnd.annotation.ConsumerType;
+
 /**
  * Abstract implementation of {@link ApplicationProvider} that supports detecting an application based
  * on one or multiple fixed paths subtrees.
  */
+@ConsumerType
 public abstract class AbstractPathApplicationProvider implements ApplicationProvider {
 
   private final String applicationId;

@@ -19,9 +19,12 @@
  */
 package io.wcm.config.core.management;
 
+import aQute.bnd.annotation.ProviderType;
+
 /**
  * Application meta data.
  */
+@ProviderType
 public final class Application implements Comparable<Application> {
 
   private final String applicationId;

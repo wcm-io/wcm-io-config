@@ -21,10 +21,13 @@ package io.wcm.config.api;
 
 import org.apache.sling.api.resource.ValueMap;
 
+import aQute.bnd.annotation.ProviderType;
+
 /**
  * Configuration for a certain content scope.
  * The map backing this configuration is read-only.
  */
+@ProviderType
 public interface Configuration extends ValueMap {
 
   /**

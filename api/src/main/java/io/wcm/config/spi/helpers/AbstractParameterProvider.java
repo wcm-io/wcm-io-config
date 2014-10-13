@@ -26,12 +26,15 @@ import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 
+import aQute.bnd.annotation.ConsumerType;
+
 import com.google.common.collect.ImmutableSet;
 
 /**
  * Abstract implementation of {@link ParameterProvider} providing list of parameters either from given
  * parameter set, or from reading all public static fields from a given class definition.
  */
+@ConsumerType
 public abstract class AbstractParameterProvider implements ParameterProvider {
 
   private final Set<Parameter<?>> parameters;
