@@ -9,7 +9,7 @@
       "description":"Das ist ein parameter, für die konfoguration des Dealers",
       "inherited": true,
       "locked": true,
-      "widgetType": "stringfield",
+      "widgetType": "textfield",
       "lockedInherited": true
     },
     {

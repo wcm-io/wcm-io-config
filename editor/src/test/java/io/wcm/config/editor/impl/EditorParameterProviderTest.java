@@ -25,10 +25,10 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
-import io.wcm.config.core.management.Application;
 import io.wcm.config.api.Configuration;
 import io.wcm.config.api.Parameter;
 import io.wcm.config.api.ParameterBuilder;
+import io.wcm.config.core.management.Application;
 import io.wcm.config.core.management.ApplicationFinder;
 import io.wcm.config.core.management.ConfigurationFinder;
 import io.wcm.config.core.management.ParameterPersistence;
@@ -138,6 +138,7 @@ public class EditorParameterProviderTest {
     when(configurationFirstLevel.getConfigurationId()).thenReturn("/content/site");
     when(configurationFirstLevel.get(EDITABLE_PARAMETER_ONE.getName())).thenReturn(EDITABLE_PARAMETER_ONE.getDefaultValue());
     when(configurationFirstLevel.get(EDITABLE_PARAMETER_TWO.getName())).thenReturn(EDITABLE_PARAMETER_TWO.getDefaultValue());
+    when(configurationFirstLevel.get(PARAMETER_DOUBLE.getName())).thenReturn(PARAMETER_DOUBLE.getDefaultValue());
 
     when(configurationSecondLevel.getConfigurationId()).thenReturn("/content/site/region");
     when(configurationSecondLevel.get(EDITABLE_PARAMETER_ONE.getName())).thenReturn(EDITABLE_PARAMETER_ONE.getDefaultValue());
@@ -208,10 +209,18 @@ public class EditorParameterProviderTest {
   }
 
   @Test
-  public void testInheritedProperty() throws ServletException, IOException, JSONException {
+  public void testInheritedPropertyDeeperLeveL() throws ServletException, IOException, JSONException {
     underTest.doGet(request, response);
     assertEquals(firstParameter.get(EditorNameConstants.INHERITED), true);
     assertEquals(secondParameter.get(EditorNameConstants.INHERITED), false);
+  }
+
+  @Test
+  public void testInheritedPropertyHighestLevel() throws ServletException, IOException, JSONException {
+    when(request.getResource()).thenReturn(siteResource);
+    underTest.doGet(request, response);
+    assertEquals(firstParameter.get(EditorNameConstants.INHERITED), true);
+    assertEquals(parameters.getJSONObject(2).get(EditorNameConstants.INHERITED), false);
   }
 
   @Test

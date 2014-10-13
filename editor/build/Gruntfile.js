@@ -7,13 +7,23 @@ module.exports = function (grunt) {
       html: ['partials/*.html']
     },
     html2js: {
-      options: {
-        base: 'partials',
-        module: 'io.wcm.config.templates'
-      },
       templates: {
+        options: {
+          base: 'partials',
+          module: 'io.wcm.config.templates'
+        },
         src: [ '<%= src.html %>' ],
         dest: '<%= pkg.config.jsPath %>Template.js'
+      },
+      test_templates: {
+        options: {
+          base: 'test/fixtures',
+          module: 'io.wcm.config.templates'
+        },
+        base: 'test/fixtures',
+        module: 'io.wcm.config.test.templates',
+        src: [ 'test/fixtures/*.html' ],
+        dest: 'test/test-Template.js'
       }
     },
     karma: {
@@ -52,6 +62,6 @@ module.exports = function (grunt) {
     grunt.task.run('karma:maven');
   });
 
-  grunt.registerTask("test", ["karma:unit"]);
+  grunt.registerTask("test", ["html2js:test_templates", "karma:unit"]);
 
 };
