@@ -15,6 +15,8 @@ Context-specific configuration management implementation.
 ### Documentation
 
 * [API Documentation][apidocs]
+* [Parameter Persistence Providers][persistence-providers]
+* [Parameter Override Providers][override-providers]
 * [Changelog][changelog]
 
 
@@ -26,7 +28,7 @@ The `io.wcm.config.core` bundle is the implementation of the API and SPI interfa
 Additionally it provides a [Configuration management API][management-api] which can be used by configuration
 editors or other applications which have to write or manage configuration data.
 
-The wcm.io projekct provides an implementation of such a [Configuration Editor][configuration-editor].
+The wcm.io project provides an implementation of such a [Configuration Editor][configuration-editor].
 
 
 [apidocs]: apidocs/
@@ -34,3 +36,5 @@ The wcm.io projekct provides an implementation of such a [Configuration Editor][
 [configuration-api]: ../api/
 [configuration-editor]: ../editor/
 [management-api]: apidocs/io/wcm/config/core/management/package-summary.html
+[persistence-providers]: persistence-providers.html
+[override-providers]: override-providers.html

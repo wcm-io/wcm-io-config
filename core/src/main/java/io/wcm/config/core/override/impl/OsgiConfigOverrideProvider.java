@@ -36,7 +36,7 @@ import org.osgi.service.component.ComponentContext;
 import com.google.common.collect.ImmutableMap;
 
 /**
- * Provide parameter override map from OSGi factory configuration.
+ * Provides parameter override map from OSGi factory configuration.
  */
 @Component(immediate = true, metatype = true, configurationFactory = true,
 label = "wcm.io Configuration Property Override Provider: OSGi configuration",

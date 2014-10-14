@@ -99,30 +99,8 @@ The wcm.io implementation contains ready-to-use implementations for this interfa
 [Parameter Override Providers][core-override-providers].
 
 They have to be activated in the OSGi configuration. If multiple are activated they are treated ordered by
-service ranking. Example usecases for the built-in providers:
-
-- SystemPropertyOverrideProvider: Can be used for parameter overrides based on staging environment
-- OsgiConfigOverrideProvider: To be used for central overrides for all contexts
-- RequestHeaderOverrideProvider: Allows to inject an override on a single request e.g. from a Selenium script.<br/>
-  _This must never be activated on an instance available via the public internet!_
+service ranking. Example usecases for the built-in providers.
   
-All override providers use a common key-value syntax to define the overrides. Syntax:
-
-* Key: `[{scope}]{parameterName}`
-* Value: any value
-
-The `[{scope}]` can be:
-
-* `[default]` - overrides default value
-* `[/x/y/z]` - overrides the configured value for configuration id `/x/y/z`
-* missing - overrides the configured value for all configuration ids
-
-Example for providing overrides per system environment parameter:
-
-```
--D"[/content/site1/en]param1=New value" -Dparam2=55 -D[default]param3=on
-```
-
 
 ### Preconditions and limitations
 
@@ -156,5 +134,5 @@ The current implementation has some preconditions and limitations:
 [persistence-provider]: apidocs/io/wcm/config/spi/ParameterPersistenceProvider.html
 [override-provider]: apidocs/io/wcm/config/spi/ParameterOverrideProvider.html
 [application-annotation]: apidocs/io/wcm/config/spi/annotations/Application.html
-[core-persistence-providers]: ../core/apidocs/io/wcm/config/core/persistence/package-summary.html
-[core-override-providers]: ../core/apidocs/io/wcm/config/core/override/package-summary.html
+[core-persistence-providers]: ../core/persistence-providers.html
+[core-override-providers]: ../core/override-providers.html

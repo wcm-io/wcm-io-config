@@ -39,7 +39,7 @@ import org.osgi.service.component.ComponentContext;
 import com.google.common.collect.ImmutableMap;
 
 /**
- * Provide parameter override map from system properties.
+ * Provides parameter override map from system properties.
  */
 @Component(immediate = true, metatype = true,
 label = "wcm.io Configuration Property Override Provider: System Properties",
