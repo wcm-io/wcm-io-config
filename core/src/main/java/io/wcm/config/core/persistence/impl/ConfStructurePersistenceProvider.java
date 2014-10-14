@@ -32,33 +32,34 @@ import org.osgi.framework.Constants;
 import org.osgi.service.component.ComponentContext;
 
 /**
- * Persistence provider that stores configuration values in pages in a path tools/config relative to the config id.
+ * Persistence provider that stores configuration values in pages at /conf appending the configuration id to build the
+ * full path.
  */
 @Component(immediate = true, metatype = true,
-label = "wcm.io Configuration Persistence Provider: /tools/config Pages",
-description = "Allows to read and store configurations in /tools/config pages.")
+label = "wcm.io Configuration Persistence Provider: /conf shadow structure",
+description = "Allows to read and store configurations in config pages stored in a shadow structure below /conf.")
 @Service(ParameterPersistenceProvider.class)
-public final class ToolsConfigPagePersistenceProvider extends AbstractConfigPagePersistenceProvider {
+public final class ConfStructurePersistenceProvider extends AbstractConfigPagePersistenceProvider {
 
-  static final String RELATIVE_CONFIG_PATH = "/tools/config";
+  static final String CONF_ROOT_PATH = "/conf";
 
-  @Property(label = "Enabled", boolValue = ToolsConfigPagePersistenceProvider.DEFAULT_ENABLED,
+  @Property(label = "Enabled", boolValue = ConfStructurePersistenceProvider.DEFAULT_ENABLED,
       description = "Enable parameter persistence provider")
   static final String PROPERTY_ENABLED = "enabled";
   static final boolean DEFAULT_ENABLED = false;
 
-  @Property(label = "Service Ranking", intValue = ToolsConfigPagePersistenceProvider.DEFAULT_RANKING,
+  @Property(label = "Service Ranking", intValue = ConfStructurePersistenceProvider.DEFAULT_RANKING,
       description = "Priority of parameter persistence providers (lower = higher priority)",
       propertyPrivate = false)
   static final String PROPERTY_RANKING = Constants.SERVICE_RANKING;
-  static final int DEFAULT_RANKING = 2000;
+  static final int DEFAULT_RANKING = 1000;
 
   @Property(label = "Config Template",
       description = "Template that is used for a configuration page.")
   static final String PROPERTY_CONFIG_PAGE_TEMPLATE = "configPageTemplate";
 
   @Property(label = "Structure Template",
-      description = "Template that is used for the tools page.")
+      description = "Template that is used for structures pages to build the configuration hierarchy.")
   static final String PROPERTY_STRUCTURE_PAGE_TEMPLATE = "structurePageTemplate";
 
   private boolean enabled;
@@ -72,7 +73,7 @@ public final class ToolsConfigPagePersistenceProvider extends AbstractConfigPage
 
   @Override
   protected String getConfigPagePath(String configurationId) {
-    return configurationId + RELATIVE_CONFIG_PATH;
+    return CONF_ROOT_PATH + configurationId;
   }
 
   @Override

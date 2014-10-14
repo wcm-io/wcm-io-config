@@ -3,7 +3,7 @@
 The wcm.io implementation contains ready-to-use implementations for the `ParameterPersistenceProvider` interface.
 
 
-### ConfPagePersistenceProvider
+### ConfStructurePersistenceProvider
 
 Persistence provider that stores configuration values in pages at `/conf` appending the
 configuration id to build the full path.

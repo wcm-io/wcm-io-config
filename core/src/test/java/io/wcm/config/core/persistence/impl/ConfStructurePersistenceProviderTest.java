@@ -20,6 +20,7 @@
 package io.wcm.config.core.persistence.impl;
 
 import static io.wcm.config.core.persistence.impl.AbstractConfigPagePersistenceProvider.CONFIG_RESOURCE_NAME;
+import static io.wcm.config.core.persistence.impl.ConfStructurePersistenceProvider.CONF_ROOT_PATH;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -37,11 +38,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
 import com.google.common.collect.ImmutableMap;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ToolsConfigPagePersistenceProviderTest {
+public class ConfStructurePersistenceProviderTest {
 
   private static final String CONFIG_ID = "/content/site1";
   private static final String CONFIG_PAGE_TEMPLATE = "/apps/dummy/templates/config";
@@ -54,13 +56,10 @@ public class ToolsConfigPagePersistenceProviderTest {
 
   @Before
   public void setUp() {
-    context.create().page("/content", STRUCTURE_PAGE_TEMPLATE);
-    context.create().page("/content/site1", STRUCTURE_PAGE_TEMPLATE);
-
-    underTest = context.registerInjectActivateService(new ToolsConfigPagePersistenceProvider(), ImmutableValueMap.builder()
-        .put(ToolsConfigPagePersistenceProvider.PROPERTY_ENABLED, true)
-        .put(ToolsConfigPagePersistenceProvider.PROPERTY_CONFIG_PAGE_TEMPLATE, CONFIG_PAGE_TEMPLATE)
-        .put(ToolsConfigPagePersistenceProvider.PROPERTY_STRUCTURE_PAGE_TEMPLATE, STRUCTURE_PAGE_TEMPLATE)
+    underTest = context.registerInjectActivateService(new ConfStructurePersistenceProvider(), ImmutableValueMap.builder()
+        .put(ConfStructurePersistenceProvider.PROPERTY_ENABLED, true)
+        .put(ConfStructurePersistenceProvider.PROPERTY_CONFIG_PAGE_TEMPLATE, CONFIG_PAGE_TEMPLATE)
+        .put(ConfStructurePersistenceProvider.PROPERTY_STRUCTURE_PAGE_TEMPLATE, STRUCTURE_PAGE_TEMPLATE)
         .build());
   }
 
@@ -71,15 +70,13 @@ public class ToolsConfigPagePersistenceProviderTest {
 
   @Test
   public void testGetPageNoConfigResource() {
-    context.create().page(CONFIG_ID + "/tools", STRUCTURE_PAGE_TEMPLATE);
-    context.create().page(CONFIG_ID + "/tools/config", CONFIG_PAGE_TEMPLATE);
+    context.create().page(CONF_ROOT_PATH + CONFIG_ID, CONFIG_PAGE_TEMPLATE);
     assertEquals(ImmutableMap.of(), underTest.get(context.resourceResolver(), CONFIG_ID));
   }
 
   @Test
   public void testGetStoreGetValues() throws PersistenceException {
-    context.create().page(CONFIG_ID + "/tools", STRUCTURE_PAGE_TEMPLATE);
-    Page configPage = context.create().page(CONFIG_ID + "/tools/config", CONFIG_PAGE_TEMPLATE);
+    Page configPage = context.create().page(CONF_ROOT_PATH + CONFIG_ID, CONFIG_PAGE_TEMPLATE);
 
     ValueMap props = ImmutableValueMap.builder()
         .put("props1", "value1")
@@ -109,7 +106,7 @@ public class ToolsConfigPagePersistenceProviderTest {
 
     assertEquals(props, ImmutableValueMap.copyOf(underTest.get(context.resourceResolver(), CONFIG_ID)));
 
-    assertNotNull(context.pageManager().getPage(CONFIG_ID + ToolsConfigPagePersistenceProvider.RELATIVE_CONFIG_PATH));
+    assertNotNull(context.pageManager().getPage(CONF_ROOT_PATH + CONFIG_ID));
   }
 
   @Test
@@ -119,17 +116,16 @@ public class ToolsConfigPagePersistenceProviderTest {
         .put("props2", 55L)
         .build();
     assertTrue(underTest.store(context.resourceResolver(), "/content/site2", props));
-    assertNotNull(context.pageManager().getPage("/content/site2" + ToolsConfigPagePersistenceProvider.RELATIVE_CONFIG_PATH));
+    assertNotNull(context.pageManager().getPage(CONF_ROOT_PATH + "/content/site2"));
   }
 
   @Test
   public void testDisabled() throws PersistenceException {
-    underTest = context.registerInjectActivateService(new ToolsConfigPagePersistenceProvider(), ImmutableValueMap.builder()
-        .put(ToolsConfigPagePersistenceProvider.PROPERTY_ENABLED, false)
+    underTest = context.registerInjectActivateService(new ConfStructurePersistenceProvider(), ImmutableValueMap.builder()
+        .put(ConfStructurePersistenceProvider.PROPERTY_ENABLED, false)
         .build());
 
-    context.create().page(CONFIG_ID + "/tools", STRUCTURE_PAGE_TEMPLATE);
-    Page configPage = context.create().page(CONFIG_ID + "/tools/config", CONFIG_PAGE_TEMPLATE);
+    Page configPage = context.create().page(CONF_ROOT_PATH + CONFIG_ID, CONFIG_PAGE_TEMPLATE);
 
     ValueMap props = ImmutableValueMap.builder()
         .put("props1", "value1")
@@ -140,6 +136,48 @@ public class ToolsConfigPagePersistenceProviderTest {
 
     assertNull(underTest.get(context.resourceResolver(), CONFIG_ID));
     assertFalse(underTest.store(context.resourceResolver(), CONFIG_ID, props));
+  }
+
+  @Test
+  public void testStoreMultipleLevels() throws PersistenceException {
+    Page level1Page;
+    Page level2Page;
+    Page level3Page;
+
+    ValueMap props = ImmutableValueMap.builder()
+        .put("props1", "value1")
+        .put("props2", 55L)
+        .build();
+
+    assertTrue(underTest.store(context.resourceResolver(), "/content/level1/level2/level3", props));
+
+    level3Page = context.pageManager().getPage("/conf/content/level1/level2/level3");
+    assertNotNull(level3Page);
+    assertEquals(CONFIG_PAGE_TEMPLATE, level3Page.getProperties().get(NameConstants.PN_TEMPLATE, String.class));
+
+    level2Page = context.pageManager().getPage("/conf/content/level1/level2");
+    assertNotNull(level2Page);
+    assertEquals(STRUCTURE_PAGE_TEMPLATE, level2Page.getProperties().get(NameConstants.PN_TEMPLATE, String.class));
+
+    level1Page = context.pageManager().getPage("/conf/content/level1");
+    assertNotNull(level1Page);
+    assertEquals(STRUCTURE_PAGE_TEMPLATE, level1Page.getProperties().get(NameConstants.PN_TEMPLATE, String.class));
+
+
+    assertTrue(underTest.store(context.resourceResolver(), "/content/level1/level2", props));
+
+    level3Page = context.pageManager().getPage("/conf/content/level1/level2/level3");
+    assertNotNull(level3Page);
+    assertEquals(CONFIG_PAGE_TEMPLATE, level3Page.getProperties().get(NameConstants.PN_TEMPLATE, String.class));
+
+    level2Page = context.pageManager().getPage("/conf/content/level1/level2");
+    assertNotNull(level2Page);
+    assertEquals(CONFIG_PAGE_TEMPLATE, level2Page.getProperties().get(NameConstants.PN_TEMPLATE, String.class));
+
+    level1Page = context.pageManager().getPage("/conf/content/level1");
+    assertNotNull(level1Page);
+    assertEquals(STRUCTURE_PAGE_TEMPLATE, level1Page.getProperties().get(NameConstants.PN_TEMPLATE, String.class));
+
   }
 
 }
