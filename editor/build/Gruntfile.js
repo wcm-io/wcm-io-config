@@ -59,6 +59,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.registerTask('build', function() {
     grunt.task.run('html2js:templates');
+    grunt.task.run('html2js:test_templates');
     grunt.task.run('karma:maven');
   });
 
