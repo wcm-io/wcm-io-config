@@ -122,7 +122,7 @@ abstract class AbstractConfigPagePersistenceProvider implements ParameterPersist
     String name = ResourceUtil.getName(path);
     PageManager pageManager = resolver.adaptTo(PageManager.class);
     try {
-      return pageManager.create(parentPath, name, template, name, true);
+      return pageManager.create(parentPath, name, StringUtils.defaultString(template), name, true);
     }
     catch (WCMException ex) {
       throw new PersistenceException("Creating page at " + path + " failed.", ex);
