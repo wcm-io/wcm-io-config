@@ -36,6 +36,8 @@ import org.apache.sling.api.resource.ValueMap;
 import org.apache.sling.commons.osgi.PropertiesUtil;
 import org.osgi.framework.Constants;
 import org.osgi.service.component.ComponentContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
@@ -78,6 +80,8 @@ public final class ToolsConfigPagePersistenceProvider implements ParameterPersis
   // TODO: default value for tools page template?
   static final String DEFAULT_TOOLS_PAGE_TEMPLATE = "";
 
+  private static final Logger log = LoggerFactory.getLogger(ToolsConfigPagePersistenceProvider.class);
+
   private boolean enabled;
   private String configPageTemplate;
   private String toolsPageTemplate;
@@ -89,6 +93,9 @@ public final class ToolsConfigPagePersistenceProvider implements ParameterPersis
     }
     Page configPage = getConfigPage(resolver, configurationId);
     if (configPage != null) {
+      if (log.isDebugEnabled()) {
+        log.debug("Read config for {} from {}.", configurationId, configPage.getPath());
+      }
       return getConfigMap(configPage);
     }
     return null;
@@ -101,6 +108,9 @@ public final class ToolsConfigPagePersistenceProvider implements ParameterPersis
       return false;
     }
     Page configPage = getOrCreateConfigPage(resolver, configurationId);
+    if (log.isDebugEnabled()) {
+      log.debug("Store config for {} to {}.", configurationId, configPage.getPath());
+    }
     storeValues(resolver, configPage, values);
     return true;
   }

@@ -57,6 +57,7 @@ public class ConfigurationImplTest {
   @Test
   public void testProperties() {
     assertEquals(CONFIG_ID, underTest.getConfigurationId());
+    assertEquals(CONFIG_ID, underTest.toString());
     assertEquals("value1", underTest.get("prop1", String.class));
     assertEquals((Integer)55, underTest.get("prop2", Integer.class));
     assertEquals("value1", underTest.get(PARAM1));

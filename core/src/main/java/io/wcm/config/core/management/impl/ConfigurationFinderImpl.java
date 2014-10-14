@@ -55,6 +55,7 @@ import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 
 /**
@@ -70,11 +71,13 @@ public final class ConfigurationFinderImpl implements ConfigurationFinder {
       description = "List of regular expression patterns for paths which should never be accepted as valie configuration Ids.",
       cardinality = Integer.MAX_VALUE,
       value = {
+      "^.*/jcr:content(/.*)?$",
       "^.*/tools$",
       "^.*/tools/config$"
   })
   static final String PROPERTY_EXCLUDE_PATH_PATTERNS = "excludePathPatterns";
   private static final String[] DEFAULT_EXCLUDE_PATH_PATTERNS = new String[] {
+    "^.*/jcr:content(/.*)?$",
     "^.*/tools$",
     "^.*/tools/config$"
   };
@@ -128,7 +131,11 @@ public final class ConfigurationFinderImpl implements ConfigurationFinder {
   @Override
   public Configuration find(Resource resource, String applicationId) {
     Set<String> allIds = getAllMatchingConfigurationIds(resource, applicationId);
-    return readConfiguration(resource.getResourceResolver(), allIds);
+    Configuration config = readConfiguration(resource.getResourceResolver(), allIds);
+    if (log.isDebugEnabled()) {
+      log.debug("find({}, {}): {}", resource.getPath(), applicationId, config);
+    }
+    return config;
   }
 
   @Override
@@ -151,6 +158,9 @@ public final class ConfigurationFinderImpl implements ConfigurationFinder {
     while (!allIds.isEmpty()) {
       configurations.add(readConfiguration(resource.getResourceResolver(), allIds));
       allIds.remove(0);
+    }
+    if (log.isDebugEnabled()) {
+      log.debug("findAll({}, {}): {}", resource.getPath(), applicationId, Joiner.on(",").join(configurations));
     }
     return configurations.iterator();
   }

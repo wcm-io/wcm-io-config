@@ -37,6 +37,8 @@ import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.apache.felix.scr.annotations.Service;
 import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableSortedSet;
 
@@ -54,12 +56,17 @@ public final class ParameterPersistenceImpl implements ParameterPersistence {
       cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
   private final RankedServices<ParameterPersistenceProvider> parameterPersistenceProviders = new RankedServices<>();
 
+  private static final Logger log = LoggerFactory.getLogger(ParameterPersistenceImpl.class);
+
   @Override
   public ParameterPersistenceData getData(ResourceResolver resolver, String configurationId) {
     // get values from first configuration provider that can provide them
     for (ParameterPersistenceProvider provider : parameterPersistenceProviders) {
       Map<String, Object> values = provider.get(resolver, configurationId);
       if (values != null) {
+        if (log.isDebugEnabled()) {
+          log.debug("getData({}) - provider returned values: {}", configurationId, provider.getClass().getName());
+        }
         return toData(values);
       }
     }
@@ -117,6 +124,9 @@ public final class ParameterPersistenceImpl implements ParameterPersistence {
     // ask providers to store the parameter values
     for (ParameterPersistenceProvider provider : parameterPersistenceProviders) {
       if (provider.store(resolver, configurationId, valuesToStore)) {
+        if (log.isDebugEnabled()) {
+          log.debug("storeData({}) - provider stored values: {}", configurationId, provider.getClass().getName());
+        }
         return;
       }
     }

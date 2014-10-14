@@ -133,4 +133,9 @@ public final class ConfigurationImpl implements Configuration {
     return this.properties.entrySet();
   }
 
+  @Override
+  public String toString() {
+    return this.configurationId;
+  }
+
 }
