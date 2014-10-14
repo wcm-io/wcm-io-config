@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.config.core.util;
+package io.wcm.config.core.management.util;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

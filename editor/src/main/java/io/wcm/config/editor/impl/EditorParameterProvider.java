@@ -27,7 +27,7 @@ import io.wcm.config.core.management.ConfigurationFinder;
 import io.wcm.config.core.management.ParameterPersistence;
 import io.wcm.config.core.management.ParameterPersistenceData;
 import io.wcm.config.core.management.ParameterResolver;
-import io.wcm.config.core.util.TypeConversion;
+import io.wcm.config.core.management.util.TypeConversion;
 import io.wcm.config.editor.EditorProperties;
 import io.wcm.wcm.commons.contenttype.ContentType;
 import io.wcm.wcm.commons.contenttype.FileExtension;

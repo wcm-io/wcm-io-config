@@ -19,7 +19,7 @@
  */
 package io.wcm.config.core.management.impl;
 
-import static io.wcm.config.core.util.TypeConversion.KEY_VALUE_DELIMITER;
+import static io.wcm.config.core.management.util.TypeConversion.KEY_VALUE_DELIMITER;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

@@ -17,9 +17,9 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.config.core.util;
+package io.wcm.config.core.management.util;
 
-import static io.wcm.config.core.util.TypeConversion.osgiPropertyToObject;
+import static io.wcm.config.core.management.util.TypeConversion.osgiPropertyToObject;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

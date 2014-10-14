@@ -24,7 +24,7 @@ import io.wcm.config.core.management.ParameterOverride;
 import io.wcm.config.core.management.ParameterPersistence;
 import io.wcm.config.core.management.ParameterPersistenceData;
 import io.wcm.config.core.management.ParameterResolver;
-import io.wcm.config.core.util.TypeConversion;
+import io.wcm.config.core.management.util.TypeConversion;
 import io.wcm.config.spi.ParameterProvider;
 import io.wcm.sling.commons.osgi.RankedServices;
 
