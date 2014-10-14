@@ -69,16 +69,6 @@
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
-        <configuration>
-          <instructions>
-            <Export-Package>
-              io.wcm.config.api,
-              io.wcm.config.spi,
-              io.wcm.config.spi.annotations,
-              io.wcm.config.spi.helpers
-            </Export-Package>
-          </instructions>
-        </configuration>
       </plugin>
 
       <plugin>

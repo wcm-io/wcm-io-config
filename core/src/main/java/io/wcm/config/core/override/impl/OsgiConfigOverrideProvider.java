@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.config.core.override;
+package io.wcm.config.core.override.impl;
 
 import io.wcm.config.spi.ParameterOverrideProvider;
 
@@ -33,8 +33,6 @@ import org.apache.sling.commons.osgi.PropertiesUtil;
 import org.osgi.framework.Constants;
 import org.osgi.service.component.ComponentContext;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.google.common.collect.ImmutableMap;
 
 /**
@@ -44,7 +42,6 @@ import com.google.common.collect.ImmutableMap;
 label = "wcm.io Configuration Property Override Provider: OSGi configuration",
 description = "Allows to define configuration property default values or overrides from OSGi configuration.")
 @Service(ParameterOverrideProvider.class)
-@ProviderType
 public final class OsgiConfigOverrideProvider implements ParameterOverrideProvider {
 
   @Property(label = "Enabled", boolValue = OsgiConfigOverrideProvider.DEFAULT_ENABLED,

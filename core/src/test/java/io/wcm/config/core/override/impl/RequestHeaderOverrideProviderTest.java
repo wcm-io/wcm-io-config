@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.config.core.override;
+package io.wcm.config.core.override.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;

@@ -17,7 +17,7 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.config.core.persistence;
+package io.wcm.config.core.persistence.impl;
 
 import io.wcm.config.spi.ParameterPersistenceProvider;
 
@@ -37,8 +37,6 @@ import org.apache.sling.commons.osgi.PropertiesUtil;
 import org.osgi.framework.Constants;
 import org.osgi.service.component.ComponentContext;
 
-import aQute.bnd.annotation.ProviderType;
-
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.WCMException;
@@ -50,7 +48,6 @@ import com.day.cq.wcm.api.WCMException;
 label = "wcm.io Configuration Persistence Provider: /tools/config Pages",
 description = "Allows to read and store configurations in /tools/config pages.")
 @Service(ParameterPersistenceProvider.class)
-@ProviderType
 public final class ToolsConfigPagePersistenceProvider implements ParameterPersistenceProvider {
 
   static final String CONFIG_PAGE_NAME = "config";

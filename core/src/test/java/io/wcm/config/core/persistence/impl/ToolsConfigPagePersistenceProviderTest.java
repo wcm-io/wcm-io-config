@@ -17,11 +17,11 @@
  * limitations under the License.
  * #L%
  */
-package io.wcm.config.core.persistence;
+package io.wcm.config.core.persistence.impl;
 
-import static io.wcm.config.core.persistence.ToolsConfigPagePersistenceProvider.CONFIG_PAGE_NAME;
-import static io.wcm.config.core.persistence.ToolsConfigPagePersistenceProvider.CONFIG_RESOURCE_NAME;
-import static io.wcm.config.core.persistence.ToolsConfigPagePersistenceProvider.TOOLS_PAGE_NAME;
+import static io.wcm.config.core.persistence.impl.ToolsConfigPagePersistenceProvider.CONFIG_PAGE_NAME;
+import static io.wcm.config.core.persistence.impl.ToolsConfigPagePersistenceProvider.CONFIG_RESOURCE_NAME;
+import static io.wcm.config.core.persistence.impl.ToolsConfigPagePersistenceProvider.TOOLS_PAGE_NAME;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -29,12 +29,12 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import io.wcm.sling.commons.resource.ImmutableValueMap;
 import io.wcm.testing.mock.aem.junit.AemContext;
-import org.apache.sling.testing.mock.osgi.MockOsgi;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.sling.api.resource.PersistenceException;
+import org.apache.sling.testing.mock.osgi.MockOsgi;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

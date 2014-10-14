@@ -20,5 +20,4 @@
 /**
  * Default implementations of {@link io.wcm.config.spi.ParameterPersistenceProvider}.
  */
-@aQute.bnd.annotation.Version("0.2.0")
-package io.wcm.config.core.persistence;
+package io.wcm.config.core.persistence.impl;

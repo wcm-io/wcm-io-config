@@ -21,8 +21,8 @@ package io.wcm.config.core.impl;
 
 import static org.apache.sling.api.adapter.AdapterFactory.ADAPTABLE_CLASSES;
 import static org.apache.sling.api.adapter.AdapterFactory.ADAPTER_CLASSES;
-import io.wcm.config.core.management.Application;
 import io.wcm.config.api.Configuration;
+import io.wcm.config.core.management.Application;
 import io.wcm.config.core.management.ApplicationFinder;
 import io.wcm.config.core.management.ConfigurationFinder;
 
