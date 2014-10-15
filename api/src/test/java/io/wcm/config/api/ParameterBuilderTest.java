@@ -22,12 +22,13 @@ package io.wcm.config.api;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 import org.junit.Test;
+
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSortedSet;
 
 public class ParameterBuilderTest {
 
@@ -35,8 +36,7 @@ public class ParameterBuilderTest {
 
   @Test
   public void testBuilder() {
-    Map<String, Object> props = new HashMap<>();
-    props.put("prop1", "value1");
+    Map<String, Object> props = ImmutableMap.<String, Object>of("prop1", "value1");
 
     Parameter<String> param = ParameterBuilder.create("param1", String.class, APP_ID)
         .defaultOsgiConfigProperty("service:prop1")
@@ -59,10 +59,11 @@ public class ParameterBuilderTest {
 
   @Test
   public void testSort() {
-    Set<Parameter> params = new TreeSet<>();
-    params.add(ParameterBuilder.create("app5_param2", String.class, APP_ID).build());
-    params.add(ParameterBuilder.create("app1_param2", String.class, APP_ID).build());
-    params.add(ParameterBuilder.create("app5_param1", String.class, APP_ID).build());
+    Set<Parameter<String>> params = ImmutableSortedSet.of(
+        ParameterBuilder.create("app5_param2", String.class, APP_ID).build(),
+        ParameterBuilder.create("app1_param2", String.class, APP_ID).build(),
+        ParameterBuilder.create("app5_param1", String.class, APP_ID).build()
+        );
 
     Parameter[] paramArray = params.toArray(new Parameter[params.size()]);
     assertEquals("app1_param2", paramArray[0].getName());

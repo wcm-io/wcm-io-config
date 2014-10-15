@@ -55,9 +55,9 @@ public final class ParameterBuilder<T> {
   private String name;
   private Class<T> type;
   private String applicationId;
-  private final Map<String, Object> properties = new HashMap<>();
   private String defaultOsgiConfigProperty;
   private T defaultValue;
+  private final Map<String, Object> properties = new HashMap<>();
 
   private ParameterBuilder() {
     // private constructor
