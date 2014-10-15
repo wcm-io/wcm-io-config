@@ -24,8 +24,7 @@ import io.wcm.config.spi.ApplicationProvider;
 import java.util.regex.Pattern;
 
 import org.apache.sling.api.resource.Resource;
-
-import aQute.bnd.annotation.ConsumerType;
+import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * Abstract implementation of {@link ApplicationProvider} that supports detecting an application based

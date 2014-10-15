@@ -19,7 +19,7 @@
  */
 package io.wcm.config.core.management;
 
-import aQute.bnd.annotation.ProviderType;
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * Application meta data.

@@ -26,8 +26,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.sling.api.resource.ResourceResolver;
-
-import aQute.bnd.annotation.ProviderType;
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * Resolve parameter values respecting configuration hierarchy and overriding.

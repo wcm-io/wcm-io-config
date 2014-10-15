@@ -22,8 +22,7 @@ package io.wcm.config.spi;
 import java.util.Iterator;
 
 import org.apache.sling.api.resource.Resource;
-
-import aQute.bnd.annotation.ConsumerType;
+import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * Allows application to define a strategy to find configurations for content paths.

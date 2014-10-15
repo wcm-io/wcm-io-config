@@ -22,8 +22,7 @@ package io.wcm.config.core.management;
 import java.util.Set;
 
 import org.apache.sling.api.resource.Resource;
-
-import aQute.bnd.annotation.ProviderType;
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * Find associated application for a resource.

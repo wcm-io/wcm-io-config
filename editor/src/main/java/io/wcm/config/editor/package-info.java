@@ -20,5 +20,5 @@
 /**
  * API for customizing parameter definitions for the configuration editor.
  */
-@aQute.bnd.annotation.Version("0.2.0")
+@org.osgi.annotation.versioning.Version("0.2.0")
 package io.wcm.config.editor;

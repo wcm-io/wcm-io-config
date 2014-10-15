@@ -19,7 +19,7 @@
  */
 package io.wcm.config.editor;
 
-import aQute.bnd.annotation.ProviderType;
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * Properties to define the edit capabilities of configuration parameters.

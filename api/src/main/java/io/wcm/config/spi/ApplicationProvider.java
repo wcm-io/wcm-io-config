@@ -22,8 +22,7 @@ package io.wcm.config.spi;
 import java.util.regex.Pattern;
 
 import org.apache.sling.api.resource.Resource;
-
-import aQute.bnd.annotation.ConsumerType;
+import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * Provides information about a registered application, and how to detect if a certain resource belongs to this

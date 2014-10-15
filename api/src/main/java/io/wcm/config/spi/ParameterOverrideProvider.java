@@ -21,7 +21,7 @@ package io.wcm.config.spi;
 
 import java.util.Map;
 
-import aQute.bnd.annotation.ConsumerType;
+import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * Provides configuration override values (default or forced).

@@ -23,7 +23,7 @@ import io.wcm.config.api.Parameter;
 
 import java.util.Set;
 
-import aQute.bnd.annotation.ConsumerType;
+import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * Allows application to provide the necessary meta data for configuration.

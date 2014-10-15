@@ -22,7 +22,7 @@ package io.wcm.config.core.management;
 import java.util.Map;
 import java.util.SortedSet;
 
-import aQute.bnd.annotation.ProviderType;
+import org.osgi.annotation.versioning.ProviderType;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedSet;

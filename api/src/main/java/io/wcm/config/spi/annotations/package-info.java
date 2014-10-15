@@ -20,5 +20,5 @@
 /**
  * Annotations for annotating Sling Models implementations.
  */
-@aQute.bnd.annotation.Version("0.2.0")
+@org.osgi.annotation.versioning.Version("0.2.0")
 package io.wcm.config.spi.annotations;

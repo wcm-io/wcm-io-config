@@ -20,8 +20,7 @@
 package io.wcm.config.api;
 
 import org.apache.sling.api.resource.ValueMap;
-
-import aQute.bnd.annotation.ProviderType;
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * Configuration for a certain content scope.
