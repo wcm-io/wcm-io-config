@@ -38,8 +38,13 @@ module.exports = function (grunt) {
         singleRun: true,
         autoWatch: false,
         browsers: ["PhantomJS"],
+        reporters: ["dots", "junit", "coverage"],
+        coverageReporter: {
+          type: "cobertura",
+          dir: "../target/cobertura"
+        },
         junitReporter: {
-          outputFile: "./target/surefire-reports/karma-results.xml"
+          outputFile: "../target/surefire-reports/karma-results.xml"
         }
       }
     },

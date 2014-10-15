@@ -19,7 +19,7 @@ module.exports = function(config) {
     ],
 
     preprocessors: {
-      "../app-root/clientlibs/io.wcm.config.editor/js/app/**/*.js": "coverage"
+      "../src/main/webapp/app-root/clientlibs/io.wcm.config.editor/js/app/**/*.js": "coverage"
     },
 
     // list of files / patterns to exclude
@@ -35,7 +35,10 @@ module.exports = function(config) {
 
     coverageReporter: {
       type: "html",
-      dir: "coverage"
+      dir: "../target/coverage"
+    },
+    junitReporter: {
+      outputFile: "../target/surefire-reports/karma-results.xml"
     },
 
     // level of logging
