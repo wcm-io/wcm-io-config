@@ -14,7 +14,7 @@ Context-specific configuration management implementation.
 
 ### Documentation
 
-* [API Documentation][apidocs]
+* [API documentation][apidocs]
 * [Parameter Persistence Providers][persistence-providers]
 * [Parameter Override Providers][override-providers]
 * [Changelog][changelog]

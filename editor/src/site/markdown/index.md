@@ -15,7 +15,7 @@ Configuration Editor Template for AEM.
 ### Documentation
 
 * [Usage][usage]
-* [API Documentation][apidocs]
+* [API documentation][apidocs]
 * [Changelog][changelog]
 
 

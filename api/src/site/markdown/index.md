@@ -17,7 +17,7 @@ API and SPI for context-specific configuration.
 * [Terminology][terminology] and basic concepts
 * [Configuration API usage][usage-api]
 * [Configuration SPI usage][usage-spi]
-* [API Documentation][apidocs]
+* [API documentation][apidocs]
 * [Changelog][changelog]
 
 
