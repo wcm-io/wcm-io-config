@@ -48,7 +48,7 @@ public final class ApplicationFinderImpl implements ApplicationFinder {
   private final RankedServices<ApplicationProvider> applicationProviders = new RankedServices<>();
 
   @Override
-  public io.wcm.config.core.management.Application find(Resource resource) {
+  public Application find(Resource resource) {
     for (ApplicationProvider provider : applicationProviders) {
       if (provider.matches(resource)) {
         return new Application(provider.getApplicationId(), provider.getLabel());

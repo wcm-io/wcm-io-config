@@ -87,19 +87,22 @@ public final class RequestHeaderOverrideProvider implements ParameterOverridePro
 
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-    if (this.enabled) {
-      // build override map from request headers
-      if (request instanceof HttpServletRequest) {
-        Map<String, String> map = OVERRIDE_MAP_THREADLOCAL.get();
-        HttpServletRequest httpRequest = (HttpServletRequest)request;
-        Enumeration keys = httpRequest.getHeaderNames();
-        while (keys.hasMoreElements()) {
-          Object keyObject = keys.nextElement();
-          if (keyObject instanceof String) {
-            String key = (String)keyObject;
-            if (StringUtils.startsWith(key, REQUEST_HEADER_PREFIX)) {
-              map.put(StringUtils.substringAfter(key, REQUEST_HEADER_PREFIX), httpRequest.getHeader(key));
-            }
+    if (!this.enabled) {
+      chain.doFilter(request, response);
+      return;
+    }
+
+    // build override map from request headers
+    if (request instanceof HttpServletRequest) {
+      Map<String, String> map = OVERRIDE_MAP_THREADLOCAL.get();
+      HttpServletRequest httpRequest = (HttpServletRequest)request;
+      Enumeration keys = httpRequest.getHeaderNames();
+      while (keys.hasMoreElements()) {
+        Object keyObject = keys.nextElement();
+        if (keyObject instanceof String) {
+          String key = (String)keyObject;
+          if (StringUtils.startsWith(key, REQUEST_HEADER_PREFIX)) {
+            map.put(StringUtils.substringAfter(key, REQUEST_HEADER_PREFIX), httpRequest.getHeader(key));
           }
         }
       }

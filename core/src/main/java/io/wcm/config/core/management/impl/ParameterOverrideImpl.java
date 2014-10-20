@@ -67,7 +67,7 @@ public final class ParameterOverrideImpl implements ParameterOverride {
     String key = (scope != null ? "[" + scope + "]" : "") + parameter.getName();
     for (ParameterOverrideProvider provider : parameterOverrideProviders) {
       Map<String, String> overrideMap = provider.getOverrideMap();
-      String value = overrideMap.get(key.toString());
+      String value = overrideMap.get(key);
       if (value != null) {
         return TypeConversion.stringToObject(value, parameter.getType());
       }

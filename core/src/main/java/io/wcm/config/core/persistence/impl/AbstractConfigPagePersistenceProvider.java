@@ -146,7 +146,7 @@ abstract class AbstractConfigPagePersistenceProvider implements ParameterPersist
       configResource = resolver.create(configPage.getContentResource(), CONFIG_RESOURCE_NAME, values);
       resolver.commit();
     }
-    catch (org.apache.sling.api.resource.PersistenceException ex) {
+    catch (PersistenceException ex) {
       throw new PersistenceException("Storing configuration values to " + configPage.getPath() + " failed.", ex);
     }
   }
