@@ -225,8 +225,8 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
   private void addWidgetConfiguration(JSONObject jsonParameter, Parameter parameter, Map<String, Application> applicationsMap) throws JSONException {
     ValueMap parameterProperties = parameter.getProperties();
     if (parameterProperties != null) {
-      for (String propertyName : parameterProperties.keySet()) {
-        jsonParameter.put(propertyName, parameterProperties.get(propertyName));
+      for (Map.Entry<String, Object> entry : parameterProperties.entrySet()) {
+        jsonParameter.put(entry.getKey(), entry.getValue());
       }
     }
     Application application = applicationsMap.get(parameter.getApplicationId());

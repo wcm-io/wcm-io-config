@@ -84,8 +84,8 @@ public enum WidgetTypes {
    */
   public Map<String, Object> getWidgetConfiguration(Map<String, Object> defaultOverrides) {
     Map<String, Object> parameters = new HashMap<>(this.params);
-    for (String key : defaultOverrides.keySet()) {
-      parameters.put(key, defaultOverrides.get(key));
+    for (Map.Entry<String, Object> entry : defaultOverrides.entrySet()) {
+      parameters.put(entry.getKey(), entry.getValue());
     }
     return parameters;
   }
