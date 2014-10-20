@@ -257,11 +257,11 @@ public final class ParameterResolverImpl implements ParameterResolver {
           parameterNames.add(parameter.getName());
         }
       }
-      if (applicationIdsOfThisProvider.size() > 1) {
+      if (applicationIdsOfThisProvider.size() > 1) { //NOPMD
         log.warn("Parameter provider {} defines parameters with multiple application Ids: {}", provider,
             applicationIdsOfThisProvider.toArray(new String[applicationIdsOfThisProvider.size()]));
       }
-      else if (applicationIdsOfThisProvider.size() == 1) {
+      else if (applicationIdsOfThisProvider.size() == 1) { //NOPMD
         String applicationId = applicationIdsOfThisProvider.iterator().next();
         if (applicationIds.contains(applicationId)) {
           log.warn("Parameter provider application id is not unique: {}", applicationId);
