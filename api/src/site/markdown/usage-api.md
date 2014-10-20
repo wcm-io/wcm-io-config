@@ -12,14 +12,14 @@ returned.
 The API usage is really simple - example:
 
 ```java
-Configuration config = resource.adaptTo(Configuration.class);    
+Configuration config = resource.adaptTo(Configuration.class);
 String value = config.get("param1", String.class);
 ```
 
 Or using a parameter constant provided by the defining application (recommended usage):
 
 ```java
-Configuration config = resource.adaptTo(Configuration.class);    
+Configuration config = resource.adaptTo(Configuration.class);
 String value = config.get(Params.PARAM_1);
 ```
 

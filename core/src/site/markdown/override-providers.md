@@ -6,7 +6,7 @@ The wcm.io implementation contains ready-to-use implementations for the `Paramet
 ### Common syntax for all providers
 
 Each parameter override provider provides a map with parameter default values or parameter overrides. The map
-consists of key/value pairs with a common syntax: 
+consists of key/value pairs with a common syntax:
 
 * Key: `[{scope}]{parameterName}`
 * Value: any value
@@ -55,7 +55,7 @@ This provider is not active by default, it has to be activated via OSGi configur
 ### RequestHeaderOverrideProvider
 
 Allows to define configuration property default values or overrides from incoming request headers. This is useful
-if you want to override you configuration parameters on a running instance from outside, e.g from a Selenium 
+if you want to override you configuration parameters on a running instance from outside, e.g from a Selenium
 test script.
 
 The request header name is the key, and the header value the value.

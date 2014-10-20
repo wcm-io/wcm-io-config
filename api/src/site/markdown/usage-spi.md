@@ -56,7 +56,7 @@ Each application should provide a [ConfigurationFinderStrategy][finder-strategy]
 to detect the configuration scopes in the resource hierarchy. Basically it returns a list of configuration ids
 = configuration scope root paths that could be found for a given resource.
 
-For convenience [AbstractAbsoluteParentConfigurationFinderStrategy][abstract-finder-strategy] can be used 
+For convenience [AbstractAbsoluteParentConfigurationFinderStrategy][abstract-finder-strategy] can be used
 if the configuration contexts are always located on a certain hierarchy level.
 
 
@@ -75,7 +75,7 @@ service ranking:
 - When writing the configuration data always the first one is used (with lowest service ranking)
 - When reading configuration data all active providers are asked to read the data - the first one that
   founds configuration data "wins"
-  
+
 Thus it is possible to start with a certain persistence implementation and switch later to another one, still
 supporting the configuration written with the implementation used before.
 
@@ -100,7 +100,7 @@ The wcm.io implementation contains ready-to-use implementations for this interfa
 
 They have to be activated in the OSGi configuration. If multiple are activated they are treated ordered by
 service ranking. Example usecases for the built-in providers.
-  
+
 
 ### Preconditions and limitations
 
@@ -112,14 +112,14 @@ The current implementation has some preconditions and limitations:
   currently only a warning is logged if different parameter provider supply parameter definitions with the same name.
 
 - Flat parameter list: For each configuration context only a flat list of parameters is supported. It can be
-  filtered in the configuration editor by parameter groups and applications. 
+  filtered in the configuration editor by parameter groups and applications.
 
 - Configuration Id: Only resource paths pointing to the real content affected by the configuration scope are supported.
   Although technically for most parts the SPI would support arbitrary configuration ids whose meaning is hidden
   in the implementation details of the configuration finder strategy implementation this does not work when
   merging configuration ids from different configuration finder strategies provided by different applications. To
   support the inheritance accross configuration scopes the configuration management has to understand the format
-  of the configuration Ids, thus the limitation to real paths.    
+  of the configuration Ids, thus the limitation to real paths.
 
 
 

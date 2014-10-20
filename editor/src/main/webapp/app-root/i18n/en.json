@@ -72,5 +72,5 @@
     "sling:message": "Filter Group",
     "jcr:mixinTypes": ["sling:Message"]
   }
-  
+
 }
