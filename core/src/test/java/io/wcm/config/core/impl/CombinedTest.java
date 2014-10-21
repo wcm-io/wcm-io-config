@@ -31,7 +31,6 @@ import io.wcm.config.core.management.impl.ConfigurationFinderImpl;
 import io.wcm.config.core.management.impl.ParameterOverrideImpl;
 import io.wcm.config.core.management.impl.ParameterPersistenceImpl;
 import io.wcm.config.core.management.impl.ParameterResolverImpl;
-import io.wcm.config.core.override.impl.RequestHeaderOverrideProvider;
 import io.wcm.config.core.override.impl.SystemPropertyOverrideProvider;
 import io.wcm.config.core.persistence.impl.ToolsConfigPagePersistenceProvider;
 import io.wcm.config.spi.ConfigurationFinderStrategy;
@@ -88,8 +87,6 @@ public class CombinedTest {
         ImmutableValueMap.of("enabled", true));
 
     // override providers
-    context.registerInjectActivateService(new RequestHeaderOverrideProvider(),
-        ImmutableValueMap.of("enabled", true));
     context.registerInjectActivateService(new SystemPropertyOverrideProvider(),
         ImmutableValueMap.of("enabled", true));
 

@@ -20,7 +20,7 @@
 package io.wcm.config.core.override.impl;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.util.Dictionary;
@@ -69,8 +69,7 @@ public class OsgiConfigOverrideProviderTest {
     provider.activate(componentContext);
 
     Map<String, String> overrideMap = provider.getOverrideMap();
-    assertNull(overrideMap.get("[default]param1"));
-    assertNull(overrideMap.get("[/config1]param2"));
+    assertTrue(overrideMap.isEmpty());
   }
 
 }

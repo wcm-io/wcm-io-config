@@ -20,29 +20,28 @@
 package io.wcm.config.core.override.impl;
 
 import io.wcm.config.spi.ParameterOverrideProvider;
+import io.wcm.sling.commons.request.RequestContext;
 
-import java.io.IOException;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.felix.scr.annotations.Activate;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Property;
+import org.apache.felix.scr.annotations.Reference;
+import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.Service;
+import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.commons.osgi.PropertiesUtil;
 import org.osgi.framework.Constants;
 import org.osgi.service.component.ComponentContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.ImmutableMap;
 
 /**
  * Provides parameter override map from current request header.
@@ -50,22 +49,13 @@ import org.osgi.service.component.ComponentContext;
 @Component(immediate = true, metatype = true,
 label = "wcm.io Configuration Property Override Provider: Request Header",
 description = "Allows to define configuration property default values or overrides from inconming request headers.")
-@Service({
-  ParameterOverrideProvider.class, Filter.class
-})
-public final class RequestHeaderOverrideProvider implements ParameterOverrideProvider, Filter {
+@Service(ParameterOverrideProvider.class)
+public final class RequestHeaderOverrideProvider implements ParameterOverrideProvider {
 
   /**
    * Prefix for override request header
    */
   public static final String REQUEST_HEADER_PREFIX = "config.override.";
-
-  private static final ThreadLocal<Map<String, String>> OVERRIDE_MAP_THREADLOCAL = new ThreadLocal<Map<String, String>>() {
-    @Override
-    protected Map<String, String> initialValue() {
-      return new HashMap<String, String>();
-    }
-  };
 
   @Property(label = "Enabled", boolValue = RequestHeaderOverrideProvider.DEFAULT_ENABLED,
       description = "Enable parameter override provider")
@@ -78,54 +68,42 @@ public final class RequestHeaderOverrideProvider implements ParameterOverridePro
   static final String PROPERTY_RANKING = Constants.SERVICE_RANKING;
   static final int DEFAULT_RANKING = 1000;
 
+  private static final Logger log = LoggerFactory.getLogger(RequestHeaderOverrideProvider.class);
+
   private boolean enabled;
+
+  @Reference(cardinality = ReferenceCardinality.OPTIONAL_UNARY)
+  private RequestContext requestContext;
 
   @Override
   public Map<String, String> getOverrideMap() {
-    return OVERRIDE_MAP_THREADLOCAL.get();
+    if (this.enabled) {
+      if (requestContext != null) {
+        SlingHttpServletRequest request = requestContext.getThreadRequest();
+        if (request != null) {
+          return buildMapFromHeaders(request);
+        }
+      }
+      else {
+        log.warn("RequestContext service not running - unable to inspect current request.");
+      }
+    }
+    return ImmutableMap.<String, String>of();
   }
 
-  @Override
-  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-    if (!this.enabled) {
-      chain.doFilter(request, response);
-      return;
-    }
-
-    // build override map from request headers
-    if (request instanceof HttpServletRequest) {
-      Map<String, String> map = OVERRIDE_MAP_THREADLOCAL.get();
-      HttpServletRequest httpRequest = (HttpServletRequest)request;
-      Enumeration keys = httpRequest.getHeaderNames();
-      while (keys.hasMoreElements()) {
-        Object keyObject = keys.nextElement();
-        if (keyObject instanceof String) {
-          String key = (String)keyObject;
-          if (StringUtils.startsWith(key, REQUEST_HEADER_PREFIX)) {
-            map.put(StringUtils.substringAfter(key, REQUEST_HEADER_PREFIX), httpRequest.getHeader(key));
-          }
+  private Map<String, String> buildMapFromHeaders(SlingHttpServletRequest request) {
+    Map<String, String> map = new HashMap<>();
+    Enumeration keys = request.getHeaderNames();
+    while (keys.hasMoreElements()) {
+      Object keyObject = keys.nextElement();
+      if (keyObject instanceof String) {
+        String key = (String)keyObject;
+        if (StringUtils.startsWith(key, REQUEST_HEADER_PREFIX)) {
+          map.put(StringUtils.substringAfter(key, REQUEST_HEADER_PREFIX), request.getHeader(key));
         }
       }
     }
-    try {
-      chain.doFilter(request, response);
-    }
-    finally {
-      if (this.enabled) {
-        // clear override map
-        OVERRIDE_MAP_THREADLOCAL.get().clear();
-      }
-    }
-  }
-
-  @Override
-  public void init(FilterConfig filterConfig) throws ServletException {
-    // nothing to do
-  }
-
-  @Override
-  public void destroy() {
-    // nothing to do
+    return map;
   }
 
   @Activate
