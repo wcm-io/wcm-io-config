@@ -30,7 +30,10 @@ import io.wcm.config.spi.ParameterPersistenceProvider;
 import io.wcm.sling.commons.resource.ImmutableValueMap;
 import io.wcm.testing.mock.aem.junit.AemContext;
 
+import java.util.Calendar;
+
 import org.apache.sling.api.resource.PersistenceException;
+import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.junit.Before;
 import org.junit.Rule;
@@ -76,6 +79,8 @@ public class ConfStructurePersistenceProviderTest {
 
   @Test
   public void testGetStoreGetValues() throws PersistenceException {
+    long currentTime = Calendar.getInstance().getTimeInMillis();
+
     Page configPage = context.create().page(CONF_ROOT_PATH + CONFIG_ID, CONFIG_PAGE_TEMPLATE);
 
     ValueMap props = ImmutableValueMap.builder()
@@ -94,6 +99,11 @@ public class ConfStructurePersistenceProviderTest {
     assertTrue(underTest.store(context.resourceResolver(), CONFIG_ID, newProps));
 
     assertEquals(newProps, ImmutableValueMap.copyOf(underTest.get(context.resourceResolver(), CONFIG_ID)));
+
+    // check last modified
+    ValueMap pageProps = configPage.getProperties();
+    Calendar lastModified = pageProps.get(NameConstants.PN_LAST_MOD, Calendar.class);
+    assertTrue(lastModified.getTimeInMillis() >= currentTime);
   }
 
   @Test

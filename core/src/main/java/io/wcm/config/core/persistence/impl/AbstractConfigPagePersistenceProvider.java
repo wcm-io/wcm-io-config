@@ -21,6 +21,7 @@ package io.wcm.config.core.persistence.impl;
 
 import io.wcm.config.spi.ParameterPersistenceProvider;
 
+import java.util.Calendar;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -28,6 +29,7 @@ import org.apache.sling.api.resource.ModifiableValueMap;
 import org.apache.sling.api.resource.PersistenceException;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.ResourceResolverFactory;
 import org.apache.sling.api.resource.ResourceUtil;
 import org.apache.sling.api.resource.ValueMap;
 import org.slf4j.Logger;
@@ -131,19 +133,27 @@ abstract class AbstractConfigPagePersistenceProvider implements ParameterPersist
 
   private void storeValues(ResourceResolver resolver, Page configPage, Map<String, Object> values) throws PersistenceException {
     try {
+      ModifiableValueMap contentProps = configPage.getContentResource().adaptTo(ModifiableValueMap.class);
+
       // overwrite template path to make sure it used the template currently configured
       String configTemplate = getConfigPageTemplate();
       if (StringUtils.isNotEmpty(configTemplate)) {
-        ModifiableValueMap contentProps = configPage.getContentResource().adaptTo(ModifiableValueMap.class);
         if (!StringUtils.equals(configTemplate, contentProps.get(NameConstants.PN_TEMPLATE, String.class))) {
           contentProps.put(NameConstants.PN_TEMPLATE, configTemplate);
         }
       }
+
+      // write configuration data
       Resource configResource = configPage.getContentResource(CONFIG_RESOURCE_NAME);
       if (configResource != null) {
         resolver.delete(configResource);
       }
       configResource = resolver.create(configPage.getContentResource(), CONFIG_RESOURCE_NAME, values);
+
+      // update last modified info
+      contentProps.put(NameConstants.PN_LAST_MOD, Calendar.getInstance());
+      contentProps.put(NameConstants.PN_LAST_MOD_BY, resolver.getAttribute(ResourceResolverFactory.USER));
+
       resolver.commit();
     }
     catch (PersistenceException ex) {
