@@ -26,10 +26,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.jackrabbit.util.Text;
 import org.apache.sling.api.resource.Resource;
 import org.osgi.annotation.versioning.ConsumerType;
-
-import com.day.jcr.vault.util.Text;
 
 /**
  * Abstract implementation of {@link ConfigurationFinderStrategy} that supports one or multiple fixed levels

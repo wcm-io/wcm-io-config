@@ -33,7 +33,6 @@ import io.wcm.testing.mock.aem.junit.AemContext;
 import java.util.Calendar;
 
 import org.apache.sling.api.resource.PersistenceException;
-import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ValueMap;
 import org.junit.Before;
 import org.junit.Rule;
