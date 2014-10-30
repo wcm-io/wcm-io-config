@@ -28,6 +28,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Reference;
@@ -36,6 +39,9 @@ import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.apache.felix.scr.annotations.Service;
 import org.apache.sling.api.resource.Resource;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+
 /**
  * Default implementation of {@link ApplicationFinder}.
  */
@@ -43,18 +49,42 @@ import org.apache.sling.api.resource.Resource;
 @Service(ApplicationFinder.class)
 public final class ApplicationFinderImpl implements ApplicationFinder {
 
+  private static final Application APPLICATION_NOT_FOUND = new Application("APPLICATION_NOT_FOUND", null);
+
   @Reference(name = "applicationProvider", referenceInterface = ApplicationProvider.class,
       cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
   private final RankedServices<ApplicationProvider> applicationProviders = new RankedServices<>();
 
+  // apply a simple cache mechanism for looking up application per resource path
+  private final Cache<String, Application> applicationFindCache = CacheBuilder.newBuilder()
+      .maximumSize(10000)
+      .expireAfterWrite(10, TimeUnit.SECONDS)
+      .build();
+
   @Override
-  public Application find(Resource resource) {
-    for (ApplicationProvider provider : applicationProviders) {
-      if (provider.matches(resource)) {
-        return new Application(provider.getApplicationId(), provider.getLabel());
+  public Application find(final Resource resource) {
+    try {
+      Application result = applicationFindCache.get(resource.getPath(), new Callable<Application>() {
+        @Override
+        public Application call() {
+          for (ApplicationProvider provider : applicationProviders) {
+            if (provider.matches(resource)) {
+              return new Application(provider.getApplicationId(), provider.getLabel());
+            }
+          }
+          return APPLICATION_NOT_FOUND;
+        }
+      });
+      if (result == APPLICATION_NOT_FOUND) {
+        return null;
+      }
+      else {
+        return result;
       }
     }
-    return null;
+    catch (ExecutionException ex) {
+      throw new RuntimeException("Error finding application.", ex.getCause());
+    }
   }
 
   @Override

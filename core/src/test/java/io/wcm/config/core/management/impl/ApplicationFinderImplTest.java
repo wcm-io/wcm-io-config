@@ -88,6 +88,7 @@ public class ApplicationFinderImplTest {
 
   @Test
   public void testFind() {
+    when(resource.getPath()).thenReturn("/any/path");
     Application app = underTest.find(resource);
     assertNotNull(app);
     assertEquals(APPLICATION_ID_1, app.getApplicationId());
