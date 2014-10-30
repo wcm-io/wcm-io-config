@@ -32,7 +32,6 @@ import org.apache.felix.scr.annotations.Activate;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Property;
 import org.apache.felix.scr.annotations.Reference;
-import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.Service;
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.commons.osgi.PropertiesUtil;
@@ -72,7 +71,7 @@ public final class RequestHeaderOverrideProvider implements ParameterOverridePro
 
   private boolean enabled;
 
-  @Reference(cardinality = ReferenceCardinality.OPTIONAL_UNARY)
+  @Reference
   private RequestContext requestContext;
 
   @Override
