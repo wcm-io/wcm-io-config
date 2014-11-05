@@ -8,7 +8,7 @@ API and SPI for context-specific configuration.
 <dependency>
   <groupId>io.wcm</groupId>
   <artifactId>io.wcm.config.api</artifactId>
-  <version>0.2.0-SNAPSHOT</version>
+  <version>0.5.0</version>
 </dependency>
 ```
 
