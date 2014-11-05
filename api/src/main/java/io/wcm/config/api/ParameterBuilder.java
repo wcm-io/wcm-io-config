@@ -65,6 +65,7 @@ public final class ParameterBuilder<T> {
 
   /**
    * Create a new parameter builder.
+   * @param <T> Parameter type
    * @return Parameter builder
    */
   public static <T> ParameterBuilder<T> create() {
@@ -73,6 +74,7 @@ public final class ParameterBuilder<T> {
 
   /**
    * Create a new parameter builder.
+   * @param <T> Parameter type
    * @param name Parameter name. Only characters, numbers, hyphen, underline and point are allowed.
    * @return Parameter builder
    */
@@ -83,6 +85,7 @@ public final class ParameterBuilder<T> {
 
   /**
    * Create a new parameter builder.
+   * @param <T> Parameter type
    * @param name Parameter name. Only characters, numbers, hyphen, underline and point are allowed.
    * @param type Parameter value type
    * @return Parameter builder
@@ -95,6 +98,7 @@ public final class ParameterBuilder<T> {
 
   /**
    * Create a new parameter builder.
+   * @param <T> Parameter type
    * @param name Parameter name. Only characters, numbers, hyphen, underline and point are allowed.
    * @param type Parameter Value type.
    * @param applicationId Application Id. Has to be a conent path starting with "/".

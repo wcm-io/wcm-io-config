@@ -39,6 +39,7 @@ public interface Configuration extends ValueMap {
    * This method does not support conversion into a primitive type or an
    * array of a primitive type. It should return <code>null</code> in this
    * case.
+   * @param <T> Parameter type
    * @param parameter Parameter definition
    * @return Return named value converted to type T or <code>null</code> if
    *         non existing or can't be converted.
@@ -50,6 +51,7 @@ public interface Configuration extends ValueMap {
    * This method does not support conversion into a primitive type or an
    * array of a primitive type. It should return the default value in this
    * case.
+   * @param <T> Parameter type
    * @param parameter Parameter definition
    * @param defaultValue The default value to use if the named property does
    *          not exist or cannot be converted to the requested type. The
