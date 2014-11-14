@@ -100,20 +100,23 @@
             _.map(data, function(parameter){
               if (!parameter.inherited) {
                 buffer.push(
-                    encodeURIComponent( parameter.name ) +
+                    encodeURIComponent(parameter.name) +
                     "=" +
-                    encodeURIComponent( ( parameter.value == null ) ? "" : parameter.value )
+                    encodeURIComponent(parameter.value == null ? "" : parameter.value )
                 );
               }
               if (parameter.locked && !parameter.lockedInherited) {
-                lockedParameters.push(encodeURIComponent(parameter.name));
+                buffer.push(
+                    encodeURIComponent(config.lockedParameterName) +
+                    "=" +
+                    encodeURIComponent(parameter.name)
+                );
               }
             });
 
             var serialzedData = "";
             if (buffer.length > 0) {
               serialzedData = buffer.join( "&" );
-              serialzedData = serialzedData + "&" + config.lockedParameterName + "=" + lockedParameters.join(",")
             }
             // append the Sling specific _charset_:utf-8
 

@@ -126,8 +126,7 @@ public class EditorParameterPersistence extends SlingAllMethodsServlet {
 
   private SortedSet<String> getLockedParameterNames(String[] lockedParameterValues) {
     if (lockedParameterValues != null && lockedParameterValues.length > 0) {
-      String[] namesArray = lockedParameterValues[0].split(TypeConversion.ARRAY_DELIMITER);
-      return ImmutableSortedSet.copyOf(namesArray);
+      return ImmutableSortedSet.copyOf(lockedParameterValues);
     }
     return ImmutableSortedSet.<String>of();
   }

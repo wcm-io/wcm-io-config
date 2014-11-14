@@ -8,8 +8,7 @@ describe("parameters service", function() {
       var i18n = {};
       i18n.applicationFilter = "Filter Application";
       i18n.groupFilter = "Filter Group";
-      parametersProvider.setConfig({i18n: i18n, url:"http://localhost/test.json",
-        lockedParameterName: "lockedParameterNames"});
+      parametersProvider.setConfig({i18n: i18n, url:"http://localhost/test.json", lockedParameterName: "lockedParameterNames"});
     });
   });
 
@@ -103,8 +102,7 @@ describe("parameters service", function() {
       httpBackend.whenPOST('http://localhost/test.json').respond(function(method, url, data, headers){
         var nameValuePairs = data.split("&");
         expect(nameValuePairs).not.toBeUndefined();
-        expect(nameValuePairs.length).toBe(5, "wrong number of parameters");
-
+        expect(nameValuePairs.length).toBe(6, "wrong number of parameters");
         expect(
           utils.contains(nameValuePairs, encodeURIComponent("checkbox-param") + "=" + encodeURIComponent("true"))).toBeTruthy("parameter is missing");
         expect(
@@ -112,7 +110,9 @@ describe("parameters service", function() {
         expect(
           utils.contains(nameValuePairs, encodeURIComponent("digits") + "=" + "123")).toBeTruthy("parameter is missing");
         expect(
-          utils.contains(nameValuePairs, encodeURIComponent("lockedParameterNames") + "=" + encodeURIComponent("string-param"))).toBeTruthy("parameter is missing");
+          utils.contains(nameValuePairs, encodeURIComponent("lockedParameterNames") + "=string-param")).toBeTruthy("parameter is missing");
+        expect(
+          utils.contains(nameValuePairs, encodeURIComponent("lockedParameterNames") + "=digits")).toBeTruthy("parameter is missing");
         expect(
           utils.contains(nameValuePairs, "_charset_=utf-8")).toBeTruthy("parameter is missing");
         return [200, {}, {}];

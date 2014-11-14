@@ -87,18 +87,16 @@ public class EditorParameterPersistenceTest {
   private static final Set<Parameter<?>> PARAMETERS = ImmutableSet.<Parameter<?>>of(PARAMETER_BOOLEAN, PARAMETER_DOUBLE, PARAMETER_INTEGER, PARAMETER_LONG,
       PARAMETER_MAP, PARAMETER_MULTIVALUE, PARAMETER_STRING, NON_EDITABLE_PARAMETER);
 
-  private static final ImmutableValueMap.Builder BUILDER = new ImmutableValueMap.Builder();
-  static {
-    BUILDER.put("map-param", "key1=value1;key2=value2");
-    BUILDER.put("multivalue-param", "value1;value2");
-    BUILDER.put("string-param", "value");
-    BUILDER.put("integer-param", "1");
-    BUILDER.put("long-param", "5");
-    BUILDER.put("double-param", "3.454");
-    BUILDER.put("boolean-param", "true");
-    BUILDER.put(ParameterPersistence.PN_LOCKED_PARAMETER_NAMES, "string-param;boolean-param");
-  }
-  private static final Map<String, Object> REQUEST_PARAMETERS = BUILDER.build();
+  private static final Map<String, Object> REQUEST_PARAMETERS = ImmutableValueMap.builder()
+      .put("map-param", "key1=value1;key2=value2")
+      .put("multivalue-param", "value1;value2")
+      .put("string-param", "value")
+      .put("integer-param", "1")
+      .put("long-param", "5")
+      .put("double-param", "3.454")
+      .put("boolean-param", "true")
+      .put(ParameterPersistence.PN_LOCKED_PARAMETER_NAMES, new String[]{"string-param", "boolean-param"})
+      .build();
 
   @Mock
   private ConfigurationFinder configurationFinder;
@@ -160,8 +158,8 @@ public class EditorParameterPersistenceTest {
     verify(persistence).storeData(any(ResourceResolver.class), eq("/content/test"), argument.capture(), eq(false));
 
     Map<String, Object> mapParam = (Map<String, Object>)argument.getValue().getValues().get("map-param");
-    assertEquals(mapParam.get("key1"), "value1");
-    assertEquals(mapParam.get("key2"), "value2");
+    assertEquals("value1", mapParam.get("key1"));
+    assertEquals("value2", mapParam.get("key2"));
   }
 
   @Test
@@ -173,8 +171,8 @@ public class EditorParameterPersistenceTest {
     verify(persistence).storeData(any(ResourceResolver.class), eq("/content/test"), argument.capture(), eq(false));
 
     String[] multiParam = (String[])argument.getValue().getValues().get("multivalue-param");
-    assertEquals(multiParam[0], "value1");
-    assertEquals(multiParam[1], "value2");
+    assertEquals("value1", multiParam[0]);
+    assertEquals("value2", multiParam[1]);
   }
 
   @Test
@@ -186,7 +184,7 @@ public class EditorParameterPersistenceTest {
     verify(persistence).storeData(any(ResourceResolver.class), eq("/content/test"), argument.capture(), eq(false));
 
     Boolean value = (Boolean)argument.getValue().getValues().get("boolean-param");
-    assertEquals(value, true);
+    assertEquals(true, value);
   }
 
   @Test
@@ -198,7 +196,7 @@ public class EditorParameterPersistenceTest {
     verify(persistence).storeData(any(ResourceResolver.class), eq("/content/test"), argument.capture(), eq(false));
 
     Integer value = (Integer)argument.getValue().getValues().get("integer-param");
-    assertEquals(value, Integer.valueOf(1));
+    assertEquals(Integer.valueOf(1), value);
   }
 
   @Test
@@ -210,7 +208,7 @@ public class EditorParameterPersistenceTest {
     verify(persistence).storeData(any(ResourceResolver.class), eq("/content/test"), argument.capture(), eq(false));
 
     Long value = (Long)argument.getValue().getValues().get("long-param");
-    assertEquals(value, Long.valueOf(5L));
+    assertEquals(Long.valueOf(5L), value);
   }
 
   @Test
@@ -222,7 +220,7 @@ public class EditorParameterPersistenceTest {
     verify(persistence).storeData(any(ResourceResolver.class), eq("/content/test"), argument.capture(), eq(false));
 
     Double value = (Double)argument.getValue().getValues().get("double-param");
-    assertEquals(value, Double.valueOf(3.454));
+    assertEquals(Double.valueOf(3.454), value);
   }
 
   @Test
@@ -234,10 +232,10 @@ public class EditorParameterPersistenceTest {
     verify(persistence).storeData(any(ResourceResolver.class), eq("/content/test"), argument.capture(), eq(false));
 
     Set<String> value = argument.getValue().getLockedParameterNames();
-    assertEquals(value.size(), 2);
+    assertEquals(2, value.size());
     Iterator<String> iterator = value.iterator();
-    assertEquals(iterator.next(), "boolean-param");
-    assertEquals(iterator.next(), "string-param");
+    assertEquals("boolean-param", iterator.next());
+    assertEquals("string-param", iterator.next());
   }
 
   @Test
@@ -250,7 +248,7 @@ public class EditorParameterPersistenceTest {
     verify(persistence).storeData(any(ResourceResolver.class), eq("/content/test"), argument.capture(), eq(false));
 
     Set<String> value = argument.getValue().getLockedParameterNames();
-    assertEquals(value.size(), 0);
+    assertEquals(0, value.size());
   }
 
 }
