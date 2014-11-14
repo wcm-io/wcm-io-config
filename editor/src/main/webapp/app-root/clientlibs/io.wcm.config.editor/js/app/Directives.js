@@ -132,7 +132,7 @@
             }
           }
           scope.$watch("parameter.inherited", function(newvalue, oldvalue){
-            if (newvalue === true) {
+            if (newvalue === true || (scope.parameter.locked === true && scope.parameter.lockedInherited === true)) {
               scope.type = getDisabledType();
               scope.newValue = scope.parameter.value;
               scope.parameter.value = scope.parameter.inheritedValue;

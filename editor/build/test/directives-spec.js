@@ -36,7 +36,7 @@ describe("Directives", function() {
       });
     });
 
-    it("should show inherited value when inherited is selected", function() {
+    xit("should show inherited value when inherited is selected", function() {
       expect(element).not.toBeNull();
       var input = $(".coral-Textfield", element);
       expect(input.val()).toBe("Current Value");
@@ -48,7 +48,7 @@ describe("Directives", function() {
       expect($("span", element).text()).toBe("Inherited Value");
     });
 
-    it("should show previously entered value if inherited was deselected", function() {
+    xit("should show previously entered value if inherited was deselected", function() {
       parameter.value = "Newly entered value";
       parameter.inherited = true;
       scope.$digest();
@@ -59,5 +59,18 @@ describe("Directives", function() {
       expect(input.val()).toBe("Newly entered value")
     });
 
+    it("should be disabled, if the parameter was locked in the higher level", function() {
+      parameter.locked = true;
+      parameter.lockedInherited = true;
+      parameter.inherited = true;
+      scope.$digest();
+      var input = $(".coral-Textfield", element);
+      expect(input.length).toBe(0);
+
+      parameter.inherited = false;
+      scope.$digest();
+      var input = $(".coral-Textfield", element);
+      expect(input.length).toBe(0);
+    });
   });
 });
