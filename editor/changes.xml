@@ -23,6 +23,12 @@
     xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/plugins/maven-changes-plugin/xsd/changes-1.0.0.xsd">
   <body>
 
+    <release version="0.6.0" date="not released">
+      <action type="fix" dev="isechyn" issue="WCMIO-51">
+        Fixed the minified version of the editor app caused by "wrong" usage of the angularjs injection mechanism
+      </action>
+    </release>
+
     <release version="0.5.2" date="2014-12-03">
       <action type="fix" dev="isechyn" issue="WCMIO-35">
         Property locked in the higher level configuration should not be editable in the deeper level configurations
