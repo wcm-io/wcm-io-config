@@ -152,7 +152,7 @@
         scope: {
           parameter: '='
         },
-        controller: function($scope) {
+        controller: ["$scope", function($scope) {
           $scope.addNewValue = function(value) {
             $scope.$evalAsync(function() {
               var indexOf = utils.indexOfValueObject($scope.values, value);
@@ -166,7 +166,7 @@
               $scope.values.push({value: ""});
             }
           };
-        },
+        }],
         link: function (scope, element, attr) {
           scope.values = [];
           if (scope.parameter.value) {
