@@ -8,7 +8,7 @@ Configuration Editor Template for AEM.
 <dependency>
   <groupId>io.wcm</groupId>
   <artifactId>io.wcm.config.editor</artifactId>
-  <version>0.5.2</version>
+  <version>0.5.4</version>
 </dependency>
 ```
 
