@@ -167,29 +167,6 @@
     </pluginManagement>
   </build>
 
-  <profiles>
-    <profile>
-      <id>nodejs</id>
-      <activation>
-        <property>
-          <name>continuous-integration</name>
-        </property>
-      </activation>
-      <build>
-        <plugins>
-          <!-- Use project-local nodjs directory for CI build -->
-          <plugin>
-            <groupId>io.wcm.maven.plugins</groupId>
-            <artifactId>nodejs-maven-plugin</artifactId>
-            <configuration>
-              <nodeJsDirectory>${project.basedir}/.nodejs</nodeJsDirectory>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
-
   <distributionManagement>
     <site>
       <id>${site.deploy.id}</id>
