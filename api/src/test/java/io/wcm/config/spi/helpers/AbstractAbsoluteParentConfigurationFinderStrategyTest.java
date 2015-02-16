@@ -57,34 +57,28 @@ public class AbstractAbsoluteParentConfigurationFinderStrategyTest {
   }
 
   @Test
-  public void testFindConfigurationIds() throws Exception {
-    List<String> configurationIds;
+  public void testFindConfigurationIds() {
 
-    when(resource.getPath()).thenReturn("/");
-    configurationIds = ImmutableList.copyOf(underTest.findConfigurationIds(resource));
-    assertEquals(0, configurationIds.size());
+    assertConfigurationIds("/", new String[0]);
+    assertConfigurationIds("/content", new String[0]);
 
-    when(resource.getPath()).thenReturn("/content");
-    configurationIds = ImmutableList.copyOf(underTest.findConfigurationIds(resource));
-    assertEquals(0, configurationIds.size());
+    assertConfigurationIds("/content/region1",
+        "/content/region1");
 
-    when(resource.getPath()).thenReturn("/content/region1");
-    configurationIds = ImmutableList.copyOf(underTest.findConfigurationIds(resource));
-    assertEquals(1, configurationIds.size());
-    assertEquals("/content/region1", configurationIds.get(0));
+    assertConfigurationIds("/content/region1/site1",
+        "/content/region1",
+        "/content/region1/site1");
 
-    when(resource.getPath()).thenReturn("/content/region1/site1");
-    configurationIds = ImmutableList.copyOf(underTest.findConfigurationIds(resource));
-    assertEquals(2, configurationIds.size());
-    assertEquals("/content/region1", configurationIds.get(0));
-    assertEquals("/content/region1/site1", configurationIds.get(1));
-
-    when(resource.getPath()).thenReturn("/content/region1/site1/page1");
-    configurationIds = ImmutableList.copyOf(underTest.findConfigurationIds(resource));
-    assertEquals(2, configurationIds.size());
-    assertEquals("/content/region1", configurationIds.get(0));
-    assertEquals("/content/region1/site1", configurationIds.get(1));
+    assertConfigurationIds("/content/region1/site1/page1",
+        "/content/region1",
+        "/content/region1/site1");
   }
 
+  private void assertConfigurationIds(String resourcePath, String... configurationIds) {
+    List<String> expectedConfigurationIds = ImmutableList.copyOf(configurationIds);
+    when(resource.getPath()).thenReturn(resourcePath);
+    List<String> detectedConfigurationIds = ImmutableList.copyOf(underTest.findConfigurationIds(resource));
+    assertEquals(expectedConfigurationIds, detectedConfigurationIds);
+  }
 
 }
