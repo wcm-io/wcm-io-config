@@ -40,7 +40,7 @@ public class SystemPropertyOverrideProviderTest {
   @Mock
   private ComponentContext componentContext;
   @Mock
-  private Dictionary config;
+  private Dictionary<String, Object> config;
 
   @Before
   public void setUp() {

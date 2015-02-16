@@ -23,8 +23,8 @@ import static io.wcm.config.core.management.util.TypeConversion.KEY_VALUE_DELIMI
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.collect.Iterators;
@@ -68,8 +68,8 @@ final class PersistenceTypeConversion {
       String[] stringArray = new String[entries.length];
       for (int i = 0; i < entries.length; i++) {
         Map.Entry<?, ?> entry = entries[i];
-        String entryKey = ObjectUtils.toString(entry.getKey());
-        String entryValue = ObjectUtils.toString(entry.getValue());
+        String entryKey = Objects.toString(entry.getKey(), "");
+        String entryValue = Objects.toString(entry.getValue(), "");
         stringArray[i] = entryKey + KEY_VALUE_DELIMITER + entryValue;
       }
       return stringArray;

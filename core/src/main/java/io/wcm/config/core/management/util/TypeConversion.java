@@ -21,9 +21,9 @@ package io.wcm.config.core.management.util;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import org.apache.commons.lang3.BooleanUtils;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.sling.commons.osgi.PropertiesUtil;
@@ -128,8 +128,8 @@ public final class TypeConversion {
       Map.Entry<?, ?>[] entries = Iterators.toArray(map.entrySet().iterator(), Map.Entry.class);
       for (int i = 0; i < entries.length; i++) {
         Map.Entry<?, ?> entry = entries[i];
-        String entryKey = ObjectUtils.toString(entry.getKey());
-        String entryValue = ObjectUtils.toString(entry.getValue());
+        String entryKey = Objects.toString(entry.getKey(), "");
+        String entryValue = Objects.toString(entry.getValue(), "");
         stringValue.append(entryKey).append(KEY_VALUE_DELIMITER).append(entryValue);
         if (i < entries.length - 1) {
           stringValue.append(ARRAY_DELIMITER);
@@ -195,8 +195,8 @@ public final class TypeConversion {
         defaultMapValue = new String[defaultMap.size()];
         Map.Entry<?, ?>[] entries = Iterators.toArray(defaultMap.entrySet().iterator(), Map.Entry.class);
         for (int i = 0; i < entries.length; i++) {
-          defaultMapValue[i] = ObjectUtils.toString(entries[i].getKey())
-              + KEY_VALUE_DELIMITER + ObjectUtils.toString(entries[i].getValue());
+          defaultMapValue[i] = Objects.toString(entries[i].getKey(), "")
+              + KEY_VALUE_DELIMITER + Objects.toString(entries[i].getValue(), "");
         }
       }
       return (T)PropertiesUtil.toMap(value, defaultMapValue);
