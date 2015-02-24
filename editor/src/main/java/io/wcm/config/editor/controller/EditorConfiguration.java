@@ -19,6 +19,7 @@
  */
 package io.wcm.config.editor.controller;
 
+import io.wcm.config.api.Configuration;
 import io.wcm.config.core.management.ParameterPersistence;
 import io.wcm.sling.models.annotations.AemObject;
 
@@ -27,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.osgi.annotation.versioning.ProviderType;
 
 import com.day.cq.wcm.api.Page;
@@ -43,14 +45,16 @@ public class EditorConfiguration {
 
   private final String lockedNamesAttributeName;
   private final String providerUrl;
+  private final String configurationId;
 
   /**
    * @param currentPage
    */
   @Inject
-  public EditorConfiguration(@AemObject Page currentPage) {
+  public EditorConfiguration(@AemObject Page currentPage, @Self Configuration configuration) {
     lockedNamesAttributeName = ParameterPersistence.PN_LOCKED_PARAMETER_NAMES;
     providerUrl = currentPage.getContentResource().getPath() + ".configProvider.json";
+    configurationId = configuration != null ? configuration.getConfigurationId() : currentPage.getPath();
   }
 
   public String getLockedNamesAttributeName() {
@@ -61,4 +65,7 @@ public class EditorConfiguration {
     return providerUrl;
   }
 
+  public String getConfigurationId() {
+    return configurationId;
+  }
 }

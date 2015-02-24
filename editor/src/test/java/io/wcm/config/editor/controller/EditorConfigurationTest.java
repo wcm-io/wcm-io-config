@@ -21,6 +21,7 @@ package io.wcm.config.editor.controller;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
+import io.wcm.config.api.Configuration;
 import io.wcm.config.core.management.ParameterPersistence;
 
 import org.apache.sling.api.resource.Resource;
@@ -41,6 +42,8 @@ public class EditorConfigurationTest {
   private Page currentPage;
   @Mock
   private Resource contentResource;
+  @Mock
+  private Configuration configuration;
 
   private EditorConfiguration underTest;
 
@@ -48,13 +51,15 @@ public class EditorConfigurationTest {
   public void setUp() {
     when(currentPage.getContentResource()).thenReturn(contentResource);
     when(contentResource.getPath()).thenReturn(SAMPLE_PATH);
-    underTest = new EditorConfiguration(currentPage);
+    when(configuration.getConfigurationId()).thenReturn("Test Configuration");
+    underTest = new EditorConfiguration(currentPage, configuration);
   }
 
   @Test
   public void testProperties() {
     assertEquals(SAMPLE_PATH + ".configProvider.json", underTest.getProviderUrl());
     assertEquals(ParameterPersistence.PN_LOCKED_PARAMETER_NAMES, underTest.getLockedNamesAttributeName());
+    assertEquals("Test Configuration", underTest.getConfigurationId());
   }
 
 }
