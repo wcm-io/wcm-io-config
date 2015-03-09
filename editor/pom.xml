@@ -162,6 +162,13 @@
             <excludePackageNames>*.impl,*.controller</excludePackageNames>
           </configuration>
         </plugin>
+        
+        <!-- Switch back to version 1.0.2 until problems with 1.0.4 are solved -->
+        <plugin>
+          <groupId>io.wcm.maven.plugins</groupId>
+          <artifactId>nodejs-maven-plugin</artifactId>
+          <version>1.0.2</version>
+        </plugin>        
 
       </plugins>
     </pluginManagement>
