@@ -163,11 +163,11 @@
           </configuration>
         </plugin>
 
-        <!-- Switch to version 1.0.5-SNAPSHOT until it is updated in aem-global-parent -->
+        <!-- Switch to version 1.0.6 until it is updated in aem-global-parent -->
         <plugin>
           <groupId>io.wcm.maven.plugins</groupId>
           <artifactId>nodejs-maven-plugin</artifactId>
-          <version>1.0.5-SNAPSHOT</version>
+          <version>1.0.6</version>
         </plugin>
 
       </plugins>
