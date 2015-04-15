@@ -41,12 +41,15 @@ This provider is not active by default, it has to be activated via OSGi configur
 Allows to define configuration property default values or overrides from system environment properties.
 
 The parameters are defined when starting the JVM using the `-D` command line parameter. Each parameter defines
-one map entry in a single string with keys separated from the values by `=`.
+one map entry in a single string with keys separated from the values by `=`. All parameter names have to be 
+prefixed with the string `config.override.`.
 
 Example:
 
 ```
--D"[/content/site1/en]param1=New value" -Dparam2=55 -D[default]param3=on
+-D"config.override.[/content/site1/en]param1=New value"
+-Dconfig.override.param2=55
+-Dconfig.override.[default]param3=on
 ```
 
 This provider is not active by default, it has to be activated via OSGi configuration.
