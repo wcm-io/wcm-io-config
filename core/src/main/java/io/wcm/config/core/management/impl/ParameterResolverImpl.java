@@ -242,7 +242,6 @@ public final class ParameterResolverImpl implements ParameterResolver {
    * Validate that application ids and configuration names are unique over all providers.
    */
   private void validateParameterProviders() {
-    Set<String> applicationIds = new HashSet<>();
     Set<String> parameterNames = new HashSet<>();
     for (ParameterProvider provider : this.parameterProviders) {
       Set<String> applicationIdsOfThisProvider = new HashSet<>();
@@ -260,15 +259,6 @@ public final class ParameterResolverImpl implements ParameterResolver {
       if (applicationIdsOfThisProvider.size() > 1) { //NOPMD
         log.warn("Parameter provider {} defines parameters with multiple application Ids: {}", provider,
             applicationIdsOfThisProvider.toArray(new String[applicationIdsOfThisProvider.size()]));
-      }
-      else if (applicationIdsOfThisProvider.size() == 1) { //NOPMD
-        String applicationId = applicationIdsOfThisProvider.iterator().next();
-        if (applicationIds.contains(applicationId)) {
-          log.warn("Parameter provider application id is not unique: {}", applicationId);
-        }
-        else {
-          applicationIds.add(applicationId);
-        }
       }
     }
   }

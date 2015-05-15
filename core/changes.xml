@@ -23,6 +23,12 @@
     xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/plugins/maven-changes-plugin/xsd/changes-1.0.0.xsd">
   <body>
 
+    <release version="0.5.4" date="not released">
+      <action type="fix" dev="sseifert">
+        Remove log warnings when multiple OSGi services contribute parameter definitions for the same application - this is a valid usecase.
+      </action>
+    </release>
+
     <release version="0.5.2" date="2015-03-09">
       <action type="fix" dev="sseifert">
         Register Application type for ConfigurationAdapterFactory as well.
