@@ -42,6 +42,7 @@ import com.google.common.collect.ImmutableMap;
 label = "wcm.io Configuration Property Override Provider: OSGi configuration",
 description = "Allows to define configuration property default values or overrides from OSGi configuration.")
 @Service(ParameterOverrideProvider.class)
+@Property(name = "webconsole.configurationFactory.nameHint", value = "{overrides}")
 public final class OsgiConfigOverrideProvider implements ParameterOverrideProvider {
 
   @Property(label = "Enabled", boolValue = OsgiConfigOverrideProvider.DEFAULT_ENABLED,

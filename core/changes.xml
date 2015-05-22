@@ -27,6 +27,9 @@
       <action type="fix" dev="sseifert">
         Remove log warnings when multiple OSGi services contribute parameter definitions for the same application - this is a valid usecase.
       </action>
+      <action type="update" dev="sseifert">
+        Add web console name hint for OSGi factory configurations.
+      </action>
     </release>
 
     <release version="0.5.2" date="2015-03-09">
