@@ -21,17 +21,22 @@ package io.wcm.config.core.management.impl;
 
 import io.wcm.config.api.Parameter;
 import io.wcm.config.core.management.ParameterOverride;
+import io.wcm.config.core.management.impl.override.ParameterOverrideInfoLookup;
 import io.wcm.config.core.management.util.TypeConversion;
 import io.wcm.config.spi.ParameterOverrideProvider;
 import io.wcm.sling.commons.osgi.RankedServices;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Reference;
 import org.apache.felix.scr.annotations.ReferenceCardinality;
 import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.apache.felix.scr.annotations.Service;
+
+import com.google.common.collect.ImmutableSet;
 
 /**
  * Default implementation of {@link ParameterOverride}.
@@ -47,40 +52,66 @@ public final class ParameterOverrideImpl implements ParameterOverride {
       cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
   private final RankedServices<ParameterOverrideProvider> parameterOverrideProviders = new RankedServices<>();
 
+  private volatile ParameterOverrideInfoLookup lookup = new ParameterOverrideInfoLookup();
+
   @Override
   public <T> T getOverrideSystemDefault(Parameter<T> parameter) {
-    return getOverrideValue(DEFAULT_SCOPE, parameter);
+    String value = lookup.getOverrideSystemDefault(parameter.getName());
+    return TypeConversion.stringToObject(value, parameter.getType());
   }
 
   @Override
   public <T> T getOverrideForce(String configurationId, Parameter<T> parameter) {
     // try to get override for explicit configuration
-    T value = getOverrideValue(configurationId, parameter);
+    String value = lookup.getOverrideForce(configurationId, parameter.getName());
     if (value == null) {
       // try to get override for all configurations
-      value = getOverrideValue(null, parameter);
+      value = lookup.getOverrideForce(parameter.getName());
     }
-    return value;
+    return TypeConversion.stringToObject(value, parameter.getType());
   }
 
-  private <T> T getOverrideValue(String scope, Parameter<T> parameter) {
-    String key = (scope != null ? "[" + scope + "]" : "") + parameter.getName();
-    for (ParameterOverrideProvider provider : parameterOverrideProviders) {
-      Map<String, String> overrideMap = provider.getOverrideMap();
-      String value = overrideMap.get(key);
-      if (value != null) {
-        return TypeConversion.stringToObject(value, parameter.getType());
-      }
+  @Override
+  public Set<String> getLockedParameterNames(String configurationId) {
+    // get locked parameter names for explicit configuration and global and merge them
+    Set<String> lockedParameterNamesScope = lookup.getLockedParameterNames(configurationId);
+    Set<String> lockedParameterNamesGlobal = lookup.getLockedParameterNames();
+    if (lockedParameterNamesScope.isEmpty()) {
+      return lockedParameterNamesGlobal;
     }
-    return null;
+    else if (lockedParameterNamesGlobal.isEmpty()) {
+      return lockedParameterNamesScope;
+    }
+    else {
+      Set<String> merged = new HashSet<>(lockedParameterNamesScope.size() + lockedParameterNamesGlobal.size());
+      merged.addAll(lockedParameterNamesScope);
+      merged.addAll(lockedParameterNamesGlobal);
+      return ImmutableSet.copyOf(merged);
+    }
   }
 
   void bindParameterOverrideProvider(ParameterOverrideProvider service, Map<String, Object> props) {
     parameterOverrideProviders.bind(service, props);
+    updateLoockup();
   }
 
   void unbindParameterOverrideProvider(ParameterOverrideProvider service, Map<String, Object> props) {
     parameterOverrideProviders.unbind(service, props);
+    updateLoockup();
+  }
+
+  /**
+   * Update lookup maps with override maps from all override providers.
+   */
+  private void updateLoockup() {
+    synchronized (parameterOverrideProviders) {
+      ParameterOverrideInfoLookup newLookup = new ParameterOverrideInfoLookup();
+      for (ParameterOverrideProvider provider : parameterOverrideProviders) {
+        newLookup.addOverrideMap(provider.getOverrideMap());
+      }
+      newLookup.seal();
+      lookup = newLookup;
+    }
   }
 
 }

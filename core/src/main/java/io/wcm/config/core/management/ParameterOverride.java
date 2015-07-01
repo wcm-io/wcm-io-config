@@ -21,6 +21,8 @@ package io.wcm.config.core.management;
 
 import io.wcm.config.api.Parameter;
 
+import java.util.Set;
+
 import org.osgi.annotation.versioning.ProviderType;
 
 /**
@@ -33,6 +35,12 @@ public interface ParameterOverride {
    * Scope for system default value
    */
   String DEFAULT_SCOPE = "default";
+
+  /**
+   * Suffix to mark a parameter override as locked, the parameter value cannot be overridden in nested configuration
+   * scopes.
+   */
+  String LOCKED_SUFFIX = ":locked";
 
   /**
    * Allows to override the system default value of a parameter, that is applied if not configuration
@@ -50,5 +58,12 @@ public interface ParameterOverride {
    * @return Parameter value (null if no override required, or new value if it was overridden)
    */
   <T> T getOverrideForce(String configurationId, Parameter<T> parameter);
+
+  /**
+   * Get parameter names that are locked for the given configuration ID.
+   * @param configurationId Configuration id
+   * @return Parameter names or empty set.
+   */
+  Set<String> getLockedParameterNames(String configurationId);
 
 }

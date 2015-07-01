@@ -107,6 +107,7 @@ public class ParameterResolverImplTest {
     when(parameterPersistence.getData(same(resolver), anyString())).thenReturn(toData(ImmutableValueMap.of()));
     when(parameterOverride.getOverrideSystemDefault(any(Parameter.class))).thenReturn(null);
     when(parameterOverride.getOverrideForce(anyString(), any(Parameter.class))).thenReturn(null);
+    when(parameterOverride.getLockedParameterNames(anyString())).thenReturn(ImmutableSet.<String>of());
 
     Set<Parameter<?>> params1 = new HashSet<>();
     params1.add(PARAM11);
@@ -344,6 +345,34 @@ public class ParameterResolverImplTest {
     Map<String, Object> values = underTest.getEffectiveValues(resolver, ImmutableList.of(
         "/region1/site1/config1", "/region1/site1", "/region1"));
     assertEquals("r11", values.get("param11"));
+    assertEquals("r12", values.get("param12"));
+    assertEquals("override13", values.get("param13"));
+    assertEquals(66, values.get("param21"));
+  }
+
+  @Test
+  public void testConfigurationHierarchyWithOverridesAndLockedParameterNamesFromOverride() {
+    when(parameterPersistence.getData(resolver, "/region1")).thenReturn(toData(ImmutableValueMap.builder()
+        .put("param11", "r11")
+        .put("param12", "r12")
+        .put("param21", 88)
+        .build(), ImmutableSortedSet.<String>of()));
+    when(parameterPersistence.getData(resolver, "/region1/site1")).thenReturn(toData(ImmutableValueMap.builder()
+        .put("param11", "s11")
+        .put("param21", 99)
+        .build(), ImmutableSortedSet.<String>of()));
+    when(parameterPersistence.getData(resolver, "/region1/site1/config1")).thenReturn(toData(ImmutableValueMap.builder()
+        .put("param11", "c11")
+        .put("param21", 111)
+        .build()));
+
+    when(parameterOverride.getOverrideSystemDefault(PARAM13)).thenReturn("override13");
+    when(parameterOverride.getOverrideForce("/region1/site1", PARAM21)).thenReturn(66);
+    when(parameterOverride.getLockedParameterNames("/region1/site1")).thenReturn(ImmutableSet.of("param21"));
+
+    Map<String, Object> values = underTest.getEffectiveValues(resolver, ImmutableList.of(
+        "/region1/site1/config1", "/region1/site1", "/region1"));
+    assertEquals("c11", values.get("param11"));
     assertEquals("r12", values.get("param12"));
     assertEquals("override13", values.get("param13"));
     assertEquals(66, values.get("param21"));

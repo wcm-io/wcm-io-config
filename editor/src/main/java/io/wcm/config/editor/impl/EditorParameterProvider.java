@@ -24,6 +24,7 @@ import io.wcm.config.api.Parameter;
 import io.wcm.config.core.management.Application;
 import io.wcm.config.core.management.ApplicationFinder;
 import io.wcm.config.core.management.ConfigurationFinder;
+import io.wcm.config.core.management.ParameterOverride;
 import io.wcm.config.core.management.ParameterPersistence;
 import io.wcm.config.core.management.ParameterPersistenceData;
 import io.wcm.config.core.management.ParameterResolver;
@@ -34,6 +35,7 @@ import io.wcm.wcm.commons.contenttype.FileExtension;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -77,6 +79,8 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
   private ParameterPersistence persistence;
   @Reference
   private ParameterResolver parameterResolver;
+  @Reference
+  private ParameterOverride parameterOverride;
 
   private static final long serialVersionUID = 1L;
 
@@ -122,7 +126,10 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
     Set<Parameter<?>> allParameters = parameterResolver.getAllParameters();
     ParameterPersistenceData persistedData = persistence.getData(request.getResourceResolver(), configuration.getConfigurationId());
     Map<String, Object> persistedValues = persistedData.getValues();
-    Set<String> lockedParameterNames = persistedData.getLockedParameterNames();
+
+    // get locked parameter names from persisted configuration, and add those from overrides
+    Set<String> lockedParameterNames = new HashSet<>(persistedData.getLockedParameterNames());
+    lockedParameterNames.addAll(parameterOverride.getLockedParameterNames(configuration.getConfigurationId()));
 
     Iterator<Parameter<?>> parameterIterator = allParameters.iterator();
     while (parameterIterator.hasNext()) {

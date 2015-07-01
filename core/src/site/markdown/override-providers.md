@@ -8,7 +8,7 @@ The wcm.io implementation contains ready-to-use implementations for the `Paramet
 Each parameter override provider provides a map with parameter default values or parameter overrides. The map
 consists of key/value pairs with a common syntax:
 
-* Key: `[{scope}]{parameterName}`
+* Key: `[{scope}[:locked]]{parameterName}`
 * Value: any value
 
 The `[{scope}]` can be:
@@ -16,6 +16,7 @@ The `[{scope}]` can be:
 * `[default]` - overrides default value
 * `[/x/y/z]` - overrides the configured value for configuration id `/x/y/z`
 * missing - overrides the configured value for all configuration ids
+* If the scope value is suffixed with the string ":locked" this configuration parameter cannot be overridden in nested configuration scopes.
 
 
 ### OsgiConfigOverrideProvider

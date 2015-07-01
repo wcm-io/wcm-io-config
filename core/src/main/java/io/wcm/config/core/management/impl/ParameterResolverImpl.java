@@ -98,7 +98,7 @@ public final class ParameterResolverImpl implements ParameterResolver {
       lockedParameterNames = applyConfiguredValues(resolver, configurationId, parameterValues, lockedParameterNames);
 
       // apply forced override values
-      applyOverrideForce(configurationId, parameterValues);
+      lockedParameterNames = applyOverrideForce(configurationId, parameterValues, lockedParameterNames);
     }
 
     return parameterValues;
@@ -187,13 +187,7 @@ public final class ParameterResolverImpl implements ParameterResolver {
     }
 
     // aggregate set of locked parameter names from ancestor levels and this level
-    SortedSet<String> lockedParameterNames = ancestorLockedParameterNames;
-    if (!data.getLockedParameterNames().isEmpty()) {
-      lockedParameterNames = new TreeSet<>();
-      lockedParameterNames.addAll(ancestorLockedParameterNames);
-      lockedParameterNames.addAll(data.getLockedParameterNames());
-    }
-    return lockedParameterNames;
+    return mergeSets(ancestorLockedParameterNames, data.getLockedParameterNames());
   }
 
   /**
@@ -228,14 +222,22 @@ public final class ParameterResolverImpl implements ParameterResolver {
    * Apply forced overrides for a configurationId.
    * @param configurationId Configuration id
    * @param parameterValues Parameter values
+   * @param ancestorLockedParameterNames Set of locked parameter names on the configuration levels above.
+   * @return Set of locked parameter names on this configuration level combined with the from the levels above.
    */
-  private void applyOverrideForce(String configurationId, Map<String, Object> parameterValues) {
+  private SortedSet<String> applyOverrideForce(String configurationId, Map<String, Object> parameterValues,
+      SortedSet<String> ancestorLockedParameterNames) {
     for (Parameter<?> parameter : allParameters) {
       Object overrideValue = parameterOverride.getOverrideForce(configurationId, parameter);
       if (overrideValue != null) {
         parameterValues.put(parameter.getName(), overrideValue);
       }
     }
+
+    Set<String> overrideLockedParameterNames = parameterOverride.getLockedParameterNames(configurationId);
+
+    // aggregate set of locked parameter names from ancestor levels and this level
+    return mergeSets(ancestorLockedParameterNames, overrideLockedParameterNames);
   }
 
   /**
@@ -261,6 +263,22 @@ public final class ParameterResolverImpl implements ParameterResolver {
             applicationIdsOfThisProvider.toArray(new String[applicationIdsOfThisProvider.size()]));
       }
     }
+  }
+
+  /**
+   * Merge two sets. If secondary set is empty return primary.
+   * @param primary Primary set
+   * @param secondary Secondary set
+   * @return Merged set
+   */
+  private SortedSet<String> mergeSets(SortedSet<String> primary, Set<String> secondary) {
+    SortedSet<String> result = primary;
+    if (!secondary.isEmpty()) {
+      result = new TreeSet<>();
+      result.addAll(primary);
+      result.addAll(secondary);
+    }
+    return result;
   }
 
   @Activate

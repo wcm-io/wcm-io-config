@@ -23,12 +23,15 @@
     xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/plugins/maven-changes-plugin/xsd/changes-1.0.0.xsd">
   <body>
 
-    <release version="0.5.4" date="not released">
+    <release version="0.6.0" date="not released">
       <action type="fix" dev="sseifert">
         Remove log warnings when multiple OSGi services contribute parameter definitions for the same application - this is a valid usecase.
       </action>
       <action type="update" dev="sseifert">
         Add web console name hint for OSGi factory configurations.
+      </action>
+      <action type="add" dev="sseifert">
+        Add support for ":locked" suffix in parameter override scope strings to disallow overriding them in nested configuration scopes.
       </action>
     </release>
 

@@ -31,6 +31,7 @@ import io.wcm.config.api.ParameterBuilder;
 import io.wcm.config.core.management.Application;
 import io.wcm.config.core.management.ApplicationFinder;
 import io.wcm.config.core.management.ConfigurationFinder;
+import io.wcm.config.core.management.ParameterOverride;
 import io.wcm.config.core.management.ParameterPersistence;
 import io.wcm.config.core.management.ParameterPersistenceData;
 import io.wcm.config.core.management.ParameterResolver;
@@ -82,6 +83,9 @@ public class EditorParameterProviderTest {
 
   @Mock
   private ParameterPersistence persistence;
+
+  @Mock
+  private ParameterOverride parameterOverride;
 
   @Mock
   private ParameterResolver parameterResolver;
@@ -197,6 +201,8 @@ public class EditorParameterProviderTest {
     when(request.getResource()).thenReturn(regionResource);
 
     when(applicationFinder.getAll()).thenReturn(ImmutableSet.<Application>of(new Application(APP_ID, "Test App")));
+
+    when(parameterOverride.getLockedParameterNames(anyString())).thenReturn(ImmutableSet.<String>of());
   }
 
   @Test
@@ -229,6 +235,17 @@ public class EditorParameterProviderTest {
     assertEquals(firstParameter.get(EditorNameConstants.LOCKED), true);
     assertEquals(firstParameter.get(EditorNameConstants.LOCKED_INHERITED), true);
     assertEquals(secondParameter.get(EditorNameConstants.LOCKED), false);
+    assertEquals(secondParameter.get(EditorNameConstants.LOCKED_INHERITED), false);
+  }
+
+  @Test
+  public void testLockedPropertyWithOverride() throws ServletException, IOException, JSONException {
+    when(parameterOverride.getLockedParameterNames(anyString())).thenReturn(ImmutableSet.of(EDITABLE_PARAMETER_TWO.getName()));
+
+    underTest.doGet(request, response);
+    assertEquals(firstParameter.get(EditorNameConstants.LOCKED), true);
+    assertEquals(firstParameter.get(EditorNameConstants.LOCKED_INHERITED), true);
+    assertEquals(secondParameter.get(EditorNameConstants.LOCKED), true);
     assertEquals(secondParameter.get(EditorNameConstants.LOCKED_INHERITED), false);
   }
 

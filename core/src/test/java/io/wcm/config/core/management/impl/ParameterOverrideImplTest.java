@@ -38,6 +38,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.osgi.framework.Constants;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ParameterOverrideImplTest {
@@ -66,12 +67,12 @@ public class ParameterOverrideImplTest {
   public void setUp() {
     when(provider1.getOverrideMap()).thenReturn(ImmutableMap.<String, String>builder()
         .put("[default]param1", "value1")
-        .put("[/config1]param1", "value11")
+        .put("[/config1:locked]param1", "value11")
         .put("[/config1]param2", "value21")
         .build());
     when(provider2.getOverrideMap()).thenReturn(ImmutableMap.<String, String>builder()
         .put("[default]param1", "value2")
-        .put("param2", "value2")
+        .put("[locked]param2", "value2")
         .put("param3", "value3")
         .build());
 
@@ -107,6 +108,10 @@ public class ParameterOverrideImplTest {
         .put("[default]integerParam", "55")
         .build());
 
+    underTest = new ParameterOverrideImpl();
+    underTest.bindParameterOverrideProvider(provider1, SERVICE_PROPS_1);
+    underTest.bindParameterOverrideProvider(provider2, SERVICE_PROPS_2);
+
     assertEquals("value1", underTest.getOverrideSystemDefault(
         ParameterBuilder.create("stringParam", String.class, APP_ID).build()));
     assertArrayEquals(new String[] {
@@ -114,6 +119,12 @@ public class ParameterOverrideImplTest {
     }, underTest.getOverrideSystemDefault(ParameterBuilder.create("stringArrayParam", String[].class, APP_ID).build()));
     assertEquals((Integer)55, underTest.getOverrideSystemDefault(
         ParameterBuilder.create("integerParam", Integer.class, APP_ID).build()));
+  }
+
+  @Test
+  public void testGetLockedParameterNames() {
+    assertEquals(ImmutableSet.of("param1", "param2"), underTest.getLockedParameterNames("/config1"));
+    assertEquals(ImmutableSet.of("param2"), underTest.getLockedParameterNames("/config2"));
   }
 
 }
