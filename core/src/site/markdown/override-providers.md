@@ -17,6 +17,7 @@ The `[{scope}]` can be:
 * `[/x/y/z]` - overrides the configured value for configuration id `/x/y/z`
 * missing - overrides the configured value for all configuration ids
 * If the scope value is suffixed with the string ":locked" this configuration parameter cannot be overridden in nested configuration scopes.
+* `[locked]` - overrides the value for all configuration scopes and do not allow to configure anything else
 
 
 ### OsgiConfigOverrideProvider
