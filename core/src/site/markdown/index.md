@@ -8,7 +8,7 @@ Context-specific configuration management implementation.
 <dependency>
   <groupId>io.wcm</groupId>
   <artifactId>io.wcm.config.core</artifactId>
-  <version>0.5.2</version>
+  <version>0.6.0</version>
 </dependency>
 ```
 
