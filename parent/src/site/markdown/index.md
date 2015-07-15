@@ -21,3 +21,8 @@ The problems and usecases solved by this implementation are described in the wcm
 
 
 [wiki-config-requirements]: https://wcm-io.atlassian.net/wiki/x/HIAH
+
+
+### GitHub Repository
+
+Sources: https://github.com/wcm-io/wcm-io-config
