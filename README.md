@@ -2,7 +2,7 @@
 ======
 [![Build Status](https://travis-ci.org/wcm-io/wcm-io-config.png?branch=master)](https://travis-ci.org/wcm-io/wcm-io-config)
 
-Context-specific configuration for AEM applications
+Context-specific configuration for AEM applications.
 
 Documentation: http://wcm.io/config/<br/>
 Issues: https://wcm-io.atlassian.net/projects/WCON<br/>
