@@ -42,6 +42,7 @@
     <module>api</module>
     <module>core</module>
     <module>editor</module>
+    <module>sample-app</module>
   </modules>
 
   <build>
