@@ -99,7 +99,7 @@ The wcm.io implementation contains ready-to-use implementations for this interfa
 [Parameter Override Providers][core-override-providers].
 
 They have to be activated in the OSGi configuration. If multiple are activated they are treated ordered by
-service ranking. Example usecases for the built-in providers.
+service ranking.
 
 
 ### Preconditions and limitations
@@ -107,7 +107,7 @@ service ranking. Example usecases for the built-in providers.
 The current implementation has some preconditions and limitations:
 
 - Parameter names: The parameter names have to be globally unique across all applications/parameter providers.
-  Although it would be technically possible to tread them in different 'namespaces' per application, this would
+  Although it would be technically possible to read them in different 'namespaces' per application, this would
   break the simplicity of the ValueMap API when accessing the configuration directly via it's string name. So
   currently only a warning is logged if different parameter provider supply parameter definitions with the same name.
 
@@ -115,7 +115,7 @@ The current implementation has some preconditions and limitations:
   filtered in the configuration editor by parameter groups and applications.
 
 - Configuration Id: Only resource paths pointing to the real content affected by the configuration scope are supported.
-  Although technically for most parts the SPI would support arbitrary configuration ids whose meaning is hidden
+  Although technically most parts of the SPI support arbitrary configuration ids whose meaning is hidden
   in the implementation details of the configuration finder strategy implementation this does not work when
   merging configuration ids from different configuration finder strategies provided by different applications. To
   support the inheritance accross configuration scopes the configuration management has to understand the format
