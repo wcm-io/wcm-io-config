@@ -27,6 +27,9 @@
       <action type="update" dev="sseifert">
         Set AEM API and OSGi dependencies to provided scope.
       </action>
+      <action type="fix" dev="sseifert" issue="WCON-16">
+        Correctly display overridden default configuration values.
+      </action>
     </release>
 
     <release version="0.6.0" date="2015-07-06">
