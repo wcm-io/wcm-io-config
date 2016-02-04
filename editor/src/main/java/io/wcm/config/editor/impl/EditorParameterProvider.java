@@ -130,6 +130,7 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
     // get locked parameter names from persisted configuration, and add those from overrides
     Set<String> lockedParameterNames = new HashSet<>(persistedData.getLockedParameterNames());
     lockedParameterNames.addAll(parameterOverride.getLockedParameterNames(configuration.getConfigurationId()));
+    Set<String> overrideLockedParameterNames = parameterOverride.getLockedParameterNames(configuration.getConfigurationId());
 
     Iterator<Parameter<?>> parameterIterator = allParameters.iterator();
     while (parameterIterator.hasNext()) {
@@ -143,7 +144,7 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
         Object persistedValue = persistedValues.get(parameterName);
 
         // set the locked and inheritedLocked flags
-        setLocked(jsonParameter, parameterName, lockedParameterNames);
+        setLocked(jsonParameter, parameterName, lockedParameterNames, overrideLockedParameterNames);
 
         // set inherited flag
         setInherited(jsonParameter, effectiveValue, persistedValue);
@@ -175,8 +176,13 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
     }
   }
 
-  private void setLocked(JSONObject jsonParameter, String parameterName, Set<String> lockedParameterNames) throws JSONException {
-    if (lockedParameterNames.contains(parameterName)) {
+  private void setLocked(JSONObject jsonParameter, String parameterName, Set<String> lockedParameterNames,
+      Set<String> overrideLockedParameterNames) throws JSONException {
+    if (overrideLockedParameterNames.contains(parameterName)) {
+      jsonParameter.put(EditorNameConstants.LOCKED, true);
+      jsonParameter.put(EditorNameConstants.LOCKED_INHERITED, true);
+    }
+    else if (lockedParameterNames.contains(parameterName)) {
       jsonParameter.put(EditorNameConstants.LOCKED, true);
       jsonParameter.put(EditorNameConstants.LOCKED_INHERITED, false);
     }

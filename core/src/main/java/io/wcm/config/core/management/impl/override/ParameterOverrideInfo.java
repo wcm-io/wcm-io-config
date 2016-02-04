@@ -63,7 +63,8 @@ class ParameterOverrideInfo {
       systemScope = true;
     }
     else {
-      isLocked = StringUtils.equals(matcher.group(3), LOCKED_SUFFIX);
+      isLocked = StringUtils.equals(matcher.group(3), LOCKED_SUFFIX)
+          || StringUtils.isEmpty(matcher.group(2));
     }
 
     if (matcher.group(3) != null && systemScope) {

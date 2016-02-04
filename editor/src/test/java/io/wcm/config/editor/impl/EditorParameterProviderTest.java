@@ -25,19 +25,6 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
-import io.wcm.config.api.Configuration;
-import io.wcm.config.api.Parameter;
-import io.wcm.config.api.ParameterBuilder;
-import io.wcm.config.core.management.Application;
-import io.wcm.config.core.management.ApplicationFinder;
-import io.wcm.config.core.management.ConfigurationFinder;
-import io.wcm.config.core.management.ParameterOverride;
-import io.wcm.config.core.management.ParameterPersistence;
-import io.wcm.config.core.management.ParameterPersistenceData;
-import io.wcm.config.core.management.ParameterResolver;
-import io.wcm.config.editor.EditorProperties;
-import io.wcm.config.editor.WidgetTypes;
-import io.wcm.sling.commons.resource.ImmutableValueMap;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -68,6 +55,20 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSortedSet;
 import com.google.common.collect.Iterators;
+
+import io.wcm.config.api.Configuration;
+import io.wcm.config.api.Parameter;
+import io.wcm.config.api.ParameterBuilder;
+import io.wcm.config.core.management.Application;
+import io.wcm.config.core.management.ApplicationFinder;
+import io.wcm.config.core.management.ConfigurationFinder;
+import io.wcm.config.core.management.ParameterOverride;
+import io.wcm.config.core.management.ParameterPersistence;
+import io.wcm.config.core.management.ParameterPersistenceData;
+import io.wcm.config.core.management.ParameterResolver;
+import io.wcm.config.editor.EditorProperties;
+import io.wcm.config.editor.WidgetTypes;
+import io.wcm.sling.commons.resource.ImmutableValueMap;
 
 /**
  * Tests for the {@link EditorParameterProvider}
@@ -246,7 +247,7 @@ public class EditorParameterProviderTest {
     assertEquals(firstParameter.get(EditorNameConstants.LOCKED), true);
     assertEquals(firstParameter.get(EditorNameConstants.LOCKED_INHERITED), true);
     assertEquals(secondParameter.get(EditorNameConstants.LOCKED), true);
-    assertEquals(secondParameter.get(EditorNameConstants.LOCKED_INHERITED), false);
+    assertEquals(secondParameter.get(EditorNameConstants.LOCKED_INHERITED), true);
   }
 
   @Test

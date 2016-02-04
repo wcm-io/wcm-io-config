@@ -30,6 +30,9 @@
       <action type="fix" dev="sseifert" issue="WCON-16">
         Correctly display overridden default configuration values.
       </action>
+      <action type="fix" dev="sseifert">
+        Lock parameter in editor which has a locked override value form an override provider.
+      </action>
     </release>
 
     <release version="0.6.0" date="2015-07-06">

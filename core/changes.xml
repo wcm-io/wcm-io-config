@@ -27,6 +27,9 @@
       <action type="update" dev="sseifert">
         Set AEM API and OSGi dependencies to provided scope.
       </action>
+      <action type="update" dev="sseifert">
+        Override scope [locked] and missing override scope should be handled similar - the parameter name is overwritten and locked for all configuration scopes.
+      </action>
     </release>
 
     <release version="0.6.0" date="2015-07-06">
