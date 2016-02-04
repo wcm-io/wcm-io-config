@@ -19,10 +19,6 @@
  */
 package io.wcm.config.editor.controller;
 
-import io.wcm.config.api.Configuration;
-import io.wcm.config.core.management.ParameterPersistence;
-import io.wcm.sling.models.annotations.AemObject;
-
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
@@ -32,6 +28,10 @@ import org.apache.sling.models.annotations.injectorspecific.Self;
 import org.osgi.annotation.versioning.ProviderType;
 
 import com.day.cq.wcm.api.Page;
+
+import io.wcm.config.api.Configuration;
+import io.wcm.config.core.management.ParameterPersistence;
+import io.wcm.sling.models.annotations.AemObject;
 
 /**
  * Provides editor configuration options
@@ -51,7 +51,7 @@ public class EditorConfiguration {
    * @param currentPage
    */
   @Inject
-  public EditorConfiguration(@AemObject Page currentPage, @Self Configuration configuration) {
+  public EditorConfiguration(@AemObject Page currentPage, @Self(optional = true) Configuration configuration) {
     lockedNamesAttributeName = ParameterPersistence.PN_LOCKED_PARAMETER_NAMES;
     providerUrl = currentPage.getContentResource().getPath() + ".configProvider.json";
     configurationId = configuration != null ? configuration.getConfigurationId() : currentPage.getPath();
