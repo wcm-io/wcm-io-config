@@ -38,7 +38,8 @@ public interface ParameterOverrideProvider {
    * <li>Syntax: <code>[{scope}[:locked]]{parameterName}</code></li>
    * <li><code>{scope}</code>: if "default", the system default parameter is overriden. Otherwise <code>{scope}</code>
    * may define a configuration id (path), in this case the configuration parameter is overwritten by force for this
-   * configuration level. If the [{scope}] part is missing, the parameter is overridded for all configurations.</li>
+   * configuration level. If the [{scope}] part is missing or [locked], the parameter is overridded for all
+   * configurations.</li>
    * <li><code>locked</code>: If the scope value is suffixed with the string &quot;:locked&quot; this configuration
    * parameter cannot be overridden in nested configuration scopes.</li>
    * <li><code>{parameterName}</code>: Parameter name (from parameter definitions)</li>

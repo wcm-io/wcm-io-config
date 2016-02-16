@@ -39,7 +39,7 @@ public class MyModel {
   Configuration config;
 
   @PostConstruct
-  protected void activate() {
+  private void activate() {
     String value = config.get("param1", String.class);
   }
 

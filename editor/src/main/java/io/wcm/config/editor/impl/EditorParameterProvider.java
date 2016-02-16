@@ -19,20 +19,6 @@
  */
 package io.wcm.config.editor.impl;
 
-import io.wcm.config.api.Configuration;
-import io.wcm.config.api.Parameter;
-import io.wcm.config.core.management.Application;
-import io.wcm.config.core.management.ApplicationFinder;
-import io.wcm.config.core.management.ConfigurationFinder;
-import io.wcm.config.core.management.ParameterOverride;
-import io.wcm.config.core.management.ParameterPersistence;
-import io.wcm.config.core.management.ParameterPersistenceData;
-import io.wcm.config.core.management.ParameterResolver;
-import io.wcm.config.core.management.util.TypeConversion;
-import io.wcm.config.editor.EditorProperties;
-import io.wcm.wcm.commons.contenttype.ContentType;
-import io.wcm.wcm.commons.contenttype.FileExtension;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -58,6 +44,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Iterators;
+
+import io.wcm.config.api.Configuration;
+import io.wcm.config.api.Parameter;
+import io.wcm.config.core.management.Application;
+import io.wcm.config.core.management.ApplicationFinder;
+import io.wcm.config.core.management.ConfigurationFinder;
+import io.wcm.config.core.management.ParameterOverride;
+import io.wcm.config.core.management.ParameterPersistence;
+import io.wcm.config.core.management.ParameterPersistenceData;
+import io.wcm.config.core.management.ParameterResolver;
+import io.wcm.config.core.management.util.TypeConversion;
+import io.wcm.config.editor.EditorProperties;
+import io.wcm.wcm.commons.contenttype.ContentType;
+import io.wcm.wcm.commons.contenttype.FileExtension;
 
 /**
  * Exports the list of parameters available for the current application in JSON format to the response.
@@ -130,6 +130,7 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
     // get locked parameter names from persisted configuration, and add those from overrides
     Set<String> lockedParameterNames = new HashSet<>(persistedData.getLockedParameterNames());
     lockedParameterNames.addAll(parameterOverride.getLockedParameterNames(configuration.getConfigurationId()));
+    Set<String> overrideLockedParameterNames = parameterOverride.getLockedParameterNames(configuration.getConfigurationId());
 
     Iterator<Parameter<?>> parameterIterator = allParameters.iterator();
     while (parameterIterator.hasNext()) {
@@ -143,12 +144,12 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
         Object persistedValue = persistedValues.get(parameterName);
 
         // set the locked and inheritedLocked flags
-        setLocked(jsonParameter, parameterName, lockedParameterNames);
+        setLocked(jsonParameter, parameterName, lockedParameterNames, overrideLockedParameterNames);
 
         // set inherited flag
         setInherited(jsonParameter, effectiveValue, persistedValue);
 
-        addValue(jsonParameter, effectiveValue, parameter);
+        addValue(jsonParameter, effectiveValue, parameter, configuration.getConfigurationId());
         addLabel(jsonParameter, parameter);
       }
     }
@@ -175,8 +176,13 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
     }
   }
 
-  private void setLocked(JSONObject jsonParameter, String parameterName, Set<String> lockedParameterNames) throws JSONException {
-    if (lockedParameterNames.contains(parameterName)) {
+  private void setLocked(JSONObject jsonParameter, String parameterName, Set<String> lockedParameterNames,
+      Set<String> overrideLockedParameterNames) throws JSONException {
+    if (overrideLockedParameterNames.contains(parameterName)) {
+      jsonParameter.put(EditorNameConstants.LOCKED, true);
+      jsonParameter.put(EditorNameConstants.LOCKED_INHERITED, true);
+    }
+    else if (lockedParameterNames.contains(parameterName)) {
       jsonParameter.put(EditorNameConstants.LOCKED, true);
       jsonParameter.put(EditorNameConstants.LOCKED_INHERITED, false);
     }
@@ -189,14 +195,20 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
     }
   }
 
-  private void addValue(JSONObject jsonParameter, Object effectiveValue, Parameter parameter) throws JSONException {
+  private void addValue(JSONObject jsonParameter, Object effectiveValue, Parameter<?> parameter, String configurationId) throws JSONException {
     Object previousValue = null;
 
     try {
       previousValue = jsonParameter.get(EditorNameConstants.PARAMETER_VALUE);
     }
     catch (JSONException ex) {
-      previousValue = parameter.getDefaultValue();
+      previousValue = parameterOverride.getOverrideForce(configurationId, parameter);
+      if (previousValue == null) {
+        previousValue = parameterOverride.getOverrideSystemDefault(parameter);
+      }
+      if (previousValue == null) {
+        previousValue = parameter.getDefaultValue();
+      }
     }
 
     jsonParameter.put(EditorNameConstants.INHERITED_VALUE, getJSONValue(previousValue));

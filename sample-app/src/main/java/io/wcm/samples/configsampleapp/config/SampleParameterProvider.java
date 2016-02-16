@@ -17,8 +17,25 @@
  * limitations under the License.
  * #L%
  */
+package io.wcm.samples.configsampleapp.config;
+
+import io.wcm.config.spi.helpers.AbstractParameterProvider;
+
+import org.apache.felix.scr.annotations.Component;
+import org.apache.felix.scr.annotations.Service;
+
 /**
- * Controllers used by the configuration editor scripts internally.
+ * Provides parameter metadata.
  */
-@org.osgi.annotation.versioning.Version("1.0.1")
-package io.wcm.config.editor.controller;
+@Component(immediate = true)
+@Service
+public class SampleParameterProvider extends AbstractParameterProvider {
+
+  /**
+   * Provide all parameters from {@link Params}.
+   */
+  public SampleParameterProvider() {
+    super(Params.class);
+  }
+
+}

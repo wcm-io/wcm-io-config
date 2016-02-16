@@ -39,7 +39,7 @@ class ParameterOverrideInfo {
   private final boolean isLocked;
   private final String parameterName;
 
-  public ParameterOverrideInfo(String overrideString) {
+  ParameterOverrideInfo(String overrideString) {
     Matcher matcher = OVERRIDE_STRING_PATTERN.matcher(overrideString);
     if (!matcher.matches()) {
       throw new IllegalArgumentException("Invalid override string identifying scope and parameter: " + overrideString);
@@ -63,7 +63,8 @@ class ParameterOverrideInfo {
       systemScope = true;
     }
     else {
-      isLocked = StringUtils.equals(matcher.group(3), LOCKED_SUFFIX);
+      isLocked = StringUtils.equals(matcher.group(3), LOCKED_SUFFIX)
+          || StringUtils.isEmpty(matcher.group(2));
     }
 
     if (matcher.group(3) != null && systemScope) {

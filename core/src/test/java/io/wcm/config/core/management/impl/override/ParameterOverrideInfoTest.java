@@ -33,7 +33,7 @@ public class ParameterOverrideInfoTest {
     ParameterOverrideInfo underTest = new ParameterOverrideInfo("aaa");
     assertNull(underTest.getConfigurationId());
     assertFalse(underTest.isOverrideSystemDefault());
-    assertFalse(underTest.isLocked());
+    assertTrue(underTest.isLocked());
     assertEquals("aaa", underTest.getParameterName());
   }
 

@@ -82,7 +82,7 @@ public class ParameterOverrideInfoLookupTest {
 
   @Test
   public void testGetLockedParameterNames() {
-    assertEquals(ImmutableSet.of("param2"), underTest.getLockedParameterNames());
+    assertEquals(ImmutableSet.of("param1", "param2"), underTest.getLockedParameterNames());
   }
 
   @Test

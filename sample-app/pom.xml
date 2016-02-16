@@ -30,22 +30,15 @@
   </parent>
 
   <groupId>io.wcm</groupId>
-  <artifactId>io.wcm.config.editor</artifactId>
-  <version>0.6.1-SNAPSHOT</version>
+  <artifactId>io.wcm.config.sample-app</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
-  <name>Configuration Editor</name>
-  <description>Configuration Editor Template for AEM.</description>
-
-  <scm>
-    <connection>scm:git:https://github.com/wcm-io/wcm-io-config.git</connection>
-    <developerConnection>scm:git:https://github.com/wcm-io/wcm-io-config.git</developerConnection>
-    <url>https://github.com/wcm-io/wcm-io-config</url>
-    <tag>HEAD</tag>
-  </scm>
+  <name>Configuration Sample Application</name>
+  <description>Sample application to demonstrate configuration API and configuration editor GUI.</description>
 
   <properties>
-    <site.url.module.prefix>config/editor</site.url.module.prefix>
+    <site.url.module.prefix>config/sample-app</site.url.module.prefix>
   </properties>
 
   <dependencies>
@@ -53,25 +46,26 @@
     <dependency>
       <groupId>io.wcm</groupId>
       <artifactId>io.wcm.config.api</artifactId>
-      <version>0.5.3-SNAPSHOT</version>
+      <version>0.5.2</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>io.wcm</groupId>
       <artifactId>io.wcm.config.core</artifactId>
-      <version>0.6.1-SNAPSHOT</version>
+      <version>0.5.2</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>io.wcm</groupId>
-      <artifactId>io.wcm.wcm.commons</artifactId>
-      <version>0.6.0</version>
+      <artifactId>io.wcm.config.editor</artifactId>
+      <version>0.5.6</version>
       <scope>compile</scope>
     </dependency>
 
   </dependencies>
 
   <build>
+
     <plugins>
 
       <plugin>
@@ -88,11 +82,8 @@
         <configuration>
           <instructions>
             <Sling-Initial-Content>
-              SLING-INF/app-root;overwrite:=true;ignoreImportProviders:=xml;path:=/apps/wcm-io/config/editor
+              SLING-INF/app-root;overwrite:=true;ignoreImportProviders:=xml;path:=/apps/wcm-io-config-sample-app
             </Sling-Initial-Content>
-            <Sling-Model-Packages>
-              io.wcm.config.editor.controller
-            </Sling-Model-Packages>
           </instructions>
         </configuration>
       </plugin>
@@ -115,59 +106,16 @@
         </executions>
       </plugin>
 
-      <!-- Nodejs Maven Plugin to run the templates compilation and tests -->
+      <!-- do not deploy this sample application into maven repository -->
       <plugin>
-        <groupId>io.wcm.maven.plugins</groupId>
-        <artifactId>nodejs-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <phase>compile</phase>
-            <goals><goal>run</goal></goals>
-          </execution>
-        </executions>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
         <configuration>
-          <tasks>
-            <npmInstallTask>
-              <workingDirectory>${project.basedir}/build</workingDirectory>
-            </npmInstallTask>
-            <nodeJsTask>
-              <workingDirectory>${project.basedir}/build</workingDirectory>
-              <moduleName>grunt-cli</moduleName>
-              <executableName>grunt</executableName>
-              <arguments>
-                <argument>build</argument>
-              </arguments>
-            </nodeJsTask>
-          </tasks>
+          <skip>true</skip>
         </configuration>
       </plugin>
 
-
     </plugins>
-    <pluginManagement>
-      <plugins>
-
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-javadoc-plugin</artifactId>
-          <configuration>
-            <excludePackageNames>*.impl,*.controller</excludePackageNames>
-          </configuration>
-        </plugin>
-
-        <!-- Switch to version 1.0.6 until it is updated in aem-global-parent -->
-        <plugin>
-          <groupId>io.wcm.maven.plugins</groupId>
-          <artifactId>nodejs-maven-plugin</artifactId>
-          <version>2.0.0</version>
-          <configuration>
-            <nodeJsVersion>0.12.7</nodeJsVersion>
-            <npmVersion>2.11.3</npmVersion>
-          </configuration>
-        </plugin>
-
-      </plugins>
-    </pluginManagement>
   </build>
 
   <distributionManagement>

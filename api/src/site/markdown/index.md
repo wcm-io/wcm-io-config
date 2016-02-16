@@ -2,15 +2,8 @@
 
 API and SPI for context-specific configuration.
 
-### Maven Dependency
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.wcm/io.wcm.config.api/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.wcm/io.wcm.config.api)
 
-```xml
-<dependency>
-  <groupId>io.wcm</groupId>
-  <artifactId>io.wcm.config.api</artifactId>
-  <version>0.5.2</version>
-</dependency>
-```
 
 ### Documentation
 

@@ -23,10 +23,6 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.when;
-import io.wcm.config.api.Parameter;
-import io.wcm.config.api.ParameterBuilder;
-import io.wcm.config.spi.ParameterOverrideProvider;
-import io.wcm.sling.commons.resource.ImmutableValueMap;
 
 import java.util.Map;
 
@@ -39,6 +35,11 @@ import org.osgi.framework.Constants;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+
+import io.wcm.config.api.Parameter;
+import io.wcm.config.api.ParameterBuilder;
+import io.wcm.config.spi.ParameterOverrideProvider;
+import io.wcm.sling.commons.resource.ImmutableValueMap;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ParameterOverrideImplTest {
@@ -123,8 +124,8 @@ public class ParameterOverrideImplTest {
 
   @Test
   public void testGetLockedParameterNames() {
-    assertEquals(ImmutableSet.of("param1", "param2"), underTest.getLockedParameterNames("/config1"));
-    assertEquals(ImmutableSet.of("param2"), underTest.getLockedParameterNames("/config2"));
+    assertEquals(ImmutableSet.of("param1", "param2", "param3"), underTest.getLockedParameterNames("/config1"));
+    assertEquals(ImmutableSet.of("param2", "param3"), underTest.getLockedParameterNames("/config2"));
   }
 
 }

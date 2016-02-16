@@ -2,15 +2,8 @@
 
 Configuration Editor Template for AEM.
 
-### Maven Dependency
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.wcm/io.wcm.config.editor/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.wcm/io.wcm.config.editor)
 
-```xml
-<dependency>
-  <groupId>io.wcm</groupId>
-  <artifactId>io.wcm.config.editor</artifactId>
-  <version>0.6.0</version>
-</dependency>
-```
 
 ### Documentation
 
