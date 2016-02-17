@@ -93,6 +93,13 @@
             <Sling-Model-Packages>
               io.wcm.config.editor.controller
             </Sling-Model-Packages>
+
+            <!-- Exported package versions differ in major version between AEM61 and AEM62 -->
+            <Import-Package>
+              javax.inject;version="[0.0,2)",
+              *
+            </Import-Package>
+
           </instructions>
         </configuration>
       </plugin>
