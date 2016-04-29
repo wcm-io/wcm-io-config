@@ -31,7 +31,7 @@
 
   <groupId>io.wcm</groupId>
   <artifactId>io.wcm.config.editor</artifactId>
-  <version>0.6.2</version>
+  <version>0.6.3-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>Configuration Editor</name>
@@ -93,6 +93,13 @@
             <Sling-Model-Packages>
               io.wcm.config.editor.controller
             </Sling-Model-Packages>
+
+            <!-- Exported package versions differ in major version between AEM61 and AEM62 -->
+            <Import-Package>
+              javax.inject;version="[0.0,2)",
+              *
+            </Import-Package>
+
           </instructions>
         </configuration>
       </plugin>

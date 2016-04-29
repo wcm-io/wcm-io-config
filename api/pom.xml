@@ -31,7 +31,7 @@
 
   <groupId>io.wcm</groupId>
   <artifactId>io.wcm.config.api</artifactId>
-  <version>0.5.5-SNAPSHOT</version>
+  <version>0.5.6</version>
   <packaging>bundle</packaging>
 
   <name>Configuration API</name>
@@ -63,6 +63,17 @@
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <instructions>
+
+            <!-- Exported package versions differ in major version between AEM61 and AEM62 -->
+            <Import-Package>
+              javax.inject;version="[0.0,2)",
+              *
+            </Import-Package>
+
+          </instructions>
+        </configuration>
       </plugin>
 
       <plugin>
