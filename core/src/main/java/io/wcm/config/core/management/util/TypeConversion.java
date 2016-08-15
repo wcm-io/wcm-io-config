@@ -19,11 +19,15 @@
  */
 package io.wcm.config.core.management.util;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
 import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.sling.commons.osgi.PropertiesUtil;
@@ -67,7 +71,7 @@ public final class TypeConversion {
       return (T)value;
     }
     else if (type == String[].class) {
-      return (T)StringUtils.splitPreserveAllTokens(value, ARRAY_DELIMITER);
+      return (T)decodeString(StringUtils.splitPreserveAllTokens(value, ARRAY_DELIMITER));
     }
     if (type == Integer.class) {
       return (T)(Integer)NumberUtils.toInt(value, 0);
@@ -87,7 +91,7 @@ public final class TypeConversion {
       for (int i = 0; i < rows.length; i++) {
         String[] keyValue = StringUtils.splitPreserveAllTokens(rows[i], KEY_VALUE_DELIMITER);
         if (keyValue.length == 2 && StringUtils.isNotEmpty(keyValue[0])) {
-          map.put(keyValue[0], StringUtils.isEmpty(keyValue[1]) ? null : keyValue[1]);
+          map.put(decodeString(keyValue[0]), StringUtils.isEmpty(keyValue[1]) ? null : decodeString(keyValue[1]));
         }
       }
       return (T)map;
@@ -108,7 +112,7 @@ public final class TypeConversion {
       return (String)value;
     }
     if (value instanceof String[]) {
-      return StringUtils.join((String[])value, ARRAY_DELIMITER);
+      return StringUtils.join(encodeString((String[])value), ARRAY_DELIMITER);
     }
     else if (value instanceof Integer) {
       return Integer.toString((Integer)value);
@@ -128,8 +132,8 @@ public final class TypeConversion {
       Map.Entry<?, ?>[] entries = Iterators.toArray(map.entrySet().iterator(), Map.Entry.class);
       for (int i = 0; i < entries.length; i++) {
         Map.Entry<?, ?> entry = entries[i];
-        String entryKey = Objects.toString(entry.getKey(), "");
-        String entryValue = Objects.toString(entry.getValue(), "");
+        String entryKey = encodeString(Objects.toString(entry.getKey(), ""));
+        String entryValue = encodeString(Objects.toString(entry.getValue(), ""));
         stringValue.append(entryKey).append(KEY_VALUE_DELIMITER).append(entryValue);
         if (i < entries.length - 1) {
           stringValue.append(ARRAY_DELIMITER);
@@ -155,7 +159,7 @@ public final class TypeConversion {
       return (T)PropertiesUtil.toString(value, (String)defaultValue);
     }
     if (type == String[].class) {
-      return (T)PropertiesUtil.toStringArray(value, (String[])defaultValue);
+      return (T)decodeString(PropertiesUtil.toStringArray(value, (String[])defaultValue));
     }
     else if (type == Integer.class) {
       Integer defaultIntValue = (Integer)defaultValue;
@@ -199,9 +203,60 @@ public final class TypeConversion {
               + KEY_VALUE_DELIMITER + Objects.toString(entries[i].getValue(), "");
         }
       }
-      return (T)PropertiesUtil.toMap(value, defaultMapValue);
+      Map<String, String> rawMap = PropertiesUtil.toMap(value, defaultMapValue);
+      Map<String, String> finalMap = new HashMap<String, String>(rawMap.size());
+      for (Map.Entry<String, String> entry : rawMap.entrySet()) {
+        finalMap.put(decodeString(entry.getKey()), decodeString(entry.getValue()));
+      }
+      return (T)finalMap;
     }
     throw new IllegalArgumentException("Unsupported type: " + type.getName());
+  }
+
+  private static String[] encodeString(String[] values) {
+    if (values == null) {
+      return null;
+    }
+    String[] escapedValues = new String[values.length];
+    for (int i = 0; i < values.length; i++) {
+      escapedValues[i] = encodeString(values[i]);
+    }
+    return values;
+  }
+
+  private static String encodeString(String value) {
+    if (value == null) {
+      return null;
+    }
+    try {
+      return URLEncoder.encode(value, CharEncoding.UTF_8);
+    }
+    catch (UnsupportedEncodingException ex) {
+      throw new RuntimeException("Unsupportec encoding.", ex);
+    }
+  }
+
+  private static String[] decodeString(String[] values) {
+    if (values == null) {
+      return null;
+    }
+    String[] escapedValues = new String[values.length];
+    for (int i = 0; i < values.length; i++) {
+      escapedValues[i] = decodeString(values[i]);
+    }
+    return values;
+  }
+
+  private static String decodeString(String value) {
+    if (value == null) {
+      return null;
+    }
+    try {
+      return URLEncoder.encode(value, CharEncoding.UTF_8);
+    }
+    catch (UnsupportedEncodingException ex) {
+      throw new RuntimeException("Unsupportec encoding.", ex);
+    }
   }
 
 }

@@ -19,6 +19,7 @@
  */
 package io.wcm.config.core.management.util;
 
+import static io.wcm.config.core.management.util.TypeConversion.objectToString;
 import static io.wcm.config.core.management.util.TypeConversion.osgiPropertyToObject;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -27,6 +28,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -65,8 +67,19 @@ public class TypeConversionOsgiPropertyTest {
     assertArrayEquals(new String[] {
         "defValue"
     }, osgiPropertyToObject(null, String[].class, new String[] {
-      "defValue"
+        "defValue"
     }));
+  }
+
+  @Test
+  public void testStringArrayWithSpecialChars() {
+    String[] values = new String[] {
+        "value1",
+        "value;2",
+        "value=3",
+    };
+    String[] convertedValues = osgiPropertyToObject(objectToString(values), String[].class, new String[0]);
+    assertArrayEquals(values, convertedValues);
   }
 
   @Test
@@ -130,6 +143,19 @@ public class TypeConversionOsgiPropertyTest {
     map = new LinkedHashMap<>();
     map.put("key1", "abc");
     assertEquals(map, osgiPropertyToObject(null, Map.class, map));
+  }
+
+  @Test
+  public void testMapWithSpecialChars() {
+    Map<String, String> map = new LinkedHashMap<>();
+    map.put("key1", "value1");
+    map.put("key;2", "value;2");
+    map.put("key=3", "value=3");
+    map.put("key=4;", "=value;4");
+
+    @SuppressWarnings("unchecked")
+    Map<String, String> convertedMap = osgiPropertyToObject(objectToString(map), Map.class, new HashMap<String, String>());
+    assertEquals(map, convertedMap);
   }
 
   @Test(expected = IllegalArgumentException.class)
