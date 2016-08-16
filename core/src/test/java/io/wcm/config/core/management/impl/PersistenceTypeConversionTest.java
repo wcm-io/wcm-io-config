@@ -36,21 +36,21 @@ import com.google.common.collect.ImmutableMap;
 public class PersistenceTypeConversionTest {
 
   static final Map<String, String> SAMPLE_MAP = ImmutableMap.<String, String>builder()
-      .put("key1", "value1")
+      .put("key1", "value=1")
       .put("key2", "55")
       .put("key3", "5.5")
       .build();
 
   static final Map<String, Object> SAMPLE_MAP_OTHERTYPES = ImmutableMap.<String, Object>builder()
-      .put("key1", "value1")
+      .put("key1", "value=1")
       .put("key2", 55)
       .put("key3", 5.5d)
       .build();
 
   static final String[] SAMPLE_MAP_PERSISTENCE = new String[] {
-    "key1=value1",
-    "key2=55",
-    "key3=5.5"
+      "key1=value\\=1",
+      "key2=55",
+      "key3=5.5"
   };
 
   @Test

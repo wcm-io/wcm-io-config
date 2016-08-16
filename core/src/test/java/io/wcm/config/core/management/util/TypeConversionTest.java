@@ -57,6 +57,19 @@ public class TypeConversionTest {
   }
 
   @Test
+  public void testStringArrayWithSpecialChars() {
+    String[] values = new String[] {
+        "value1",
+        "value;2",
+        "value=3",
+    };
+    String convertedString = objectToString(values);
+    assertEquals("value1;value\\;2;value\\=3", convertedString);
+    String[] convertedValues = stringToObject(convertedString, String[].class);
+    assertArrayEquals(values, convertedValues);
+  }
+
+  @Test
   public void testInteger() {
     assertConversion(55, "55", Integer.class);
     assertEquals((Integer)0, stringToObject("wurst", Integer.class));
@@ -95,6 +108,19 @@ public class TypeConversionTest {
     assertConversion(map, "key1=abc;key2=def;key3=", Map.class);
     assertEquals(map, stringToObject("key1=abc;key2=def;key3=;;=xyz", Map.class));
     assertConversion(null, null, Map.class);
+  }
+
+  @Test
+  public void testMapWithSpecialChars() {
+    Map<String, String> map = new LinkedHashMap<>();
+    map.put("key1", "value1");
+    map.put("key;2", "value;2");
+    map.put("key=3", "value=3");
+    map.put("key=4;", "=value;4");
+
+    @SuppressWarnings("unchecked")
+    Map<String, String> convertedMap = stringToObject(objectToString(map), Map.class);
+    assertEquals(map, convertedMap);
   }
 
   @Test(expected = IllegalArgumentException.class)

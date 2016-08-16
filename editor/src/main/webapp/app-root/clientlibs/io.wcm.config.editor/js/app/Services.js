@@ -99,16 +99,39 @@
             var buffer = [];
             _.map(data, function(parameter){
               if (!parameter.inherited) {
-                buffer.push(
-                    encodeURIComponent(parameter.name) +
-                    "=" +
-                    encodeURIComponent(parameter.value == null ? "" : parameter.value )
-                );
+                if (Array.isArray(parameter.value)) {
+                  for (var i=0; i<parameter.value.length; i++) {
+                    if (parameter.value[i].key && parameter.value[i].value) {
+                      // map data type 
+                      buffer.push(
+                          encodeURIComponent(parameter.name + "$key") + "=" +
+                          encodeURIComponent(parameter.value[i] == null ? "" : parameter.value[i].key)
+                      );
+                      buffer.push(
+                          encodeURIComponent(parameter.name) + "=" +
+                          encodeURIComponent(parameter.value[i] == null ? "" : parameter.value[i].value)
+                      );
+                    }
+                    else {
+                      // string array data type
+                      buffer.push(
+                          encodeURIComponent(parameter.name) + "=" +
+                          encodeURIComponent(parameter.value[i] == null ? "" : parameter.value[i])
+                      );
+                    }
+                  }
+                }
+                else {
+                  // all other data types
+                  buffer.push(
+                      encodeURIComponent(parameter.name) + "=" +
+                      encodeURIComponent(parameter.value == null ? "" : parameter.value)
+                  );
+                }
               }
               if (parameter.locked && !parameter.lockedInherited) {
                 buffer.push(
-                    encodeURIComponent(config.lockedParameterName) +
-                    "=" +
+                    encodeURIComponent(config.lockedParameterName) + "=" +
                     encodeURIComponent(parameter.name)
                 );
               }
@@ -118,9 +141,10 @@
             if (buffer.length > 0) {
               serialzedData = buffer.join( "&" );
             }
+            
             // append the Sling specific _charset_:utf-8
-
             serialzedData = serialzedData + "&_charset_=utf-8";
+            
             return serialzedData;
           }
 
