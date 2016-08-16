@@ -71,6 +71,7 @@ import io.wcm.wcm.commons.contenttype.FileExtension;
     selectors = "configProvider",
     methods = HttpConstants.METHOD_GET)
 public class EditorParameterProvider extends SlingAllMethodsServlet {
+  private static final long serialVersionUID = 1L;
 
   @Reference
   private ConfigurationFinder configurationFinder;
@@ -82,8 +83,6 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
   private ParameterResolver parameterResolver;
   @Reference
   private ParameterOverride parameterOverride;
-
-  private static final long serialVersionUID = 1L;
 
   private static final Logger log = LoggerFactory.getLogger(EditorParameterProvider.class);
 

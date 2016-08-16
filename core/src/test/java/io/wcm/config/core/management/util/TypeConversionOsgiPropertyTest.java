@@ -20,7 +20,6 @@
 package io.wcm.config.core.management.util;
 
 import static io.wcm.config.core.management.util.TypeConversion.KEY_VALUE_DELIMITER;
-import static io.wcm.config.core.management.util.TypeConversion.encodeString;
 import static io.wcm.config.core.management.util.TypeConversion.osgiPropertyToObject;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -80,7 +79,7 @@ public class TypeConversionOsgiPropertyTest {
         "value;2",
         "value=3",
     };
-    String[] encodedArray = encodeString(values);
+    String[] encodedArray = ConversionStringUtils.encodeString(values);
     String[] convertedValues = osgiPropertyToObject(encodedArray, String[].class, new String[0]);
     assertArrayEquals(values, convertedValues);
   }
@@ -158,7 +157,8 @@ public class TypeConversionOsgiPropertyTest {
 
     List<String> encodedMapList = new ArrayList<>();
     for (Map.Entry<String, String> entry : map.entrySet()) {
-      encodedMapList.add(encodeString(entry.getKey()) + KEY_VALUE_DELIMITER + encodeString(entry.getValue()));
+      encodedMapList.add(ConversionStringUtils.encodeString(entry.getKey()) + KEY_VALUE_DELIMITER
+          + ConversionStringUtils.encodeString(entry.getValue()));
     }
     String[] encodedMap = encodedMapList.toArray(new String[encodedMapList.size()]);
     assertArrayEquals(new String[] {

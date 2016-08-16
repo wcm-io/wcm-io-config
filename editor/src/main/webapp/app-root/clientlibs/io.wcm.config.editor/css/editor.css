@@ -46,12 +46,23 @@ span.wcm-io-editor-pathbrowser {
   position: relative;
   padding-right: 103px;
 }
-
 .wcm-io-editor-multifield .coral-Textfield {
-  width: 100%;
+  width: 98%;
+}
+.wcm-io-editor-multifield .coral-ButtonGroup {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
-.wcm-io-editor-multifield .coral-ButtonGroup {
+.wcm-io-editor-map {
+  position: relative;
+  padding-right: 103px;
+}
+.wcm-io-editor-map .coral-Textfield {
+  width: 49%;
+}
+.wcm-io-editor-map .coral-ButtonGroup {
   position: absolute;
   top: 0;
   right: 0;

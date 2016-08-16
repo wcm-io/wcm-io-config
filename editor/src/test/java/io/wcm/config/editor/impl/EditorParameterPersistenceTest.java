@@ -89,7 +89,12 @@ public class EditorParameterPersistenceTest {
       PARAMETER_MAP, PARAMETER_MULTIVALUE, PARAMETER_STRING, NON_EDITABLE_PARAMETER);
 
   private static final Map<String, Object> REQUEST_PARAMETERS = ImmutableValueMap.builder()
-      .put("map-param", "key1=value1;key2=value2")
+      .put("map-param" + EditorParameterPersistence.MAP_KEY_SUFFIX, new String[] {
+          "key1", "key2"
+      })
+      .put("map-param", new String[] {
+          "value1", "value2"
+      })
       .put("multivalue-param", new String[] {
           "value1", "value2"
       })

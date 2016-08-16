@@ -29,6 +29,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.collect.Iterators;
 
+import io.wcm.config.core.management.util.ConversionStringUtils;
+
 /**
  * Handles conversions that are required to transform a type to be prepared persisted and vice versa.
  * The configuration API supports types like Map that need to transformed to other types e.g. a string array
@@ -70,7 +72,7 @@ final class PersistenceTypeConversion {
         Map.Entry<?, ?> entry = entries[i];
         String entryKey = Objects.toString(entry.getKey(), "");
         String entryValue = Objects.toString(entry.getValue(), "");
-        stringArray[i] = entryKey + KEY_VALUE_DELIMITER + entryValue;
+        stringArray[i] = ConversionStringUtils.encodeString(entryKey) + KEY_VALUE_DELIMITER + ConversionStringUtils.encodeString(entryValue);
       }
       return stringArray;
     }
@@ -91,9 +93,11 @@ final class PersistenceTypeConversion {
       String[] rows = (String[])value;
       Map<String, String> map = new LinkedHashMap<>();
       for (int i = 0; i < rows.length; i++) {
-        String[] keyValue = StringUtils.splitPreserveAllTokens(rows[i], KEY_VALUE_DELIMITER);
+        String[] keyValue = ConversionStringUtils.splitPreserveAllTokens(rows[i], KEY_VALUE_DELIMITER.charAt(0));
         if (keyValue.length == 2 && StringUtils.isNotEmpty(keyValue[0])) {
-          map.put(keyValue[0], StringUtils.isEmpty(keyValue[1]) ? null : keyValue[1]);
+          String entryKey = keyValue[0];
+          String entryValue = StringUtils.isEmpty(keyValue[1]) ? null : keyValue[1];
+          map.put(ConversionStringUtils.decodeString(entryKey), ConversionStringUtils.decodeString(entryValue));
         }
       }
       return map;

@@ -184,6 +184,42 @@
         }
       }
     }])
+    .directive("map", ['templateUrlList', "EditorUtilities", function (templateList, utils) {
+      return {
+        restrict: "E",
+        replace: true,
+        templateUrl: templateList.map,
+        scope: {
+          parameter: '='
+        },
+        controller: ["$scope", function($scope) {
+          $scope.addNewValue = function(value) {
+            $scope.$evalAsync(function() {
+              var indexOf = utils.indexOfValueObject($scope.values, value);
+              $scope.values.splice(indexOf+1, 0, {key:"", value: ""});
+            });
+          };
+          $scope.removeValue = function(value) {
+            var indexOf = utils.indexOfValueObject($scope.values, value);
+            $scope.values.splice(indexOf, 1);
+            if ($scope.values.length == 0) {
+              $scope.values.push({key: "", value: ""});
+            }
+          };
+        }],
+        link: function (scope, element, attr) {
+          scope.values = [];
+          if (scope.parameter.value && scope.parameter.value.length > 0) {
+            scope.values = scope.parameter.value;
+          } else {
+            scope.values.push({key:"", value: ""});
+          }
+          scope.$watch('values', function() {
+            scope.parameter.value = scope.values;
+          }, true);
+        }
+      }
+    }])
   /**
    * Path browser directive to allow select pages from the siteadmin. Utilizes the CUI.PathBrowser
    */

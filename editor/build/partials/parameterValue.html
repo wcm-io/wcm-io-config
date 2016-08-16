@@ -7,9 +7,11 @@
          ng-minlength="{{parameter.minlength}}"
          ng-pattern="{{parameter.pattern}}"
          ng-required="{{parameter.required}}"/>
+
   <div ng-switch-when="textMultivalue">
     <multifield  parameter="parameter" />
   </div>
+
   <div ng-switch-when="textarea">
     <textarea  class="coral-Textfield coral-Textfield--multiline" name="parameter"
               ng-model="parameter.value"
@@ -18,6 +20,10 @@
               ng-pattern="{{parameter.pattern}}"
               ng-required="{{parameter.required}}"
               ng-attr-rows="{{parameter.rows}}"></textarea>
+  </div>
+
+  <div ng-switch-when="map">
+    <map  parameter="parameter" />
   </div>
 
   <div ng-switch-when="pathbrowser">
@@ -30,10 +36,13 @@
       <span class="coral-Checkbox-checkmark"></span>
     </label>
   </div>
+
   <div ng-switch-when="disabledCheckbox" >
     <i ng-class="{'coral-Icon--check': parameter.value}" class="coral-Icon coral-Icon--sizeS"></i>
   </div>
+
   <div ng-switch-default>
     <span>{{parameter.value}}</span>
   </div>
+
 </div>

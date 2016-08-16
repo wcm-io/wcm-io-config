@@ -22,9 +22,10 @@ package io.wcm.config.editor;
 import static io.wcm.config.editor.EditorProperties.ROOT_PATH;
 import static io.wcm.config.editor.EditorProperties.ROWS;
 import static io.wcm.config.editor.EditorProperties.WIDGET_TYPE;
-import io.wcm.sling.commons.resource.ImmutableValueMap;
 
 import java.util.Map;
+
+import io.wcm.sling.commons.resource.ImmutableValueMap;
 
 /**
  * Provides constants for the widget configuration property names
@@ -41,6 +42,10 @@ final class DefaultWidgetConfiguration {
 
   static final Map<String, Object> MULTIFIELD = ImmutableValueMap.builder()
       .put(WIDGET_TYPE, "textMultivalue")
+      .build();
+
+  static final Map<String, Object> MAP = ImmutableValueMap.builder()
+      .put(WIDGET_TYPE, "map")
       .build();
 
   static final Map<String, Object> TEXTAREA = ImmutableValueMap.builder()

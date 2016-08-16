@@ -64,6 +64,18 @@ public enum WidgetTypes {
   TEXTAREA(DefaultWidgetConfiguration.TEXTAREA),
 
   /**
+   * Text Multifield widget, which allows to specify multiple values for a property.
+   * Following properties are available for configuration (all empty per default):
+   * <ul>
+   * <li>required = true or false</li>
+   * <li>maxlength = integer value</li>
+   * <li>minlength = integer value</li>
+   * <li>pattern = regular expression for the value validation. E.g. <code>/^[0-9]*$/</code></li>
+   * </ul>
+   */
+  MAP(DefaultWidgetConfiguration.MAP),
+
+  /**
    * Path Browser widget with autocomplete function.
    * Following properties are available for configuration (all empty per default):
    * <ul>

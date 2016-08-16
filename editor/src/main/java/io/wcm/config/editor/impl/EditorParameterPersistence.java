@@ -63,8 +63,7 @@ import io.wcm.wcm.commons.contenttype.FileExtension;
     selectors = "configProvider",
     methods = HttpConstants.METHOD_POST)
 public class EditorParameterPersistence extends SlingAllMethodsServlet {
-
-  private static final Logger log = LoggerFactory.getLogger(EditorParameterPersistence.class);
+  private static final long serialVersionUID = 1L;
 
   @Reference
   private ConfigurationFinder configurationFinder;
@@ -73,7 +72,9 @@ public class EditorParameterPersistence extends SlingAllMethodsServlet {
   @Reference
   private ParameterResolver parameterResolver;
 
-  private static final long serialVersionUID = 1L;
+  static final String MAP_KEY_SUFFIX = "$key";
+
+  private static final Logger log = LoggerFactory.getLogger(EditorParameterPersistence.class);
 
   @Override
   protected void doPost(SlingHttpServletRequest request, SlingHttpServletResponse response) throws ServletException, IOException {
@@ -102,7 +103,13 @@ public class EditorParameterPersistence extends SlingAllMethodsServlet {
       String parameterName = requestParameterNames.nextElement();
       Parameter<?> parameter = parameters.get(parameterName);
       if (parameter != null) {
-        Object value = getValue(request.getParameterValues(parameterName), parameter);
+        Object value;
+        if (parameter.getType() == Map.class) {
+          value = getMapValue(request.getParameterValues(parameterName + MAP_KEY_SUFFIX), request.getParameterValues(parameterName));
+        }
+        else {
+          value = getValue(request.getParameterValues(parameterName), parameter);
+        }
         if (value != null) {
           values.put(parameterName, value);
         }
@@ -142,6 +149,17 @@ public class EditorParameterPersistence extends SlingAllMethodsServlet {
       }
     }
     return value;
+  }
+
+  private Map<String, String> getMapValue(String[] keys, String[] values) {
+    Map<String, String> map = null;
+    if (keys != null && keys.length > 0 && values != null && values.length > 0) {
+      map = new HashMap<>();
+      for (int i = 0; i < keys.length && i < values.length; i++) {
+        map.put(keys[i], values[i]);
+      }
+    }
+    return map;
   }
 
   private String getCurrentConfigurationId(SlingHttpServletRequest request) {
