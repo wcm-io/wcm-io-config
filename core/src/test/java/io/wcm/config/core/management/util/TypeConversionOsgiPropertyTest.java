@@ -19,7 +19,8 @@
  */
 package io.wcm.config.core.management.util;
 
-import static io.wcm.config.core.management.util.TypeConversion.objectToString;
+import static io.wcm.config.core.management.util.TypeConversion.KEY_VALUE_DELIMITER;
+import static io.wcm.config.core.management.util.TypeConversion.encodeString;
 import static io.wcm.config.core.management.util.TypeConversion.osgiPropertyToObject;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -27,9 +28,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
@@ -78,7 +80,8 @@ public class TypeConversionOsgiPropertyTest {
         "value;2",
         "value=3",
     };
-    String[] convertedValues = osgiPropertyToObject(objectToString(values), String[].class, new String[0]);
+    String[] encodedArray = encodeString(values);
+    String[] convertedValues = osgiPropertyToObject(encodedArray, String[].class, new String[0]);
     assertArrayEquals(values, convertedValues);
   }
 
@@ -129,7 +132,7 @@ public class TypeConversionOsgiPropertyTest {
 
   @Test
   public void testMap() {
-    Map<String, String> map = new LinkedHashMap<>();
+    Map<String, String> map = new HashMap<>();
     map.put("key1", "abc");
     map.put("key2", "def");
     map.put("key3", null);
@@ -137,24 +140,36 @@ public class TypeConversionOsgiPropertyTest {
         "key1=abc", "key2=def", "key3=", "", "=xyz"
     }, Map.class, null));
 
-    map = new LinkedHashMap<>();
+    map = new HashMap<>();
     assertEquals(map, osgiPropertyToObject(null, Map.class, null));
 
-    map = new LinkedHashMap<>();
+    map = new HashMap<>();
     map.put("key1", "abc");
     assertEquals(map, osgiPropertyToObject(null, Map.class, map));
   }
 
   @Test
   public void testMapWithSpecialChars() {
-    Map<String, String> map = new LinkedHashMap<>();
+    Map<String, String> map = new HashMap<>();
     map.put("key1", "value1");
     map.put("key;2", "value;2");
     map.put("key=3", "value=3");
     map.put("key=4;", "=value;4");
 
+    List<String> encodedMapList = new ArrayList<>();
+    for (Map.Entry<String, String> entry : map.entrySet()) {
+      encodedMapList.add(encodeString(entry.getKey()) + KEY_VALUE_DELIMITER + encodeString(entry.getValue()));
+    }
+    String[] encodedMap = encodedMapList.toArray(new String[encodedMapList.size()]);
+    assertArrayEquals(new String[] {
+        "key1=value1",
+        "key\\;2=value\\;2",
+        "key\\=3=value\\=3",
+        "key\\=4\\;=\\=value\\;4"
+    }, encodedMap);
+
     @SuppressWarnings("unchecked")
-    Map<String, String> convertedMap = osgiPropertyToObject(objectToString(map), Map.class, new HashMap<String, String>());
+    Map<String, String> convertedMap = osgiPropertyToObject(encodedMap, Map.class, new HashMap<String, String>());
     assertEquals(map, convertedMap);
   }
 

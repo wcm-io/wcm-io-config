@@ -19,15 +19,15 @@
  */
 package io.wcm.config.core.management.util;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.BooleanUtils;
-import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.sling.commons.osgi.PropertiesUtil;
@@ -41,15 +41,24 @@ import com.google.common.collect.Iterators;
 @ProviderType
 public final class TypeConversion {
 
+  private static final char ARRAY_DELIMITER_CHAR = ';';
+  private static final char KEY_VALUE_DELIMITER_CHAR = '=';
+  private static final char ESCAPE_DELIMITER_CHAR = '\\';
+
   /**
    * Delimiter for string array values an map rows
    */
-  public static final String ARRAY_DELIMITER = ";";
+  public static final String ARRAY_DELIMITER = Character.toString(ARRAY_DELIMITER_CHAR);
 
   /**
    * Delimiter to separate key/value pairs in map rows
    */
-  public static final String KEY_VALUE_DELIMITER = "=";
+  public static final String KEY_VALUE_DELIMITER = Character.toString(KEY_VALUE_DELIMITER_CHAR);
+
+  /**
+   * Delimiter to prefix escaped characters.
+   */
+  public static final String ESCAPE_DELIMITER = Character.toString(ESCAPE_DELIMITER_CHAR);
 
   private TypeConversion() {
     // static methods only
@@ -71,7 +80,7 @@ public final class TypeConversion {
       return (T)value;
     }
     else if (type == String[].class) {
-      return (T)decodeString(StringUtils.splitPreserveAllTokens(value, ARRAY_DELIMITER));
+      return (T)decodeString(splitPreserveAllTokens(value, ARRAY_DELIMITER_CHAR));
     }
     if (type == Integer.class) {
       return (T)(Integer)NumberUtils.toInt(value, 0);
@@ -86,10 +95,10 @@ public final class TypeConversion {
       return (T)(Boolean)BooleanUtils.toBoolean(value);
     }
     if (type == Map.class) {
-      String[] rows = StringUtils.splitPreserveAllTokens(value, ARRAY_DELIMITER);
+      String[] rows = splitPreserveAllTokens(value, ARRAY_DELIMITER_CHAR);
       Map<String, String> map = new LinkedHashMap<>();
       for (int i = 0; i < rows.length; i++) {
-        String[] keyValue = StringUtils.splitPreserveAllTokens(rows[i], KEY_VALUE_DELIMITER);
+        String[] keyValue = splitPreserveAllTokens(rows[i], KEY_VALUE_DELIMITER_CHAR);
         if (keyValue.length == 2 && StringUtils.isNotEmpty(keyValue[0])) {
           map.put(decodeString(keyValue[0]), StringUtils.isEmpty(keyValue[1]) ? null : decodeString(keyValue[1]));
         }
@@ -199,64 +208,145 @@ public final class TypeConversion {
         defaultMapValue = new String[defaultMap.size()];
         Map.Entry<?, ?>[] entries = Iterators.toArray(defaultMap.entrySet().iterator(), Map.Entry.class);
         for (int i = 0; i < entries.length; i++) {
-          defaultMapValue[i] = Objects.toString(entries[i].getKey(), "")
-              + KEY_VALUE_DELIMITER + Objects.toString(entries[i].getValue(), "");
+          defaultMapValue[i] = encodeString(Objects.toString(entries[i].getKey(), ""))
+              + KEY_VALUE_DELIMITER + encodeString(Objects.toString(entries[i].getValue(), ""));
         }
       }
-      Map<String, String> rawMap = PropertiesUtil.toMap(value, defaultMapValue);
-      Map<String, String> finalMap = new HashMap<String, String>(rawMap.size());
-      for (Map.Entry<String, String> entry : rawMap.entrySet()) {
-        finalMap.put(decodeString(entry.getKey()), decodeString(entry.getValue()));
+      String[] rawMap = PropertiesUtil.toStringArray(value, defaultMapValue);
+      Map<String, String> finalMap = new HashMap<String, String>(rawMap.length);
+      for (int i = 0; i < rawMap.length; i++) {
+        String[] keyValue = splitPreserveAllTokens(rawMap[i], KEY_VALUE_DELIMITER_CHAR);
+        if (keyValue.length == 2 && StringUtils.isNotEmpty(keyValue[0])) {
+          finalMap.put(decodeString(keyValue[0]), StringUtils.isEmpty(keyValue[1]) ? null : decodeString(keyValue[1]));
+        }
       }
       return (T)finalMap;
     }
     throw new IllegalArgumentException("Unsupported type: " + type.getName());
   }
 
-  private static String[] encodeString(String[] values) {
+  /**
+   * String tokenizer that preservers all tokens and ignores escaped separator chars.
+   * @param value Value to tokenize
+   * @param separatorChar Separator char
+   * @return String parts. Never null.
+   */
+  static String[] splitPreserveAllTokens(String value, char separatorChar) {
+    if (value == null) {
+      return ArrayUtils.EMPTY_STRING_ARRAY;
+    }
+    int len = value.length();
+    if (len == 0) {
+      return ArrayUtils.EMPTY_STRING_ARRAY;
+    }
+    List<String> list = new ArrayList<>();
+    int i = 0;
+    int start = 0;
+    boolean match = false;
+    boolean lastMatch = false;
+    int escapeStart = -2;
+    while (i < len) {
+      char c = value.charAt(i);
+      if (c == ESCAPE_DELIMITER_CHAR) {
+        escapeStart = i;
+      }
+      if (c == separatorChar && escapeStart != i - 1) {
+        lastMatch = true;
+        list.add(value.substring(start, i));
+        match = false;
+        start = ++i;
+        continue;
+      }
+      match = true;
+      i++;
+    }
+    if (match || lastMatch) {
+      list.add(value.substring(start, i));
+    }
+    return list.toArray(new String[list.size()]);
+  }
+
+  /**
+   * Escape all delimiter chars in string.
+   * @param values Strings
+   * @return Encoded strings
+   */
+  static String[] encodeString(String[] values) {
     if (values == null) {
       return null;
     }
-    String[] escapedValues = new String[values.length];
+    String[] encodedValues = new String[values.length];
     for (int i = 0; i < values.length; i++) {
-      escapedValues[i] = encodeString(values[i]);
+      encodedValues[i] = encodeString(values[i]);
     }
-    return values;
+    return encodedValues;
   }
 
-  private static String encodeString(String value) {
+  /**
+   * Escape all delimiter chars in string.
+   * @param value String
+   * @return Encoded string
+   */
+  static String encodeString(String value) {
     if (value == null) {
       return null;
     }
-    try {
-      return URLEncoder.encode(value, CharEncoding.UTF_8);
+    StringBuilder encoded = new StringBuilder();
+    int len = value.length();
+    for (int i = 0; i < len; i++) {
+      char c = value.charAt(i);
+      switch (c) {
+        case ARRAY_DELIMITER_CHAR:
+        case KEY_VALUE_DELIMITER_CHAR:
+        case ESCAPE_DELIMITER_CHAR:
+          encoded.append(ESCAPE_DELIMITER_CHAR);
+          break;
+        default:
+          // just append char
+      }
+      encoded.append(c);
     }
-    catch (UnsupportedEncodingException ex) {
-      throw new RuntimeException("Unsupportec encoding.", ex);
-    }
+    return encoded.toString();
   }
 
-  private static String[] decodeString(String[] values) {
+  /**
+   * Unescape all delimiter chars in string.
+   * @param values Strings
+   * @return Decoded strings
+   */
+  static String[] decodeString(String[] values) {
     if (values == null) {
       return null;
     }
-    String[] escapedValues = new String[values.length];
+    String[] decodedValues = new String[values.length];
     for (int i = 0; i < values.length; i++) {
-      escapedValues[i] = decodeString(values[i]);
+      decodedValues[i] = decodeString(values[i]);
     }
-    return values;
+    return decodedValues;
   }
 
-  private static String decodeString(String value) {
+  /**
+   * Unescape all delimiter chars in string.
+   * @param value String
+   * @return Decoded string
+   */
+  static String decodeString(String value) {
     if (value == null) {
       return null;
     }
-    try {
-      return URLEncoder.encode(value, CharEncoding.UTF_8);
+    StringBuilder decoded = new StringBuilder();
+    int len = value.length();
+    int escapeStart = -2;
+    for (int i = 0; i < len; i++) {
+      char c = value.charAt(i);
+      if (c == ESCAPE_DELIMITER_CHAR && escapeStart != i - 1) {
+        escapeStart = i;
+      }
+      else {
+        decoded.append(c);
+      }
     }
-    catch (UnsupportedEncodingException ex) {
-      throw new RuntimeException("Unsupportec encoding.", ex);
-    }
+    return decoded.toString();
   }
 
 }

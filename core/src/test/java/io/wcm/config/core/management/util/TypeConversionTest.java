@@ -19,11 +19,15 @@
  */
 package io.wcm.config.core.management.util;
 
+import static io.wcm.config.core.management.util.TypeConversion.decodeString;
+import static io.wcm.config.core.management.util.TypeConversion.encodeString;
 import static io.wcm.config.core.management.util.TypeConversion.objectToString;
+import static io.wcm.config.core.management.util.TypeConversion.splitPreserveAllTokens;
 import static io.wcm.config.core.management.util.TypeConversion.stringToObject;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -63,7 +67,9 @@ public class TypeConversionTest {
         "value;2",
         "value=3",
     };
-    String[] convertedValues = stringToObject(objectToString(values), String[].class);
+    String convertedString = objectToString(values);
+    assertEquals("value1;value\\;2;value\\=3", convertedString);
+    String[] convertedValues = stringToObject(convertedString, String[].class);
     assertArrayEquals(values, convertedValues);
   }
 
@@ -145,6 +151,61 @@ public class TypeConversionTest {
       assertEquals("stringToObject(" + stringValue + ")", objectValue, stringToObject(stringValue, type));
     }
     assertEquals("objectToString(" + objectValue + ")", stringValue, objectToString(objectValue));
+  }
+
+  @Test
+  public void testSplitPreserveAllTokens() {
+    assertArrayEquals(new String[0], splitPreserveAllTokens(null, ';'));
+    assertArrayEquals(new String[0], splitPreserveAllTokens("", ';'));
+
+    assertArrayEquals(new String[] {
+        "aa"
+    }, splitPreserveAllTokens("aa", ';'));
+    assertArrayEquals(new String[] {
+        "aa",
+        "bb",
+        "cc"
+    }, splitPreserveAllTokens("aa;bb;cc", ';'));
+    assertArrayEquals(new String[] {
+        "aa",
+        ""
+    }, splitPreserveAllTokens("aa;", ';'));
+    assertArrayEquals(new String[] {
+        "",
+        "aa",
+        ""
+    }, splitPreserveAllTokens(";aa;", ';'));
+
+    assertArrayEquals(new String[] {
+        "aa\\;bb\\;cc"
+    }, splitPreserveAllTokens("aa\\;bb\\;cc", ';'));
+    assertArrayEquals(new String[] {
+        "\\;aa",
+        "bb\\;",
+        "cc"
+    }, splitPreserveAllTokens("\\;aa;bb\\;;cc", ';'));
+  }
+
+  @Test
+  public void testEncodeString() {
+    assertNull(encodeString((String)null));
+    assertEquals("", encodeString(""));
+
+    assertEquals("aa", encodeString("aa"));
+    assertEquals("aa\\;", encodeString("aa;"));
+    assertEquals("\\=a\\;a", encodeString("=a;a"));
+    assertEquals("a\\\\\\;a", encodeString("a\\;a"));
+  }
+
+  @Test
+  public void testDecodeStringString() {
+    assertNull(decodeString((String)null));
+    assertEquals("", decodeString(""));
+
+    assertEquals("aa", decodeString("aa"));
+    assertEquals("aa;", decodeString("aa\\;"));
+    assertEquals("=a;a", decodeString("\\=a\\;a"));
+    assertEquals("a\\;a", decodeString("a\\\\\\;a"));
   }
 
 }
