@@ -28,45 +28,57 @@ import java.util.Map;
 public enum WidgetTypes {
 
   /**
-   * Text Field widget. Following properties are available for configuration (all empty per default):
-   * - required = true or false
-   * - maxlength = integer value
-   * - minlength = integer value
-   * - pattern = regular expression for the value validation. E.g. /^[0-9]*$/
+   * Text Field widget.
+   * Following properties are available for configuration (all empty per default):
+   * <ul>
+   * <li>required = true or false</li>
+   * <li>maxlength = integer value</li>
+   * <li>minlength = integer value</li>
+   * <li>pattern = regular expression for the value validation. E.g. <code>/^[0-9]*$/</code></li>
+   * </ul>
    */
   TEXTFIELD(DefaultWidgetConfiguration.TEXTFIELD),
 
   /**
-   * Text Multifield widget, which allows to specifiy multiple values for a property.
+   * Text Multifield widget, which allows to specify multiple values for a property.
    * Following properties are available for configuration (all empty per default):
-   * - required = true or false
-   * - maxlength = integer value
-   * - minlength = integer value
-   * - pattern = regular expression for the value validation. E.g. /^[0-9]*$/
+   * <ul>
+   * <li>required = true or false</li>
+   * <li>maxlength = integer value</li>
+   * <li>minlength = integer value</li>
+   * <li>pattern = regular expression for the value validation. E.g. <code>/^[0-9]*$/</code></li>
+   * </ul>
    */
   TEXT_MULTIFIELD(DefaultWidgetConfiguration.MULTIFIELD),
 
   /**
-   * Text Area widget. Following properties are available for configuration (all empty per default):
-   * - requried = true or false
-   * - maxlength = integer value
-   * - minlength = integer value
-   * - pattern = regular expression for the value validation. E.g. /^[0-9]*$/
+   * Text Area widget.
+   * Following properties are available for configuration (all empty per default):
+   * <ul>
+   * <li>required = true or false</li>
+   * <li>maxlength = integer value</li>
+   * <li>minlength = integer value</li>
+   * <li>pattern = regular expression for the value validation. E.g. <code>/^[0-9]*$/</code></li>
+   * </ul>
    */
   TEXTAREA(DefaultWidgetConfiguration.TEXTAREA),
 
   /**
-   * Path Browser widget with autocomplete function.Following properties are available for configuration (all empty per
-   * default):
-   * - required = true or false
-   * - rootPath = root path from where pages can be selected. Default: /content
+   * Path Browser widget with autocomplete function.
+   * Following properties are available for configuration (all empty per default):
+   * <ul>
+   * <li>required = true or false</li>
+   * <li>rootPath = root path from where pages can be selected. Default: <code>/content</code></li>
+   * </ul>
    */
   PATHBROWSER(DefaultWidgetConfiguration.PATHBROWSER),
 
   /**
-   * Checkbox widget.Following properties are available for configuration (all empty per
-   * default):
-   * - required = true or false
+   * Checkbox widget.
+   * Following properties are available for configuration (all empty per default):
+   * <ul>
+   * <li>required = true or false</li>
+   * </ul>
    */
   CHECKBOX(DefaultWidgetConfiguration.CHECKBOX);
 
