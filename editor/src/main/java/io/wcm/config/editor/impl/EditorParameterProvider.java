@@ -20,6 +20,7 @@
 package io.wcm.config.editor.impl;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -216,9 +217,28 @@ public class EditorParameterProvider extends SlingAllMethodsServlet {
 
   }
 
+  @SuppressWarnings("unchecked")
   private Object getJSONValue(Object value) {
     if (value instanceof Boolean) {
       return value;
+    }
+    else if (value instanceof String[]) {
+      return new JSONArray(Arrays.asList((String[])value));
+    }
+    else if (value instanceof Map) {
+      JSONArray jsonMap = new JSONArray();
+      for (Map.Entry<String, String> entry : ((Map<String, String>)value).entrySet()) {
+        JSONObject item = new JSONObject();
+        try {
+          item.putOpt("key", entry.getKey());
+          item.putOpt("value", entry.getValue());
+        }
+        catch (JSONException ex) {
+          throw new RuntimeException("Error converting value '" + value + "' to JSON.", ex);
+        }
+        jsonMap.put(item);
+      }
+      return jsonMap;
     }
     return TypeConversion.objectToString(value);
   }

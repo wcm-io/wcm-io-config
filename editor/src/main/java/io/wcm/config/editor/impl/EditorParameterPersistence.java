@@ -19,15 +19,6 @@
  */
 package io.wcm.config.editor.impl;
 
-import io.wcm.config.api.Configuration;
-import io.wcm.config.api.Parameter;
-import io.wcm.config.core.management.ConfigurationFinder;
-import io.wcm.config.core.management.ParameterPersistence;
-import io.wcm.config.core.management.ParameterPersistenceData;
-import io.wcm.config.core.management.ParameterResolver;
-import io.wcm.config.core.management.util.TypeConversion;
-import io.wcm.wcm.commons.contenttype.FileExtension;
-
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -51,6 +42,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableSortedSet;
+
+import io.wcm.config.api.Configuration;
+import io.wcm.config.api.Parameter;
+import io.wcm.config.core.management.ConfigurationFinder;
+import io.wcm.config.core.management.ParameterPersistence;
+import io.wcm.config.core.management.ParameterPersistenceData;
+import io.wcm.config.core.management.ParameterResolver;
+import io.wcm.config.core.management.util.TypeConversion;
+import io.wcm.wcm.commons.contenttype.FileExtension;
 
 /**
  * Persists configuration parameters
@@ -134,7 +134,12 @@ public class EditorParameterPersistence extends SlingAllMethodsServlet {
   private Object getValue(String[] values, Parameter<?> parameter) {
     Object value = null;
     if (values != null && values.length > 0) {
-      value = TypeConversion.stringToObject(values[0], parameter.getType());
+      if (parameter.getType() == String[].class) {
+        value = values;
+      }
+      else {
+        value = TypeConversion.stringToObject(values[0], parameter.getType());
+      }
     }
     return value;
   }

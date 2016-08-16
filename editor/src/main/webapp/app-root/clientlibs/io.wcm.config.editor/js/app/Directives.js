@@ -169,21 +169,17 @@
         }],
         link: function (scope, element, attr) {
           scope.values = [];
-          if (scope.parameter.value) {
-            var stringValues = scope.parameter.value.split(";");
-            if (stringValues.length > 0) {
-              for (var i = 0; i < stringValues.length; i++) {
-                scope.values.push({value: stringValues[i]});
-              }
-            } else {
-              scope.values.push({value: ""});
+          if (scope.parameter.value && scope.parameter.value.length > 0) {
+            var stringValues = scope.parameter.value;
+            for (var i = 0; i < stringValues.length; i++) {
+              scope.values.push({value: stringValues[i]});
             }
           } else {
             scope.values.push({value: ""});
           }
           scope.$watch('values', function() {
             var stringValues = _.pluck(scope.values, "value");
-            scope.parameter.value = stringValues.join(";");
+            scope.parameter.value = stringValues;
           }, true);
         }
       }
