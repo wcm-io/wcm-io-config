@@ -1,6 +1,6 @@
 <img src="http://wcm.io/images/favicon-16@2x.png"/> wcm.io Configuration
 ======
-[![Build Status](https://travis-ci.org/wcm-io/wcm-io-config.png?branch=develop)](https://travis-ci.org/wcm-io/wcm-io-config)
+[![Build Status](https://codecov.io/github/wcm-io/wcm-io-config/coverage.svg?branch=develop)](https://codecov.io/github/wcm-io/wcm-io-config?branch=develop)
 
 Context-specific configuration for AEM applications.
 
