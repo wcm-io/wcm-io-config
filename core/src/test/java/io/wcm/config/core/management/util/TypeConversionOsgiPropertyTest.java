@@ -32,6 +32,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.junit.Test;
 
@@ -149,7 +150,7 @@ public class TypeConversionOsgiPropertyTest {
 
   @Test
   public void testMapWithSpecialChars() {
-    Map<String, String> map = new HashMap<>();
+    Map<String, String> map = new TreeMap<>();
     map.put("key1", "value1");
     map.put("key;2", "value;2");
     map.put("key=3", "value=3");
