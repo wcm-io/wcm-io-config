@@ -22,15 +22,9 @@ package io.wcm.config.core.management.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyCollectionOf;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyCollection;
 import static org.mockito.Mockito.when;
-import io.wcm.config.api.Configuration;
-import io.wcm.config.core.management.Application;
-import io.wcm.config.core.management.ApplicationFinder;
-import io.wcm.config.core.management.ParameterResolver;
-import io.wcm.config.spi.ConfigurationFinderStrategy;
-import io.wcm.sling.commons.resource.ImmutableValueMap;
 
 import java.util.Collection;
 import java.util.Dictionary;
@@ -49,13 +43,20 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 import org.osgi.framework.Constants;
 import org.osgi.service.component.ComponentContext;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+
+import io.wcm.config.api.Configuration;
+import io.wcm.config.core.management.Application;
+import io.wcm.config.core.management.ApplicationFinder;
+import io.wcm.config.core.management.ParameterResolver;
+import io.wcm.config.spi.ConfigurationFinderStrategy;
+import io.wcm.sling.commons.resource.ImmutableValueMap;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ConfigurationFinderImplTest {
@@ -86,6 +87,7 @@ public class ConfigurationFinderImplTest {
   @InjectMocks
   private ConfigurationFinderImpl underTest;
 
+  @SuppressWarnings("unchecked")
   @Before
   public void setUp() {
     Dictionary<String, Object> config = new Hashtable<>();
@@ -109,9 +111,8 @@ public class ConfigurationFinderImplTest {
         .build().iterator());
     when(finderStrategy2.getApplicationId()).thenReturn(APPLICATION_ID_2);
 
-    when(parameterResolver.getEffectiveValues(any(ResourceResolver.class), anyCollectionOf(String.class)))
+    when(parameterResolver.getEffectiveValues((ResourceResolver)any(), (Collection)anyCollection()))
     .then(new Answer<Map<String,Object>>() {
-      @SuppressWarnings("unchecked")
       @Override
       public Map<String, Object> answer(InvocationOnMock invocation) {
         Collection<String> configurationIds = (Collection<String>)invocation.getArguments()[1];

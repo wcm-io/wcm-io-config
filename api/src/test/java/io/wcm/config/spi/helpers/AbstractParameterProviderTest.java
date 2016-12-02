@@ -22,15 +22,16 @@ package io.wcm.config.spi.helpers;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import io.wcm.config.api.Parameter;
-import io.wcm.config.api.ParameterBuilder;
-import io.wcm.config.spi.ParameterProvider;
 
 import java.util.Set;
 
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableSet;
+
+import io.wcm.config.api.Parameter;
+import io.wcm.config.api.ParameterBuilder;
+import io.wcm.config.spi.ParameterProvider;
 
 public class AbstractParameterProviderTest {
 

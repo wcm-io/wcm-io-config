@@ -19,11 +19,11 @@
  */
 package io.wcm.config.core.management;
 
-import io.wcm.config.api.Parameter;
-
 import java.util.Set;
 
 import org.osgi.annotation.versioning.ProviderType;
+
+import io.wcm.config.api.Parameter;
 
 /**
  * Override configuration parameter. The implementation can decide at which level the override should take place.

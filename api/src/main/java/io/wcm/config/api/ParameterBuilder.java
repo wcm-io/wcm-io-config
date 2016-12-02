@@ -19,9 +19,6 @@
  */
 package io.wcm.config.api;
 
-import io.wcm.config.spi.ApplicationProvider;
-import io.wcm.sling.commons.resource.ImmutableValueMap;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -30,6 +27,9 @@ import java.util.regex.Pattern;
 import org.osgi.annotation.versioning.ProviderType;
 
 import com.google.common.collect.ImmutableSet;
+
+import io.wcm.config.spi.ApplicationProvider;
+import io.wcm.sling.commons.resource.ImmutableValueMap;
 
 /**
  * Fluent API for building configuration parameter definitions.

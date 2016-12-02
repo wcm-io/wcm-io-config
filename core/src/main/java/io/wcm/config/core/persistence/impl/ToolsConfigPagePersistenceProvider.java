@@ -19,8 +19,6 @@
  */
 package io.wcm.config.core.persistence.impl;
 
-import io.wcm.config.spi.ParameterPersistenceProvider;
-
 import java.util.Dictionary;
 
 import org.apache.felix.scr.annotations.Activate;
@@ -30,6 +28,8 @@ import org.apache.felix.scr.annotations.Service;
 import org.apache.sling.commons.osgi.PropertiesUtil;
 import org.osgi.framework.Constants;
 import org.osgi.service.component.ComponentContext;
+
+import io.wcm.config.spi.ParameterPersistenceProvider;
 
 /**
  * Persistence provider that stores configuration values in pages in a path tools/config relative to the config id.

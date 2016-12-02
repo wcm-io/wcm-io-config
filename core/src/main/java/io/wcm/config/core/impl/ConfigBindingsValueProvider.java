@@ -19,8 +19,6 @@
  */
 package io.wcm.config.core.impl;
 
-import io.wcm.config.api.Configuration;
-
 import javax.script.Bindings;
 
 import org.apache.felix.scr.annotations.Component;
@@ -31,6 +29,8 @@ import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.scripting.SlingBindings;
 import org.apache.sling.scripting.api.BindingsValuesProvider;
 import org.osgi.framework.Constants;
+
+import io.wcm.config.api.Configuration;
 
 /**
  * Binds a script variable "config" to the current configuration value map to be used in Sightly.

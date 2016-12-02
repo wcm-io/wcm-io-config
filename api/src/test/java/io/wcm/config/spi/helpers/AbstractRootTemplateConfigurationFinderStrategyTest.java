@@ -20,8 +20,6 @@
 package io.wcm.config.spi.helpers;
 
 import static org.junit.Assert.assertEquals;
-import io.wcm.config.spi.ConfigurationFinderStrategy;
-import io.wcm.testing.mock.aem.junit.AemContext;
 
 import java.util.List;
 
@@ -31,6 +29,9 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
+
+import io.wcm.config.spi.ConfigurationFinderStrategy;
+import io.wcm.testing.mock.aem.junit.AemContext;
 
 public class AbstractRootTemplateConfigurationFinderStrategyTest {
 

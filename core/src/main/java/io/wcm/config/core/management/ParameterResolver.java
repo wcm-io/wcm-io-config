@@ -19,14 +19,14 @@
  */
 package io.wcm.config.core.management;
 
-import io.wcm.config.api.Parameter;
-
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.sling.api.resource.ResourceResolver;
 import org.osgi.annotation.versioning.ProviderType;
+
+import io.wcm.config.api.Parameter;
 
 /**
  * Resolve parameter values respecting configuration hierarchy and overriding.

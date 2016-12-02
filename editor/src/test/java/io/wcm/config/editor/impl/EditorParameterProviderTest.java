@@ -20,9 +20,9 @@
 package io.wcm.config.editor.impl;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
@@ -48,7 +48,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
 import com.google.common.collect.ImmutableMap;
@@ -156,7 +156,7 @@ public class EditorParameterProviderTest {
     when(configurationSecondLevel.get(PARAMETER_LONG.getName())).thenReturn(5L);
     when(configurationSecondLevel.get(PARAMETER_BOOLEAN.getName())).thenReturn(true);
     when(configurationSecondLevel.get((PARAMETER_DOUBLE.getName()))).thenReturn(3.3434);
-    when(persistence.getData(any(ResourceResolver.class), eq("/content/site"))).then(new Answer<ParameterPersistenceData>() {
+    when(persistence.getData((ResourceResolver)any(), eq("/content/site"))).then(new Answer<ParameterPersistenceData>() {
 
       @Override
       public ParameterPersistenceData answer(InvocationOnMock invocation) {
@@ -166,7 +166,7 @@ public class EditorParameterProviderTest {
       }
     });
 
-    when(persistence.getData(any(ResourceResolver.class), eq("/content/site/region"))).then(new Answer<ParameterPersistenceData>() {
+    when(persistence.getData((ResourceResolver)any(), eq("/content/site/region"))).then(new Answer<ParameterPersistenceData>() {
       @Override
       public ParameterPersistenceData answer(InvocationOnMock invocation) {
         Map<String, Object> values = new HashMap<>();
@@ -209,7 +209,7 @@ public class EditorParameterProviderTest {
   @Test
   public void testReturnOnlyEditableParameters() throws JSONException {
     parameters = new JSONArray();
-    when(persistence.getData(any(ResourceResolver.class), anyString())).thenReturn(
+    when(persistence.getData((ResourceResolver)any(), anyString())).thenReturn(
         new ParameterPersistenceData(ImmutableValueMap.of(), ImmutableSortedSet.<String>of()));
     underTest.addParameters(parameters, configurationFirstLevel, request, ImmutableMap.<String, Application>of());
     assertEquals(parameters.length(), 8);

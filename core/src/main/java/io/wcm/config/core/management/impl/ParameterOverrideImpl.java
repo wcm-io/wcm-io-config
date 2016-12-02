@@ -19,13 +19,6 @@
  */
 package io.wcm.config.core.management.impl;
 
-import io.wcm.config.api.Parameter;
-import io.wcm.config.core.management.ParameterOverride;
-import io.wcm.config.core.management.impl.override.ParameterOverrideInfoLookup;
-import io.wcm.config.core.management.util.TypeConversion;
-import io.wcm.config.spi.ParameterOverrideProvider;
-import io.wcm.sling.commons.osgi.RankedServices;
-
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -37,6 +30,13 @@ import org.apache.felix.scr.annotations.ReferencePolicy;
 import org.apache.felix.scr.annotations.Service;
 
 import com.google.common.collect.ImmutableSet;
+
+import io.wcm.config.api.Parameter;
+import io.wcm.config.core.management.ParameterOverride;
+import io.wcm.config.core.management.impl.override.ParameterOverrideInfoLookup;
+import io.wcm.config.core.management.util.TypeConversion;
+import io.wcm.config.spi.ParameterOverrideProvider;
+import io.wcm.sling.commons.osgi.RankedServices;
 
 /**
  * Default implementation of {@link ParameterOverride}.

@@ -19,11 +19,6 @@
  */
 package io.wcm.config.core.management.impl;
 
-import io.wcm.config.core.management.Application;
-import io.wcm.config.core.management.ApplicationFinder;
-import io.wcm.config.spi.ApplicationProvider;
-import io.wcm.sling.commons.osgi.RankedServices;
-
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
@@ -41,6 +36,11 @@ import org.apache.sling.api.resource.Resource;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+
+import io.wcm.config.core.management.Application;
+import io.wcm.config.core.management.ApplicationFinder;
+import io.wcm.config.spi.ApplicationProvider;
+import io.wcm.sling.commons.osgi.RankedServices;
 
 /**
  * Default implementation of {@link ApplicationFinder}.

@@ -19,11 +19,11 @@
  */
 package io.wcm.samples.configsampleapp.config;
 
-import io.wcm.config.spi.ApplicationProvider;
-
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Service;
 import org.apache.sling.api.resource.Resource;
+
+import io.wcm.config.spi.ApplicationProvider;
 
 /**
  * Sample implementation for {@link ApplicationProvider}

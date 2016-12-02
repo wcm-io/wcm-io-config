@@ -19,9 +19,6 @@
  */
 package io.wcm.config.core.impl;
 
-import io.wcm.config.core.management.Application;
-import io.wcm.config.core.management.ApplicationFinder;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Property;
@@ -30,6 +27,9 @@ import org.apache.felix.scr.annotations.Service;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.spi.ImplementationPicker;
 import org.osgi.framework.Constants;
+
+import io.wcm.config.core.management.Application;
+import io.wcm.config.core.management.ApplicationFinder;
 
 /**
  * Sling Models {@link ImplementationPicker} implementation that checks if an application is associated

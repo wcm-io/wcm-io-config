@@ -19,11 +19,6 @@
  */
 package io.wcm.config.core.management.impl;
 
-import io.wcm.config.core.management.ParameterPersistence;
-import io.wcm.config.core.management.ParameterPersistenceData;
-import io.wcm.config.spi.ParameterPersistenceProvider;
-import io.wcm.sling.commons.osgi.RankedServices;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -41,6 +36,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableSortedSet;
+
+import io.wcm.config.core.management.ParameterPersistence;
+import io.wcm.config.core.management.ParameterPersistenceData;
+import io.wcm.config.spi.ParameterPersistenceProvider;
+import io.wcm.sling.commons.osgi.RankedServices;
 
 /**
  * Default implementation of {@link ParameterPersistence}.

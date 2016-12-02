@@ -19,8 +19,6 @@
  */
 package io.wcm.config.core.persistence.impl;
 
-import io.wcm.config.spi.ParameterPersistenceProvider;
-
 import java.util.Calendar;
 import java.util.Map;
 
@@ -39,6 +37,8 @@ import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.day.cq.wcm.api.WCMException;
+
+import io.wcm.config.spi.ParameterPersistenceProvider;
 
 /**
  * Common functionality for storing configuration in a configuration page.

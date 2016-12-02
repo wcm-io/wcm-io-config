@@ -19,12 +19,12 @@
  */
 package io.wcm.config.core.management;
 
-import io.wcm.config.api.Configuration;
-
 import java.util.Iterator;
 
 import org.apache.sling.api.resource.Resource;
 import org.osgi.annotation.versioning.ProviderType;
+
+import io.wcm.config.api.Configuration;
 
 /**
  * Find matching configurations for a resource.

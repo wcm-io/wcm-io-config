@@ -19,10 +19,10 @@
  */
 package io.wcm.samples.configsampleapp.config;
 
-import io.wcm.config.spi.helpers.AbstractParameterProvider;
-
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Service;
+
+import io.wcm.config.spi.helpers.AbstractParameterProvider;
 
 /**
  * Provides parameter metadata.
