@@ -28,7 +28,7 @@ Sources: https://github.com/wcm-io/wcm-io-config
 
 
 
-[caonfig]: ../caconfig/
+[caonfig]: http://wcm.io/caconfig/
 [sling-caconfig]: http://sling.apache.org/documentation/bundles/context-aware-configuration/context-aware-configuration.html
 [caconfig-migration]: https://wcm-io.atlassian.net/wiki/x/BgCvAg
 [wiki-config-requirements]: https://wcm-io.atlassian.net/wiki/x/HIAH
