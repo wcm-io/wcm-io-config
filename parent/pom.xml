@@ -34,7 +34,7 @@
   <version>0.5.7-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <name>Configuration</name>
+  <name>Configuration (deprecated)</name>
   <description>Context-specific configuration for AEM applications.</description>
 
   <scm>
