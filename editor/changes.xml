@@ -28,6 +28,9 @@
         Make sure special characters in String array and Map data types are handled properly.
         This also introduces a new widget type "MAP" which has to be used for all parameters of data type "Map", editing map parameters with "TEXT_MULTIFIELD" widget is no longer supported.
       </action>
+      <action type="fix" dev="sseifert">
+        Make configuration editor clientlib compatible with AEM 6.2 and non-admin users by moving it to /etc/clientlibs.
+      </action>
     </release>
 
     <release version="0.6.4" date="2016-04-29">
