@@ -25,13 +25,13 @@
   <parent>
     <groupId>io.wcm</groupId>
     <artifactId>io.wcm.config.parent</artifactId>
-    <version>0.5.7-SNAPSHOT</version>
+    <version>0.5.8</version>
     <relativePath>../parent/pom.xml</relativePath>
   </parent>
 
   <groupId>io.wcm</groupId>
   <artifactId>io.wcm.config.core</artifactId>
-  <version>0.6.3-SNAPSHOT</version>
+  <version>0.6.4</version>
   <packaging>bundle</packaging>
 
   <name>Configuration Implementation</name>
