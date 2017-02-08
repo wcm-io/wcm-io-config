@@ -20,21 +20,10 @@
 package io.wcm.config.editor.impl;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import io.wcm.config.api.Configuration;
-import io.wcm.config.api.Parameter;
-import io.wcm.config.api.ParameterBuilder;
-import io.wcm.config.core.management.ConfigurationFinder;
-import io.wcm.config.core.management.ParameterPersistence;
-import io.wcm.config.core.management.ParameterPersistenceData;
-import io.wcm.config.core.management.ParameterResolver;
-import io.wcm.config.editor.WidgetTypes;
-import io.wcm.sling.commons.resource.ImmutableValueMap;
-import io.wcm.testing.mock.aem.junit.AemContext;
-import io.wcm.wcm.commons.util.RunMode;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -51,13 +40,25 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Matchers;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import com.day.cq.wcm.api.Page;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+
+import io.wcm.config.api.Configuration;
+import io.wcm.config.api.Parameter;
+import io.wcm.config.api.ParameterBuilder;
+import io.wcm.config.core.management.ConfigurationFinder;
+import io.wcm.config.core.management.ParameterPersistence;
+import io.wcm.config.core.management.ParameterPersistenceData;
+import io.wcm.config.core.management.ParameterResolver;
+import io.wcm.config.editor.WidgetTypes;
+import io.wcm.sling.commons.resource.ImmutableValueMap;
+import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.wcm.commons.util.RunMode;
 
 /**
  * Tests for the {@link EditorParameterPersistence}
@@ -88,8 +89,15 @@ public class EditorParameterPersistenceTest {
       PARAMETER_MAP, PARAMETER_MULTIVALUE, PARAMETER_STRING, NON_EDITABLE_PARAMETER);
 
   private static final Map<String, Object> REQUEST_PARAMETERS = ImmutableValueMap.builder()
-      .put("map-param", "key1=value1;key2=value2")
-      .put("multivalue-param", "value1;value2")
+      .put("map-param" + EditorParameterPersistence.MAP_KEY_SUFFIX, new String[] {
+          "key1", "key2"
+      })
+      .put("map-param", new String[] {
+          "value1", "value2"
+      })
+      .put("multivalue-param", new String[] {
+          "value1", "value2"
+      })
       .put("string-param", "value")
       .put("integer-param", "1")
       .put("long-param", "5")
@@ -126,13 +134,13 @@ public class EditorParameterPersistenceTest {
     context.registerService(ParameterResolver.class, parameterResolver);
     context.registerService(ParameterPersistence.class, persistence);
     when(parameterResolver.getAllParameters()).thenReturn(PARAMETERS);
-    when(configurationFinder.find(Matchers.any(Resource.class))).thenReturn(configuration);
+    when(configurationFinder.find(ArgumentMatchers.any(Resource.class))).thenReturn(configuration);
     when(configuration.getConfigurationId()).thenReturn("/content/test");
   }
 
   @Test
   public void testResponseNoConfigurationFound() throws Exception {
-    when(configurationFinder.find(Matchers.any(Resource.class))).thenReturn(null);
+    when(configurationFinder.find(ArgumentMatchers.any(Resource.class))).thenReturn(null);
 
     EditorParameterPersistence underTest = new EditorParameterPersistence();
     context.registerInjectActivateService(underTest);

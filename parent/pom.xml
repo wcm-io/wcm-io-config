@@ -25,16 +25,16 @@
   <parent>
     <groupId>io.wcm</groupId>
     <artifactId>io.wcm.parent_toplevel</artifactId>
-    <version>1.0.10</version>
+    <version>1.1.0</version>
     <relativePath />
   </parent>
 
   <groupId>io.wcm</groupId>
   <artifactId>io.wcm.config.parent</artifactId>
-  <version>0.5.7-SNAPSHOT</version>
+  <version>0.5.8</version>
   <packaging>pom</packaging>
 
-  <name>Configuration</name>
+  <name>Configuration (deprecated)</name>
   <description>Context-specific configuration for AEM applications.</description>
 
   <scm>
@@ -83,13 +83,13 @@
     <dependency>
       <groupId>io.wcm</groupId>
       <artifactId>io.wcm.testing.aem-mock</artifactId>
-      <version>1.7.0</version>
+      <version>1.9.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>io.wcm</groupId>
       <artifactId>io.wcm.testing.wcm-io-mock.sling</artifactId>
-      <version>0.5.0</version>
+      <version>0.6.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -112,7 +112,7 @@
     </dependency>
 
   </dependencies>
-
+  
   <distributionManagement>
     <site>
       <id>${site.deploy.id}</id>

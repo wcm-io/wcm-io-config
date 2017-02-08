@@ -19,11 +19,11 @@
  */
 package io.wcm.config.spi;
 
-import io.wcm.config.api.Parameter;
-
 import java.util.Set;
 
 import org.osgi.annotation.versioning.ConsumerType;
+
+import io.wcm.config.api.Parameter;
 
 /**
  * Allows application to provide the necessary meta data for configuration.

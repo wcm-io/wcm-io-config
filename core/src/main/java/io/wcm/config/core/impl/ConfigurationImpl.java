@@ -19,15 +19,15 @@
  */
 package io.wcm.config.core.impl;
 
-import io.wcm.config.api.Configuration;
-import io.wcm.config.api.Parameter;
-import io.wcm.sling.commons.resource.ImmutableValueMap;
-
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.sling.api.resource.ValueMap;
+
+import io.wcm.config.api.Configuration;
+import io.wcm.config.api.Parameter;
+import io.wcm.sling.commons.resource.ImmutableValueMap;
 
 /**
  * Default implementation of {@link Configuration}.

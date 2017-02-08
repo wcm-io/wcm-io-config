@@ -20,13 +20,14 @@
 package io.wcm.samples.configsampleapp.config;
 
 import static io.wcm.config.api.ParameterBuilder.create;
-import io.wcm.config.api.Parameter;
-import io.wcm.config.editor.EditorProperties;
-import io.wcm.config.editor.WidgetTypes;
 
 import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
+
+import io.wcm.config.api.Parameter;
+import io.wcm.config.editor.EditorProperties;
+import io.wcm.config.editor.WidgetTypes;
 
 /**
  * Defines some example paramters.
@@ -86,9 +87,9 @@ public final class Params {
    * Map parameter
    */
   public static final Parameter<Map> MAP_PARAM = create("map-param", Map.class, APPLICATION_ID)
-      .property(EditorProperties.DESCRIPTION, "This is a Map parameter. Single entries of the map are defined as key=value pairs.")
+      .property(EditorProperties.DESCRIPTION, "This is a Map parameter.")
       .property(EditorProperties.GROUP, "Group 1")
-      .properties(WidgetTypes.TEXT_MULTIFIELD.getDefaultWidgetConfiguration())
+      .properties(WidgetTypes.MAP.getDefaultWidgetConfiguration())
       .defaultValue(ImmutableMap.of("key1", "value1", "key2", "value2"))
       .build();
 
@@ -127,7 +128,7 @@ public final class Params {
       .property(EditorProperties.GROUP, "Group 2")
       .property(EditorProperties.DESCRIPTION, "This is a Pathbrowser parameter with default tree root set to '/content'. "
           + "Start typing with '/' to receive suggestions")
-          .properties(WidgetTypes.PATHBROWSER.getDefaultWidgetConfiguration())
-          .build();
+      .properties(WidgetTypes.PATHBROWSER.getDefaultWidgetConfiguration())
+      .build();
 
 }

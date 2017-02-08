@@ -22,16 +22,17 @@ package io.wcm.config.core.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import io.wcm.config.api.Configuration;
-import io.wcm.config.api.Parameter;
-import io.wcm.config.api.ParameterBuilder;
-import io.wcm.sling.commons.resource.ImmutableValueMap;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import io.wcm.config.api.Configuration;
+import io.wcm.config.api.Parameter;
+import io.wcm.config.api.ParameterBuilder;
+import io.wcm.sling.commons.resource.ImmutableValueMap;
 
 public class ConfigurationImplTest {
 

@@ -19,11 +19,9 @@
  */
 package io.wcm.config.core.override.impl;
 
+import static io.wcm.testing.mock.wcmio.sling.ContextPlugins.WCMIO_SLING;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import io.wcm.sling.commons.resource.ImmutableValueMap;
-import io.wcm.testing.mock.aem.junit.AemContext;
-import io.wcm.testing.mock.wcmio.sling.MockSlingExtensions;
 
 import java.util.Map;
 
@@ -31,14 +29,18 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import io.wcm.sling.commons.resource.ImmutableValueMap;
+import io.wcm.testing.mock.aem.junit.AemContext;
+import io.wcm.testing.mock.aem.junit.AemContextBuilder;
+import io.wcm.testing.mock.wcmio.sling.MockSlingExtensions;
+
 public class RequestHeaderOverrideProviderTest {
 
   @Rule
-  public AemContext context = new AemContext();
+  public AemContext context = new AemContextBuilder().plugin(WCMIO_SLING).build();;
 
   @Before
   public void setUp() {
-    MockSlingExtensions.setUp(context);
     MockSlingExtensions.setRequestContext(context, context.request());
 
     context.request().setHeader(RequestHeaderOverrideProvider.REQUEST_HEADER_PREFIX + "[default]param1", "value1");

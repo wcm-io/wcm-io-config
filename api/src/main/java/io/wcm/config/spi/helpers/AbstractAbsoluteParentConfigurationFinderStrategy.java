@@ -19,8 +19,6 @@
  */
 package io.wcm.config.spi.helpers;
 
-import io.wcm.config.spi.ConfigurationFinderStrategy;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -29,6 +27,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.jackrabbit.util.Text;
 import org.apache.sling.api.resource.Resource;
 import org.osgi.annotation.versioning.ConsumerType;
+
+import io.wcm.config.spi.ConfigurationFinderStrategy;
 
 /**
  * Abstract implementation of {@link ConfigurationFinderStrategy} that supports one or multiple fixed levels

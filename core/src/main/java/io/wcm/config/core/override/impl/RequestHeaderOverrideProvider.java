@@ -19,9 +19,6 @@
  */
 package io.wcm.config.core.override.impl;
 
-import io.wcm.config.spi.ParameterOverrideProvider;
-import io.wcm.sling.commons.request.RequestContext;
-
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -41,6 +38,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableMap;
+
+import io.wcm.config.spi.ParameterOverrideProvider;
+import io.wcm.sling.commons.request.RequestContext;
 
 /**
  * Provides parameter override map from current request header.

@@ -21,22 +21,6 @@ package io.wcm.config.core.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import io.wcm.config.api.Configuration;
-import io.wcm.config.api.Parameter;
-import io.wcm.config.api.ParameterBuilder;
-import io.wcm.config.core.management.ParameterPersistence;
-import io.wcm.config.core.management.ParameterPersistenceData;
-import io.wcm.config.core.management.impl.ApplicationFinderImpl;
-import io.wcm.config.core.management.impl.ConfigurationFinderImpl;
-import io.wcm.config.core.management.impl.ParameterOverrideImpl;
-import io.wcm.config.core.management.impl.ParameterPersistenceImpl;
-import io.wcm.config.core.management.impl.ParameterResolverImpl;
-import io.wcm.config.core.override.impl.SystemPropertyOverrideProvider;
-import io.wcm.config.core.persistence.impl.ToolsConfigPagePersistenceProvider;
-import io.wcm.config.spi.ConfigurationFinderStrategy;
-import io.wcm.config.spi.ParameterProvider;
-import io.wcm.sling.commons.resource.ImmutableValueMap;
-import io.wcm.testing.mock.aem.junit.AemContext;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -55,6 +39,23 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSortedSet;
+
+import io.wcm.config.api.Configuration;
+import io.wcm.config.api.Parameter;
+import io.wcm.config.api.ParameterBuilder;
+import io.wcm.config.core.management.ParameterPersistence;
+import io.wcm.config.core.management.ParameterPersistenceData;
+import io.wcm.config.core.management.impl.ApplicationFinderImpl;
+import io.wcm.config.core.management.impl.ConfigurationFinderImpl;
+import io.wcm.config.core.management.impl.ParameterOverrideImpl;
+import io.wcm.config.core.management.impl.ParameterPersistenceImpl;
+import io.wcm.config.core.management.impl.ParameterResolverImpl;
+import io.wcm.config.core.override.impl.SystemPropertyOverrideProvider;
+import io.wcm.config.core.persistence.impl.ToolsConfigPagePersistenceProvider;
+import io.wcm.config.spi.ConfigurationFinderStrategy;
+import io.wcm.config.spi.ParameterProvider;
+import io.wcm.sling.commons.resource.ImmutableValueMap;
+import io.wcm.testing.mock.aem.junit.AemContext;
 
 /**
  * Test all configuration services in combination.

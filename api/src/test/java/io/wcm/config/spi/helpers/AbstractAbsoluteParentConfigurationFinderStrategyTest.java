@@ -21,7 +21,6 @@ package io.wcm.config.spi.helpers;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
-import io.wcm.config.spi.ConfigurationFinderStrategy;
 
 import java.util.List;
 
@@ -30,9 +29,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import com.google.common.collect.ImmutableList;
+
+import io.wcm.config.spi.ConfigurationFinderStrategy;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AbstractAbsoluteParentConfigurationFinderStrategyTest {

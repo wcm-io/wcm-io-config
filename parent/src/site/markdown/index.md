@@ -1,6 +1,8 @@
-## wcm.io Configuration
+## wcm.io Configuration (deprecated)
 
 Context-specific configuration for AEM applications.
+
+**PLEASE NOTE**: wcm.io Configuration is deprecated (although still fully maintained). For new projects please use the [Apache Sling Context-Aware Configuration][sling-caconfig], with support from [wcm.io Context-Aware Configuration][caconfig]. There is a wiki page how to migrate: [Migrate from wcm.io Configuration 0.x to Context-Aware Configuration][caconfig-migration].
 
 
 ### Context-specific configuration
@@ -20,9 +22,13 @@ The problems and usecases solved by this implementation are described in the wcm
 * [Sample Application](sample-app/): Sample application to demonstrate configuration API and configuration editor GUI.
 
 
-[wiki-config-requirements]: https://wcm-io.atlassian.net/wiki/x/HIAH
-
-
 ### GitHub Repository
 
 Sources: https://github.com/wcm-io/wcm-io-config
+
+
+
+[caconfig]: http://wcm.io/caconfig/
+[sling-caconfig]: http://sling.apache.org/documentation/bundles/context-aware-configuration/context-aware-configuration.html
+[caconfig-migration]: https://wcm-io.atlassian.net/wiki/x/BgCvAg
+[wiki-config-requirements]: https://wcm-io.atlassian.net/wiki/x/HIAH

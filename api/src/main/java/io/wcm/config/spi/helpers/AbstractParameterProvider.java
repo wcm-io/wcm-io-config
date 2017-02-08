@@ -19,9 +19,6 @@
  */
 package io.wcm.config.spi.helpers;
 
-import io.wcm.config.api.Parameter;
-import io.wcm.config.spi.ParameterProvider;
-
 import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
@@ -29,6 +26,9 @@ import java.util.Set;
 import org.osgi.annotation.versioning.ConsumerType;
 
 import com.google.common.collect.ImmutableSet;
+
+import io.wcm.config.api.Parameter;
+import io.wcm.config.spi.ParameterProvider;
 
 /**
  * Abstract implementation of {@link ParameterProvider} providing list of parameters either from given

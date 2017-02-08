@@ -28,6 +28,7 @@
       parameterValue: 'parameterValue.html',
       pathBrowser: 'pathBrowser.html',
       textMultifield: 'textMultifield.html',
+      map: 'map.html',
       popupContainer: 'popupContainer.html',
       popupContent: 'popupContent.html'
     });

@@ -19,6 +19,13 @@
  */
 package io.wcm.config.core.management.util;
 
+import static io.wcm.config.core.management.util.ConversionStringUtils.ARRAY_DELIMITER_CHAR;
+import static io.wcm.config.core.management.util.ConversionStringUtils.KEY_VALUE_DELIMITER_CHAR;
+import static io.wcm.config.core.management.util.ConversionStringUtils.decodeString;
+import static io.wcm.config.core.management.util.ConversionStringUtils.encodeString;
+import static io.wcm.config.core.management.util.ConversionStringUtils.splitPreserveAllTokens;
+
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -40,12 +47,12 @@ public final class TypeConversion {
   /**
    * Delimiter for string array values an map rows
    */
-  public static final String ARRAY_DELIMITER = ";";
+  public static final String ARRAY_DELIMITER = Character.toString(ARRAY_DELIMITER_CHAR);
 
   /**
    * Delimiter to separate key/value pairs in map rows
    */
-  public static final String KEY_VALUE_DELIMITER = "=";
+  public static final String KEY_VALUE_DELIMITER = Character.toString(KEY_VALUE_DELIMITER_CHAR);
 
   private TypeConversion() {
     // static methods only
@@ -67,7 +74,7 @@ public final class TypeConversion {
       return (T)value;
     }
     else if (type == String[].class) {
-      return (T)StringUtils.splitPreserveAllTokens(value, ARRAY_DELIMITER);
+      return (T)decodeString(splitPreserveAllTokens(value, ARRAY_DELIMITER_CHAR));
     }
     if (type == Integer.class) {
       return (T)(Integer)NumberUtils.toInt(value, 0);
@@ -82,12 +89,12 @@ public final class TypeConversion {
       return (T)(Boolean)BooleanUtils.toBoolean(value);
     }
     if (type == Map.class) {
-      String[] rows = StringUtils.splitPreserveAllTokens(value, ARRAY_DELIMITER);
+      String[] rows = splitPreserveAllTokens(value, ARRAY_DELIMITER_CHAR);
       Map<String, String> map = new LinkedHashMap<>();
       for (int i = 0; i < rows.length; i++) {
-        String[] keyValue = StringUtils.splitPreserveAllTokens(rows[i], KEY_VALUE_DELIMITER);
+        String[] keyValue = splitPreserveAllTokens(rows[i], KEY_VALUE_DELIMITER_CHAR);
         if (keyValue.length == 2 && StringUtils.isNotEmpty(keyValue[0])) {
-          map.put(keyValue[0], StringUtils.isEmpty(keyValue[1]) ? null : keyValue[1]);
+          map.put(decodeString(keyValue[0]), StringUtils.isEmpty(keyValue[1]) ? null : decodeString(keyValue[1]));
         }
       }
       return (T)map;
@@ -108,7 +115,7 @@ public final class TypeConversion {
       return (String)value;
     }
     if (value instanceof String[]) {
-      return StringUtils.join((String[])value, ARRAY_DELIMITER);
+      return StringUtils.join(encodeString((String[])value), ARRAY_DELIMITER);
     }
     else if (value instanceof Integer) {
       return Integer.toString((Integer)value);
@@ -128,8 +135,8 @@ public final class TypeConversion {
       Map.Entry<?, ?>[] entries = Iterators.toArray(map.entrySet().iterator(), Map.Entry.class);
       for (int i = 0; i < entries.length; i++) {
         Map.Entry<?, ?> entry = entries[i];
-        String entryKey = Objects.toString(entry.getKey(), "");
-        String entryValue = Objects.toString(entry.getValue(), "");
+        String entryKey = encodeString(Objects.toString(entry.getKey(), ""));
+        String entryValue = encodeString(Objects.toString(entry.getValue(), ""));
         stringValue.append(entryKey).append(KEY_VALUE_DELIMITER).append(entryValue);
         if (i < entries.length - 1) {
           stringValue.append(ARRAY_DELIMITER);
@@ -155,7 +162,7 @@ public final class TypeConversion {
       return (T)PropertiesUtil.toString(value, (String)defaultValue);
     }
     if (type == String[].class) {
-      return (T)PropertiesUtil.toStringArray(value, (String[])defaultValue);
+      return (T)decodeString(PropertiesUtil.toStringArray(value, (String[])defaultValue));
     }
     else if (type == Integer.class) {
       Integer defaultIntValue = (Integer)defaultValue;
@@ -195,11 +202,19 @@ public final class TypeConversion {
         defaultMapValue = new String[defaultMap.size()];
         Map.Entry<?, ?>[] entries = Iterators.toArray(defaultMap.entrySet().iterator(), Map.Entry.class);
         for (int i = 0; i < entries.length; i++) {
-          defaultMapValue[i] = Objects.toString(entries[i].getKey(), "")
-              + KEY_VALUE_DELIMITER + Objects.toString(entries[i].getValue(), "");
+          defaultMapValue[i] = encodeString(Objects.toString(entries[i].getKey(), ""))
+              + KEY_VALUE_DELIMITER + encodeString(Objects.toString(entries[i].getValue(), ""));
         }
       }
-      return (T)PropertiesUtil.toMap(value, defaultMapValue);
+      String[] rawMap = PropertiesUtil.toStringArray(value, defaultMapValue);
+      Map<String, String> finalMap = new HashMap<String, String>(rawMap.length);
+      for (int i = 0; i < rawMap.length; i++) {
+        String[] keyValue = splitPreserveAllTokens(rawMap[i], KEY_VALUE_DELIMITER_CHAR);
+        if (keyValue.length == 2 && StringUtils.isNotEmpty(keyValue[0])) {
+          finalMap.put(decodeString(keyValue[0]), StringUtils.isEmpty(keyValue[1]) ? null : decodeString(keyValue[1]));
+        }
+      }
+      return (T)finalMap;
     }
     throw new IllegalArgumentException("Unsupported type: " + type.getName());
   }

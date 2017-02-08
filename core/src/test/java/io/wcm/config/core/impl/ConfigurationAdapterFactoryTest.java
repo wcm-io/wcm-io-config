@@ -22,10 +22,6 @@ package io.wcm.config.core.impl;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.when;
-import io.wcm.config.api.Configuration;
-import io.wcm.config.core.management.Application;
-import io.wcm.config.core.management.ApplicationFinder;
-import io.wcm.config.core.management.ConfigurationFinder;
 
 import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
@@ -34,7 +30,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
+
+import io.wcm.config.api.Configuration;
+import io.wcm.config.core.management.Application;
+import io.wcm.config.core.management.ApplicationFinder;
+import io.wcm.config.core.management.ConfigurationFinder;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ConfigurationAdapterFactoryTest {

@@ -19,12 +19,11 @@
  */
 package io.wcm.config.core.impl;
 
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import io.wcm.config.api.Configuration;
 
 import javax.script.Bindings;
 
@@ -34,7 +33,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
+
+import io.wcm.config.api.Configuration;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ConfigBindingsValueProviderTest {
@@ -65,14 +66,14 @@ public class ConfigBindingsValueProviderTest {
   @Test
   public void testWithoutConfig() {
     underTest.addBindings(bindings);
-    verify(bindings, never()).put(anyString(), anyObject());
+    verify(bindings, never()).put(anyString(), any(Object.class));
   }
 
   @Test
   public void testNoRequest() {
     when(bindings.containsKey(SlingBindings.REQUEST)).thenReturn(false);
     underTest.addBindings(bindings);
-    verify(bindings, never()).put(anyString(), anyObject());
+    verify(bindings, never()).put(anyString(), any(Object.class));
   }
 
 }

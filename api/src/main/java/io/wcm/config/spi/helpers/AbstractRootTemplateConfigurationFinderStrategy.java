@@ -19,9 +19,6 @@
  */
 package io.wcm.config.spi.helpers;
 
-import io.wcm.config.spi.ConfigurationFinderStrategy;
-import io.wcm.sling.commons.adapter.AdaptTo;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -35,6 +32,9 @@ import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 import com.google.common.collect.ImmutableSet;
+
+import io.wcm.config.spi.ConfigurationFinderStrategy;
+import io.wcm.sling.commons.adapter.AdaptTo;
 
 /**
  * Abstract implementation of {@link ConfigurationFinderStrategy} based on that detects the configuration scope

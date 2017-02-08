@@ -19,8 +19,6 @@
  */
 package io.wcm.config.core.override.impl;
 
-import io.wcm.config.spi.ParameterOverrideProvider;
-
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +32,8 @@ import org.osgi.framework.Constants;
 import org.osgi.service.component.ComponentContext;
 
 import com.google.common.collect.ImmutableMap;
+
+import io.wcm.config.spi.ParameterOverrideProvider;
 
 /**
  * Provides parameter override map from OSGi factory configuration.

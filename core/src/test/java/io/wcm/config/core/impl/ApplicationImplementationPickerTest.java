@@ -21,8 +21,6 @@ package io.wcm.config.core.impl;
 
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.when;
-import io.wcm.config.core.management.Application;
-import io.wcm.config.core.management.ApplicationFinder;
 
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.Model;
@@ -31,7 +29,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
+
+import io.wcm.config.core.management.Application;
+import io.wcm.config.core.management.ApplicationFinder;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ApplicationImplementationPickerTest {

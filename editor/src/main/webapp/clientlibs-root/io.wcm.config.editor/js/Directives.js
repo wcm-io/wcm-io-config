@@ -169,21 +169,53 @@
         }],
         link: function (scope, element, attr) {
           scope.values = [];
-          if (scope.parameter.value) {
-            var stringValues = scope.parameter.value.split(";");
-            if (stringValues.length > 0) {
-              for (var i = 0; i < stringValues.length; i++) {
-                scope.values.push({value: stringValues[i]});
-              }
-            } else {
-              scope.values.push({value: ""});
+          if (scope.parameter.value && scope.parameter.value.length > 0) {
+            var stringValues = scope.parameter.value;
+            for (var i = 0; i < stringValues.length; i++) {
+              scope.values.push({value: stringValues[i]});
             }
           } else {
             scope.values.push({value: ""});
           }
           scope.$watch('values', function() {
             var stringValues = _.pluck(scope.values, "value");
-            scope.parameter.value = stringValues.join(";");
+            scope.parameter.value = stringValues;
+          }, true);
+        }
+      }
+    }])
+    .directive("map", ['templateUrlList', "EditorUtilities", function (templateList, utils) {
+      return {
+        restrict: "E",
+        replace: true,
+        templateUrl: templateList.map,
+        scope: {
+          parameter: '='
+        },
+        controller: ["$scope", function($scope) {
+          $scope.addNewValue = function(value) {
+            $scope.$evalAsync(function() {
+              var indexOf = utils.indexOfValueObject($scope.values, value);
+              $scope.values.splice(indexOf+1, 0, {key:"", value: ""});
+            });
+          };
+          $scope.removeValue = function(value) {
+            var indexOf = utils.indexOfValueObject($scope.values, value);
+            $scope.values.splice(indexOf, 1);
+            if ($scope.values.length == 0) {
+              $scope.values.push({key: "", value: ""});
+            }
+          };
+        }],
+        link: function (scope, element, attr) {
+          scope.values = [];
+          if (scope.parameter.value && scope.parameter.value.length > 0) {
+            scope.values = scope.parameter.value;
+          } else {
+            scope.values.push({key:"", value: ""});
+          }
+          scope.$watch('values', function() {
+            scope.parameter.value = scope.values;
           }, true);
         }
       }

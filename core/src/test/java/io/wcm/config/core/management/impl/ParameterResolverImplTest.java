@@ -23,16 +23,10 @@ import static io.wcm.config.api.ParameterBuilder.create;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.same;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.when;
-import io.wcm.config.api.Parameter;
-import io.wcm.config.core.management.ParameterOverride;
-import io.wcm.config.core.management.ParameterPersistence;
-import io.wcm.config.core.management.ParameterPersistenceData;
-import io.wcm.config.spi.ParameterProvider;
-import io.wcm.sling.commons.resource.ImmutableValueMap;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -45,7 +39,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
@@ -54,6 +48,13 @@ import org.osgi.service.component.ComponentContext;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSortedSet;
+
+import io.wcm.config.api.Parameter;
+import io.wcm.config.core.management.ParameterOverride;
+import io.wcm.config.core.management.ParameterPersistence;
+import io.wcm.config.core.management.ParameterPersistenceData;
+import io.wcm.config.spi.ParameterProvider;
+import io.wcm.sling.commons.resource.ImmutableValueMap;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ParameterResolverImplTest {
@@ -100,7 +101,6 @@ public class ParameterResolverImplTest {
   @SuppressWarnings("unchecked")
   @Before
   public void setUp() {
-    when(componentContext.getBundleContext()).thenReturn(bundleContext);
     when(bundleContext.getServiceReference("my.service")).thenReturn(serviceReference);
     when(serviceReference.getProperty("prop1")).thenReturn("valueFromOsgiConfig");
 

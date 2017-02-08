@@ -23,10 +23,6 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import io.wcm.config.core.management.ParameterPersistence;
-import io.wcm.config.core.management.ParameterPersistenceData;
-import io.wcm.config.spi.ParameterPersistenceProvider;
-import io.wcm.sling.commons.resource.ImmutableValueMap;
 
 import java.util.Map;
 import java.util.SortedSet;
@@ -38,10 +34,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.osgi.framework.Constants;
 
 import com.google.common.collect.ImmutableSortedSet;
+
+import io.wcm.config.core.management.ParameterPersistence;
+import io.wcm.config.core.management.ParameterPersistenceData;
+import io.wcm.config.spi.ParameterPersistenceProvider;
+import io.wcm.sling.commons.resource.ImmutableValueMap;
 
 /**
  * Test {@link ParameterPersistenceImpl} with basic property values, but multiple providers and merging.

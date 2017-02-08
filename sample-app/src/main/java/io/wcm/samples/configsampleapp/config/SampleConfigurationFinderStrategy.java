@@ -19,10 +19,10 @@
  */
 package io.wcm.samples.configsampleapp.config;
 
-import io.wcm.config.spi.helpers.AbstractAbsoluteParentConfigurationFinderStrategy;
-
 import org.apache.felix.scr.annotations.Component;
 import org.apache.felix.scr.annotations.Service;
+
+import io.wcm.config.spi.helpers.AbstractAbsoluteParentConfigurationFinderStrategy;
 
 /**
  * Sample configuration finder strategy wich accepts absolute root levels 1/2/3 as site configuration id.

@@ -26,9 +26,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import io.wcm.config.spi.ParameterPersistenceProvider;
-import io.wcm.sling.commons.resource.ImmutableValueMap;
-import io.wcm.testing.mock.aem.junit.AemContext;
 
 import java.util.Calendar;
 
@@ -38,11 +35,15 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import com.day.cq.wcm.api.NameConstants;
 import com.day.cq.wcm.api.Page;
 import com.google.common.collect.ImmutableMap;
+
+import io.wcm.config.spi.ParameterPersistenceProvider;
+import io.wcm.sling.commons.resource.ImmutableValueMap;
+import io.wcm.testing.mock.aem.junit.AemContext;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ConfStructurePersistenceProviderTest {

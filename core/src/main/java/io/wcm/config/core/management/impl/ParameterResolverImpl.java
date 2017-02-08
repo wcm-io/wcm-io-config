@@ -19,15 +19,6 @@
  */
 package io.wcm.config.core.management.impl;
 
-import io.wcm.config.api.Parameter;
-import io.wcm.config.core.management.ParameterOverride;
-import io.wcm.config.core.management.ParameterPersistence;
-import io.wcm.config.core.management.ParameterPersistenceData;
-import io.wcm.config.core.management.ParameterResolver;
-import io.wcm.config.core.management.util.TypeConversion;
-import io.wcm.config.spi.ParameterProvider;
-import io.wcm.sling.commons.osgi.RankedServices;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -55,6 +46,15 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSortedSet;
 import com.google.common.collect.Iterators;
+
+import io.wcm.config.api.Parameter;
+import io.wcm.config.core.management.ParameterOverride;
+import io.wcm.config.core.management.ParameterPersistence;
+import io.wcm.config.core.management.ParameterPersistenceData;
+import io.wcm.config.core.management.ParameterResolver;
+import io.wcm.config.core.management.util.TypeConversion;
+import io.wcm.config.spi.ParameterProvider;
+import io.wcm.sling.commons.osgi.RankedServices;
 
 /**
  * Default implementation of {@link ParameterResolver}.
