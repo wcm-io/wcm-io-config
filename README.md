@@ -1,9 +1,9 @@
-<img src="http://wcm.io/images/favicon-16@2x.png"/> wcm.io Configuration
+<img src="http://wcm.io/images/favicon-16@2x.png"/> wcm.io Configuration (deprecated)
 ======
 [![Build Status](https://travis-ci.org/wcm-io/wcm-io-config.png?branch=develop)](https://travis-ci.org/wcm-io/wcm-io-config) 
 [![Code Coverage](https://codecov.io/gh/wcm-io/wcm-io-config/branch/develop/graph/badge.svg)](https://codecov.io/gh/wcm-io/wcm-io-config)
 
-Context-specific configuration for AEM applications.
+Context-specific configuration for AEM applications (deprecated). Please use [wcm.io Context-Aware Configuration](http://wcm.io/caconfig/) instead.
 
 Documentation: http://wcm.io/config/<br/>
 Issues: https://wcm-io.atlassian.net/projects/WCON<br/>
