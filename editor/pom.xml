@@ -122,8 +122,8 @@
           </execution>
         </executions>
         <configuration>
-          <nodeJsVersion>0.12.7</nodeJsVersion>
-          <npmVersion>2.11.3</npmVersion>
+          <nodeJsVersion>6.11.2</nodeJsVersion>
+          <npmVersion>3.10.10</npmVersion>
           <tasks>
             <npmInstallTask>
               <workingDirectory>${project.basedir}/build</workingDirectory>
